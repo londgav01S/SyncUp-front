@@ -1,0 +1,58 @@
+/* PlaylistCard styles - Estilo Spotify moderno */
+.PlaylistCard {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 16px;
+  border-radius: var(--border-radius-md);
+  background: var(--card-bg);
+  transition: all var(--transition-medium);
+  cursor: pointer;
+  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--border-color);
+}
+
+.PlaylistCard:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-lg);
+  background: var(--card-hover);
+}
+
+.PlaylistCard__cover {
+  width: 100%;
+  aspect-ratio: 1/1;
+  object-fit: cover;
+  border-radius: var(--border-radius-md);
+  box-shadow: var(--shadow-md);
+  transition: transform var(--transition-medium);
+}
+
+.PlaylistCard:hover .PlaylistCard__cover {
+  transform: scale(1.05);
+}
+
+.PlaylistCard__name {
+  margin: 4px 0 0 0;
+  font-weight: 700;
+  font-size: 15px;
+  color: var(--text);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.PlaylistCard__description {
+  font-size: 13px;
+  color: var(--text-muted);
+  margin: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  line-height: 1.4;
+}
+
+.PlaylistCard:hover .PlaylistCard__name {
+  color: var(--accent);
+}

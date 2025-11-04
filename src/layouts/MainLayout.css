@@ -1,0 +1,104 @@
+/* MainLayout - Estilo Spotify moderno */
+.MainLayout {
+  display: flex;
+  height: 100vh;
+  background: var(--bg);
+  overflow: hidden;
+}
+
+.MainLayout__body {
+  display: flex;
+  flex: 1;
+  overflow: hidden;
+}
+
+.MainLayout__content {
+  flex: 1;
+  padding: 32px 40px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  background: var(--bg);
+  margin-bottom: 90px; /* Espacio para el player fijo */
+  color: var(--text) !important;
+}
+
+.MainLayout__search {
+  margin-bottom: 32px;
+  max-width: 720px;
+}
+
+/* Asegurar que los textos sean legibles */
+.MainLayout__content h1,
+.MainLayout__content h2,
+.MainLayout__content h3,
+.MainLayout__content h4,
+.MainLayout__content h5,
+.MainLayout__content h6,
+.MainLayout__content p,
+.MainLayout__content span,
+.MainLayout__content label {
+  color: var(--text) !important;
+}
+
+/* Estilos para links dentro del contenido */
+.MainLayout__content a {
+  color: var(--accent);
+  transition: var(--transition-fast);
+}
+
+.MainLayout__content a:hover {
+  color: #FF6F52;
+}
+
+/* Mejora del scroll */
+.MainLayout__content::-webkit-scrollbar {
+  width: 12px;
+}
+
+.MainLayout__content::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.MainLayout__content::-webkit-scrollbar-thumb {
+  background: rgba(68, 75, 84, 0.3);
+  border-radius: 6px;
+  border: 3px solid transparent;
+  background-clip: content-box;
+}
+
+.MainLayout__content::-webkit-scrollbar-thumb:hover {
+  background: rgba(68, 75, 84, 0.5);
+  border: 3px solid transparent;
+  background-clip: content-box;
+}
+
+/* Grid para tarjetas de canciones/playlists */
+.MainLayout__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 20px;
+  margin-top: 20px;
+}
+
+@media (min-width: 1024px) {
+  .MainLayout__grid {
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 24px;
+  }
+}
+
+/* Títulos de sección */
+.MainLayout__sectionTitle {
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--text);
+  margin: 0 0 16px 0;
+  letter-spacing: -0.5px;
+}
+
+.MainLayout__sectionSubtitle {
+  font-size: 14px;
+  color: var(--text-muted);
+  margin: -8px 0 20px 0;
+  font-weight: 500;
+}

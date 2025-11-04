@@ -1,0 +1,53 @@
+/* SearchBar styles - Estilo Spotify moderno */
+.SearchBar {
+  padding: 8px 16px;
+  width: 100%;
+  max-width: 400px;
+}
+
+.SearchBar__input {
+  width: 100%;
+  padding: 12px 16px;
+  padding-left: 40px;
+  border-radius: var(--border-radius-full);
+  border: none;
+  background: white;
+  color: var(--text);
+  font-size: 14px;
+  font-weight: 500;
+  transition: all var(--transition-fast);
+  box-shadow: var(--shadow-sm);
+  outline: none;
+}
+
+.SearchBar__input::placeholder {
+  color: var(--text-muted);
+  opacity: 0.6;
+}
+
+.SearchBar__input:focus {
+  box-shadow: var(--shadow-md);
+  background: white;
+  border: 2px solid var(--secondary);
+  padding-left: 38px;
+}
+
+.SearchBar__wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.SearchBar__icon {
+  position: absolute;
+  left: 14px;
+  color: var(--text-muted);
+  pointer-events: none;
+  font-size: 18px;
+  opacity: 0.6;
+}
+
+.SearchBar__input:focus + .SearchBar__icon {
+  color: var(--secondary);
+  opacity: 1;
+}

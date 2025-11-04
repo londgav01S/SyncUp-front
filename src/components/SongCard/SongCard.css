@@ -1,0 +1,121 @@
+/* SongCard styles - Estilo Spotify moderno */
+.SongCard {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 16px;
+  border-radius: var(--border-radius-md);
+  background: var(--card-bg);
+  transition: all var(--transition-medium);
+  overflow: hidden;
+  cursor: pointer;
+  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--border-color);
+}
+
+.SongCard:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-lg);
+  background: var(--card-hover);
+}
+
+.SongCard__media {
+  position: relative;
+  border-radius: var(--border-radius-md);
+  overflow: hidden;
+  box-shadow: var(--shadow-md);
+}
+
+.SongCard__cover {
+  width: 100%;
+  aspect-ratio: 1/1;
+  object-fit: cover;
+  display: block;
+  transition: transform var(--transition-medium);
+}
+
+.SongCard:hover .SongCard__cover {
+  transform: scale(1.05);
+}
+
+.SongCard__overlay {
+  position: absolute;
+  right: 12px;
+  bottom: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  border: none;
+  border-radius: 50%;
+  background: var(--accent);
+  color: white;
+  opacity: 0;
+  transform: translateY(8px);
+  transition: all var(--transition-medium);
+  cursor: pointer;
+  box-shadow: 0 8px 16px rgba(242, 92, 67, 0.4);
+}
+
+.SongCard:hover .SongCard__overlay {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.SongCard__overlay:hover {
+  transform: scale(1.08);
+  background: #FF6F52;
+}
+
+.SongCard__overlay:active {
+  transform: scale(0.95);
+}
+
+.SongCard__overlay.is-playing {
+  opacity: 1;
+  transform: translateY(0);
+  background: var(--secondary);
+  animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    box-shadow: 0 8px 16px rgba(69, 182, 179, 0.4);
+  }
+  50% {
+    box-shadow: 0 8px 24px rgba(69, 182, 179, 0.6);
+  }
+}
+
+.SongCard__info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.SongCard__title {
+  font-size: 15px;
+  font-weight: 700;
+  margin: 0;
+  line-height: 1.3;
+  color: var(--text);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.SongCard__artist {
+  font-size: 13px;
+  color: var(--text-muted);
+  font-weight: 500;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  line-height: 1.3;
+}
+
+/* Hover effect en el título */
+.SongCard:hover .SongCard__title {
+  color: var(--accent);
+}

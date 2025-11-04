@@ -1,0 +1,82 @@
+/* Navbar styles - Estilo Spotify moderno */
+.Navbar {
+  position: sticky;
+  top: 0;
+  z-index: 25;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 24px;
+  background: var(--color-surface);
+  color: var(--on-surface);
+  border-bottom: 1px solid rgba(250, 248, 244, 0.08);
+  box-shadow: 0 1px 0 rgba(0, 0, 0, 0.1);
+  height: 72px;
+}
+
+.Navbar__brand {
+  display: flex;
+  align-items: center;
+}
+
+.Navbar__brand a {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-weight: 700;
+  font-size: 20px;
+  letter-spacing: -0.3px;
+  color: var(--on-surface);
+  transition: var(--transition-fast);
+}
+
+.Navbar__logo {
+  height: 36px;
+  width: auto;
+}
+
+.Navbar__brand:hover {
+  color: var(--accent);
+}
+
+.Navbar__actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.Navbar a {
+  color: var(--on-surface);
+  text-decoration: none;
+  padding: 8px 16px;
+  border-radius: var(--border-radius-full);
+  font-size: 14px;
+  font-weight: 600;
+  transition: var(--transition-fast);
+  opacity: 0.9;
+}
+
+.Navbar a:hover {
+  background: rgba(250, 248, 244, 0.1);
+  opacity: 1;
+  transform: scale(1.02);
+}
+
+.Navbar button {
+  background: var(--accent);
+  color: white;
+  border: none;
+  padding: 10px 24px;
+  border-radius: var(--border-radius-full);
+  font-weight: 700;
+  font-size: 14px;
+  cursor: pointer;
+  transition: var(--transition-fast);
+  box-shadow: 0 2px 8px rgba(242, 92, 67, 0.3);
+}
+
+.Navbar button:hover {
+  background: #FF6F52;
+  transform: scale(1.05);
+  box-shadow: 0 4px 12px rgba(242, 92, 67, 0.4);
+}

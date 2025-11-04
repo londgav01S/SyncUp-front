@@ -1,0 +1,123 @@
+/* Auth page styles - Estilo moderno */
+.auth-page {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  background: linear-gradient(135deg, var(--primary) 0%, var(--color-surface-elevated) 100%);
+  padding: 20px;
+}
+
+.auth-form {
+  width: 100%;
+  max-width: 420px;
+  padding: 40px;
+  border-radius: var(--border-radius-lg);
+  background: white;
+  box-shadow: var(--shadow-lg);
+}
+
+.auth-form h2 {
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--text);
+  margin: 0 0 8px 0;
+  text-align: center;
+  letter-spacing: -0.5px;
+}
+
+.auth-form p {
+  text-align: center;
+  color: var(--text-muted);
+  margin: 0 0 32px 0;
+  font-size: 14px;
+}
+
+.auth-form label {
+  display: block;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 8px;
+}
+
+.auth-form input {
+  width: 100%;
+  padding: 12px 16px;
+  margin: 0 0 20px 0;
+  border-radius: var(--border-radius-sm);
+  border: 1px solid var(--border-color);
+  font-size: 14px;
+  transition: all var(--transition-fast);
+  background: var(--bg);
+}
+
+.auth-form input:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(242, 92, 67, 0.1);
+  background: white;
+}
+
+.auth-form button {
+  width: 100%;
+  padding: 14px;
+  margin-top: 8px;
+  background: var(--accent);
+  color: white;
+  border: none;
+  border-radius: var(--border-radius-full);
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  box-shadow: 0 4px 12px rgba(242, 92, 67, 0.3);
+}
+
+.auth-form button:hover {
+  background: #FF6F52;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(242, 92, 67, 0.4);
+}
+
+.auth-form button:active {
+  transform: translateY(0);
+}
+
+.auth-form a {
+  color: var(--accent);
+  text-decoration: none;
+  font-weight: 600;
+  transition: var(--transition-fast);
+}
+
+.auth-form a:hover {
+  color: #FF6F52;
+  text-decoration: underline;
+}
+
+.auth-divider {
+  text-align: center;
+  margin: 24px 0;
+  position: relative;
+  color: var(--text-muted);
+  font-size: 14px;
+}
+
+.auth-divider::before,
+.auth-divider::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  width: 40%;
+  height: 1px;
+  background: var(--border-color);
+}
+
+.auth-divider::before {
+  left: 0;
+}
+
+.auth-divider::after {
+  right: 0;
+}

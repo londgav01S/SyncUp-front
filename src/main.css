@@ -1,0 +1,44 @@
+@import './assets/global.css';
+@import './assets/variables.css';
+@import './assets/utilities.css';
+
+/* Reset and base styles */
+html, body, #root {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: 'Circular', 'Helvetica Neue', 'Segoe UI', Roboto, Arial, sans-serif;
+  background: var(--bg, #FAF8F4);
+  color: var(--text, #1C2B3A);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Smooth scrolling */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Links por defecto */
+a {
+  color: inherit;
+  text-decoration: none;
+  transition: var(--transition-fast);
+}
+
+/* Inputs y selects por defecto */
+input,
+select,
+textarea {
+  font-family: inherit;
+  font-size: inherit;
+}
+
+/* Focus visible para accesibilidad */
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
