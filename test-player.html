@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Test ReactPlayer</title>
+  <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+  <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+  <script src="https://unpkg.com/react-player@2.14.0/dist/ReactPlayer.standalone.js"></script>
+</head>
+<body>
+  <div id="root"></div>
+  <script>
+    const { useState } = React;
+    
+    function TestPlayer() {
+      const [playing, setPlaying] = useState(false);
+      
+      return React.createElement('div', { style: { padding: '20px' }},
+        React.createElement('h2', null, 'Test ReactPlayer con YouTube'),
+        React.createElement('button', { 
+          onClick: () => setPlaying(!playing),
+          style: { padding: '10px 20px', marginBottom: '20px', cursor: 'pointer' }
+        }, playing ? 'Pausar' : 'Reproducir'),
+        React.createElement(ReactPlayer, {
+          url: 'https://www.youtube.com/watch?v=ysz5S6PUM-U',
+          playing: playing,
+          controls: true,
+          width: '640px',
+          height: '360px',
+          onReady: () => console.log('Player ready!'),
+          onError: (e) => console.error('Player error:', e),
+          config: {
+            youtube: {
+              playerVars: { modestbranding: 1 }
+            }
+          }
+        })
+      );
+    }
+    
+    const root = ReactDOM.createRoot(document.getElementById('root'));
+    root.render(React.createElement(TestPlayer));
+  </script>
+</body>
+</html>
