@@ -1,71 +1,126 @@
-/* Sidebar styles - Estilo Spotify moderno */
+/* 🎵 Sidebar - limpia, responsive y moderna */
 .Sidebar {
-  position: sticky;
+  position: fixed;
   top: 0;
-  width: 280px;
+  left: 0;
+  width: 260px;
   height: 100vh;
   background: var(--primary);
   color: var(--on-surface);
-  border-right: 1px solid rgba(250, 248, 244, 0.08);
   display: flex;
   flex-direction: column;
-  gap: 24px;
-  padding: 20px 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+  border-right: 1px solid rgba(250, 248, 244, 0.08);
+  box-shadow: var(--shadow-md);
+  transition: width var(--transition-medium);
+  z-index: 100;
 }
 
+/* 🧩 Estado colapsado */
+.Sidebar--collapsed {
+  width: 80px;
+}
+
+/* 🌈 Header con logo y toggle */
 .Sidebar__brand {
-  padding: 0 24px;
-  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 24px 20px 15px;
+  background: rgba(255, 255, 255, 0.05);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  position: relative;
 }
 
-.Sidebar__brand a {
+/* 🔸 Cuando Sidebar está colapsada */
+.Sidebar--collapsed .Sidebar__brandLink {
+  justify-content: center;
+  width: 100%;
+}
+
+/* 🔸 Oculta logo y texto del brand al colapsar */
+.Sidebar--collapsed .Sidebar__logo,
+.Sidebar--collapsed .Sidebar__brand-text {
+  display: none;
+}
+
+/* 🔸 El botón se centra horizontalmente al colapsar */
+.Sidebar--collapsed .Sidebar__toggleBtn {
+  margin: 0 auto;
+  position: relative;
+  left: 0;
+  transform: none;
+}
+
+.Sidebar__brandLink {
   display: flex;
   align-items: center;
   gap: 12px;
   text-decoration: none;
   color: var(--on-surface);
+  font-weight: 700;
+  font-size: 18px;
+  white-space: nowrap;
 }
 
 .Sidebar__logo {
+  width: 40px;
   height: 40px;
-  width: auto;
-  opacity: 0.9;
-  transition: var(--transition-fast);
+  border-radius: 8px;
+  object-fit: contain;
 }
 
 .Sidebar__brand-text {
-  font-size: 20px;
-  font-weight: 700;
-  color: var(--on-surface);
+  transition: opacity var(--transition-medium), width var(--transition-medium);
 }
 
-.Sidebar__brand:hover .Sidebar__logo {
+.Sidebar--collapsed .Sidebar__brand-text {
+  opacity: 0;
+  width: 0;
+}
+
+/* 🧭 Botón toggle estilo HeroCarousel */
+.Sidebar__toggleBtn {
+  width: 48px;
+  height: 48px;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.1);
+  color: var(--on-surface);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  backdrop-filter: blur(10px);
+  flex-shrink: 0; /* ✅ evita que se reduzca en flex */
+  transition: background var(--transition-fast), opacity var(--transition-fast);
+  opacity: 0.8;
+}
+
+.Sidebar__toggleBtn:hover {
+  background: rgba(255, 255, 255, 0.2);
+  transform: scale(1.05);
   opacity: 1;
 }
 
+/* ✅ No se reduce de tamaño al hacer clic */
+.Sidebar__toggleBtn:active {
+  transform: none;
+}
+
+.Sidebar__toggleIcon {
+  transition: transform var(--transition-medium);
+}
+
+.Sidebar--collapsed .Sidebar__toggleIcon {
+  transform: rotate(180deg);
+}
+
+/* 🔍 Barra de búsqueda */
 .Sidebar__search {
-  margin: 0 16px;
   position: relative;
-}
-
-.Sidebar__search input {
-  width: 100%;
-  padding: 12px 16px 12px 40px;
-  background: rgba(255, 255, 255, 0.1);
-  border: none;
-  border-radius: var(--border-radius-full);
-  color: var(--on-surface);
-  font-size: 14px;
-  transition: var(--transition-fast);
-}
-
-.Sidebar__search input::placeholder {
-  color: rgba(250, 248, 244, 0.6);
-}
-
-.Sidebar__search input:focus {
-  background: rgba(255, 255, 255, 0.15);
-  outline: none;
+  margin: 16px 20px 16px 15px;
 }
 
 .Sidebar__search i {
@@ -74,20 +129,44 @@
   top: 50%;
   transform: translateY(-50%);
   color: rgba(250, 248, 244, 0.6);
-  pointer-events: none;
 }
 
+.Sidebar__search input {
+  width: 100%;
+  padding: 10px 12px 10px 36px;
+  border: none;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.1);
+  color: var(--on-surface);
+  outline: none;
+  transition: background var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+.Sidebar__search input:focus {
+  background: rgba(255, 255, 255, 0.15);
+  box-shadow: 0 0 0 2px rgba(242, 92, 67, 0.3);
+}
+
+.Sidebar__search input::placeholder {
+  color: rgba(250, 248, 244, 0.5);
+}
+
+.Sidebar--collapsed .Sidebar__search {
+  display: none;
+}
+
+/* 📁 Secciones del menú */
 .Sidebar__section {
-  padding: 0 8px;
+  padding: 16px 20px;
+  flex: 1;
 }
 
 .Sidebar__section-title {
-  padding: 0 16px;
   font-size: 12px;
   text-transform: uppercase;
+  color: rgba(250, 248, 244, 0.6);
   letter-spacing: 1px;
-  color: rgba(250, 248, 244, 0.4);
-  margin-bottom: 8px;
+  margin-bottom: 10px;
 }
 
 .Sidebar__list {
@@ -96,136 +175,149 @@
   margin: 0;
 }
 
+.Sidebar__item {
+  margin-bottom: 8px;
+  position: relative;
+}
+
 .Sidebar__item a {
   display: flex;
   align-items: center;
-  gap: 16px;
-  padding: 12px 16px;
+  gap: 12px;
+  padding: 10px 12px;
+  border-radius: 8px;
   color: rgba(250, 248, 244, 0.8);
   text-decoration: none;
-  font-size: 14px;
-  font-weight: 600;
-  border-radius: var(--border-radius-md);
-  margin: 2px 8px;
-  transition: var(--transition-fast);
-}
-
-.Sidebar__item i {
-  font-size: 18px;
-  width: 24px;
-  text-align: center;
+  transition: all var(--transition-fast);
 }
 
 .Sidebar__item a:hover {
-  color: var(--on-surface);
-  background: rgba(250, 248, 244, 0.1);
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff;
 }
 
 .Sidebar__item a.active {
-  color: var(--on-surface);
-  background: var(--accent);
+  background: linear-gradient(90deg, rgba(242, 92, 67, 0.2), rgba(242, 92, 67, 0.1));
+  box-shadow: inset 3px 0 0 var(--accent);
+  color: var(--accent);
 }
 
+.Sidebar__item i {
+  width: 20px;
+  text-align: center;
+}
+
+.Sidebar__itemText {
+  transition: opacity var(--transition-medium), width var(--transition-medium);
+}
+
+.Sidebar--collapsed .Sidebar__itemText {
+  opacity: 0;
+  width: 0;
+}
+
+/* 💬 Tooltips para modo colapsado */
+.Sidebar--collapsed .Sidebar__item::after {
+  content: attr(data-tooltip);
+  position: absolute;
+  left: 100%;
+  top: 50%;
+  transform: translateY(-50%);
+  margin-left: 10px;
+  padding: 6px 10px;
+  background: rgba(28, 43, 58, 0.95);
+  color: white;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s ease;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+  white-space: nowrap;
+  z-index: 200;
+}
+
+.Sidebar--collapsed .Sidebar__item:hover::after {
+  opacity: 1;
+}
+
+/* 🔻 Footer */
 .Sidebar__footer {
   margin-top: auto;
-  padding: 16px 24px;
-  border-top: 1px solid rgba(250, 248, 244, 0.1);
-}
-
-.Sidebar__btn {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  width: 100%;
-  padding: 12px 20px;
-  background: transparent;
-  border: 1px solid rgba(250, 248, 244, 0.2);
-  border-radius: var(--border-radius-full);
-  color: var(--on-surface);
-  font-size: 14px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: var(--transition-fast);
-  text-decoration: none;
-  margin-bottom: 8px;
-}
-
-.Sidebar__btn:hover {
-  background: rgba(250, 248, 244, 0.1);
-  border-color: rgba(250, 248, 244, 0.3);
-}
-
-.Sidebar__btn--accent {
-  background: var(--accent);
-  border-color: var(--accent);
-}
-
-.Sidebar__btn--accent:hover {
-  background: #FF6F52;
-  border-color: #FF6F52;
+  padding: 16px 20px;
+  border-top: 1px solid rgba(250, 248, 244, 0.08);
+  background: rgba(255, 255, 255, 0.05);
 }
 
 .Sidebar__auth-buttons {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 10px;
 }
 
-.Sidebar__list {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-}
-
-.Sidebar__item {
-  border-radius: var(--border-radius-sm);
-  transition: var(--transition-fast);
-}
-
-.Sidebar__item a {
+.Sidebar__btn {
   display: flex;
   align-items: center;
-  gap: 16px;
+  justify-content: center;
+  gap: 10px;
+  padding: 12px;
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
   color: var(--on-surface);
   text-decoration: none;
-  padding: 12px 16px;
-  border-radius: var(--border-radius-sm);
-  font-size: 14px;
   font-weight: 600;
-  transition: var(--transition-fast);
-  opacity: 0.7;
+  transition: all var(--transition-fast);
 }
 
-.Sidebar__item a:hover {
-  background: rgba(250, 248, 244, 0.1);
-  opacity: 1;
+.Sidebar__btn:hover {
+  background: rgba(255, 255, 255, 0.1);
+  transform: translateY(-2px);
 }
 
-.Sidebar__item .active {
-  background: var(--accent);
+.Sidebar__btn--accent {
+  background: linear-gradient(135deg, var(--accent) 0%, #FF6F52 100%);
   color: white;
-  opacity: 1;
-  box-shadow: 0 2px 8px rgba(242, 92, 67, 0.3);
+  border: none;
+  box-shadow: 0 4px 10px rgba(242, 92, 67, 0.3);
 }
 
-.Sidebar__item .active:hover {
-  background: #FF6F52;
+.Sidebar__btn--accent:hover {
+  transform: translateY(-2px) scale(1.02);
+  box-shadow: 0 6px 14px rgba(242, 92, 67, 0.4);
 }
 
-/* Iconos de la sidebar (si los usas) */
-.Sidebar__item svg,
-.Sidebar__item i {
-  width: 24px;
-  height: 24px;
-  transition: var(--transition-fast);
+/* 🔸 Ocultar texto de botones cuando está colapsado */
+.Sidebar__btn span {
+  transition: opacity var(--transition-medium), width var(--transition-medium);
+  white-space: nowrap;
 }
 
-/* Separador visual */
-.Sidebar__separator {
-  height: 1px;
-  background: rgba(250, 248, 244, 0.1);
-  margin: 8px 0;
+.Sidebar--collapsed .Sidebar__btn span {
+  opacity: 0;
+  width: 0;
+  overflow: hidden;
+}
+
+.Sidebar--collapsed .Sidebar__btn {
+  justify-content: center;
+  padding: 12px 8px;
+}
+
+/* 📱 Responsive */
+@media (max-width: 768px) {
+  .Sidebar {
+    width: 80px;
+  }
+
+  .Sidebar__brand-text,
+  .Sidebar__section-title,
+  .Sidebar__itemText,
+  .Sidebar__search {
+    display: none;
+  }
+
+  .Sidebar__toggleBtn {
+    display: none;
+  }
 }

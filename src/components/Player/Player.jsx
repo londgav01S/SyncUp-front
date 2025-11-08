@@ -2,6 +2,7 @@ import React, { useRef, useEffect, useState, useMemo } from 'react'
 import ReactPlayer from 'react-player'
 import './Player.css'
 import usePlayer from '../../hooks/usePlayer'
+import { useSidebar } from '../../context/SidebarContext'
 
 export default function Player(){
   const {
@@ -20,6 +21,11 @@ export default function Player(){
     setMuted,
   } = usePlayer()
 
+  const { isCollapsed } = useSidebar()
+
+  // Determinar si el player debe estar visible
+  const isPlayerVisible = current !== null
+
   // Debug: log cuando cambian current o playing
   useEffect(() => {
     console.log('🎬 Player received update:', {
@@ -27,9 +33,10 @@ export default function Player(){
       currentTitle: current?.title,
       playing,
       hasUrl: !!current?.url,
-      url: current?.url
+      url: current?.url,
+      isPlayerVisible
     })
-  }, [current, playing])
+  }, [current, playing, isPlayerVisible])
 
   const playerRef = useRef(null)
   const [seeking, setSeeking] = useState(false)
@@ -74,7 +81,7 @@ export default function Player(){
   const progressPercent = duration > 0 ? (displaySeconds / duration) * 100 : 0
 
   return (
-    <div className="Player player">
+    <div className={`Player player ${isPlayerVisible ? 'Player--visible' : ''} ${isCollapsed ? 'Player--sidebarCollapsed' : ''}`}>
       {/* Información de la canción (izquierda) */}
       <div className="Player__songInfo">
         {current && (

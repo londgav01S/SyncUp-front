@@ -13,6 +13,7 @@ export default function Navbar(){
           <span>Estructuras</span>
         </Link>
       </div>
+      
       <div className="Navbar__actions nav-actions">
         <Link className="Navbar__link" to="/user">Inicio</Link>
         <Link className="Navbar__link" to="/user/discover">Descubrir</Link>

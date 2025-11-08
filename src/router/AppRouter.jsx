@@ -4,6 +4,7 @@ import NotFound from '../pages/NotFound'
 import Login from '../pages/Auth/Login'
 import Register from '../pages/Auth/Register'
 import HomeUser from '../pages/User/HomeUser'
+import SearchPage from '../pages/User/SearchPage'
 import Profile from '../pages/User/Profile'
 import Playlists from '../pages/User/Playlists'
 import DiscoverWeekly from '../pages/User/DiscoverWeekly'
@@ -29,6 +30,7 @@ export default function AppRouter() {
           {/* User area */}
           <Route path="/" element={<HomeUser />} />
           <Route path="/user" element={<HomeUser />} />
+          <Route path="/search" element={<SearchPage />} />
           <Route path="/user/profile" element={<Profile />} />
           <Route path="/user/playlists" element={<Playlists />} />
           <Route path="/user/discover" element={<DiscoverWeekly />} />

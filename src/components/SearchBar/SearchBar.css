@@ -1,6 +1,6 @@
 /* SearchBar styles - Estilo Spotify moderno */
 .SearchBar {
-  padding: 8px 16px;
+  padding: 8px 8px 8px 8px;
   width: 100%;
   max-width: 400px;
 }
@@ -45,9 +45,186 @@
   pointer-events: none;
   font-size: 18px;
   opacity: 0.6;
+  z-index: 1;
 }
 
 .SearchBar__input:focus + .SearchBar__icon {
   color: var(--secondary);
   opacity: 1;
 }
+
+/* Icon button for search (used in sidebar) */
+.SearchBar__iconBtn {
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  background: transparent;
+  border: none;
+  padding: 6px;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: rgba(250, 248, 244, 0.65);
+  z-index: 100;
+  transition: color 0.2s ease, transform 0.2s ease;
+}
+.SearchBar__iconBtn:hover {
+  color: rgba(250, 248, 244, 0.95);
+  transform: translateY(-50%) scale(1.15);
+}
+.SearchBar__iconBtn:focus {
+  outline: 2px solid rgba(100, 116, 255, 0.3);
+  border-radius: 8px;
+  outline-offset: 2px;
+}
+.SearchBar__iconBtn .SearchBar__icon {
+  pointer-events: none;
+  width: 20px;
+  height: 20px;
+  stroke-width: 2.5;
+  position: static;
+  z-index: auto;
+}
+
+/* Suggestions dropdown */
+.SearchBar__suggestions {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 0;
+  right: 0;
+  background: white;
+  border-radius: 10px;
+  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.12);
+  z-index: 50;
+  max-height: 360px;
+  overflow: auto;
+  padding: 6px;
+}
+
+.SearchBar__suggestion {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  width: 100%;
+  padding: 8px;
+  border-radius: 8px;
+  background: transparent;
+  border: none;
+  text-align: left;
+  cursor: pointer;
+}
+
+.SearchBar__suggestion:hover {
+  background: rgba(15,23,42,0.04);
+}
+
+.SearchBar__suggestion--active {
+  background: rgba(15,23,42,0.08);
+}
+
+.SearchBar__suggestionImg {
+  width: 48px;
+  height: 48px;
+  object-fit: cover;
+  border-radius: 6px;
+}
+
+.SearchBar__suggestionInfo {
+  display: flex;
+  flex-direction: column;
+}
+
+.SearchBar__suggestionTitle {
+  font-weight: 700;
+  font-size: 14px;
+}
+
+.SearchBar__suggestionArtist {
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+/* Advanced search styles (used by AdvancedSearchFilters) */
+.AdvancedSearch {
+  margin: 18px 0;
+  padding: 16px;
+  background: rgba(15,23,42,0.02);
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.AdvancedSearch__row {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+.AdvancedSearch__input {
+  flex: 1 1 240px;
+  padding: 10px 12px;
+  border-radius: 8px;
+  border: 1px solid rgba(15,23,42,0.1);
+  background: white;
+  font-size: 14px;
+}
+.AdvancedSearch__select {
+  padding: 10px 12px;
+  border-radius: 8px;
+  border: 1px solid rgba(15,23,42,0.1);
+  background: white;
+  font-size: 14px;
+}
+.AdvancedSearch__inputAdvanced {
+  width: 120px;
+  padding: 8px 10px;
+  border-radius: 8px;
+  border: 1px solid rgba(15,23,42,0.1);
+  background: white;
+  font-size: 14px;
+}
+.AdvancedSearch__op {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  font-size: 14px;
+  font-weight: 600;
+}
+.AdvancedSearch__op label {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+  cursor: pointer;
+}
+.AdvancedSearch__actions {
+  margin-left: auto;
+  display: flex;
+  gap: 8px;
+}
+.AdvancedSearch__btn {
+  padding: 10px 16px;
+  border-radius: 8px;
+  border: none;
+  background: var(--primary);
+  color: white;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 14px;
+  transition: all 0.2s ease;
+}
+.AdvancedSearch__btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+.AdvancedSearch__btn.Secondary {
+  background: transparent;
+  color: var(--text);
+  border: 1px solid rgba(15,23,42,0.15);
+}
+.AdvancedSearch__btn.Secondary:hover {
+  background: rgba(15,23,42,0.04);
+}
+

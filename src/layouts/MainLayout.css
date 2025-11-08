@@ -1,25 +1,59 @@
-/* MainLayout - Estilo Spotify moderno */
+/* MainLayout.css - Versión mejorada con sidebar dinámico */
 .MainLayout {
   display: flex;
   height: 100vh;
   background: var(--bg);
   overflow: hidden;
+  position: relative;
+}
+
+/* Efecto de degradado sutil en el fondo */
+.MainLayout::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 300px;
+  background: radial-gradient(circle at 50% 0%, rgba(242, 92, 67, 0.03) 0%, transparent 70%);
+  pointer-events: none;
+  z-index: 0;
 }
 
 .MainLayout__body {
   display: flex;
   flex: 1;
   overflow: hidden;
+  position: relative;
+  z-index: 1;
 }
 
 .MainLayout__content {
   flex: 1;
+  margin-left: 260px; /* Espacio para sidebar expandido */
   padding: 32px 40px;
   overflow-y: auto;
   overflow-x: hidden;
-  background: var(--bg);
-  margin-bottom: 90px; /* Espacio para el player fijo */
+  background: transparent;
+  transition: margin-bottom 0.4s cubic-bezier(0.4, 0, 0.2, 1),
+              margin-left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   color: var(--text) !important;
+  position: relative;
+}
+
+/* Adaptación al sidebar colapsado */
+.MainLayout__content--sidebarCollapsed {
+  margin-left: 80px; /* Espacio para sidebar colapsado */
+}
+
+/* Margen inferior cuando el player está visible */
+.MainLayout__content--playerVisible {
+  margin-bottom: 90px;
+}
+
+/* Sin margen cuando el player está oculto */
+.MainLayout__content--playerHidden {
+  margin-bottom: 0;
 }
 
 .MainLayout__search {
@@ -50,9 +84,9 @@
   color: #FF6F52;
 }
 
-/* Mejora del scroll */
+/* Mejora del scroll con diseño más suave */
 .MainLayout__content::-webkit-scrollbar {
-  width: 12px;
+  width: 10px;
 }
 
 .MainLayout__content::-webkit-scrollbar-track {
@@ -60,15 +94,16 @@
 }
 
 .MainLayout__content::-webkit-scrollbar-thumb {
-  background: rgba(68, 75, 84, 0.3);
-  border-radius: 6px;
-  border: 3px solid transparent;
+  background: linear-gradient(180deg, rgba(242, 92, 67, 0.4) 0%, rgba(69, 182, 179, 0.4) 100%);
+  border-radius: 10px;
+  border: 2px solid transparent;
   background-clip: content-box;
+  transition: all var(--transition-fast);
 }
 
 .MainLayout__content::-webkit-scrollbar-thumb:hover {
-  background: rgba(68, 75, 84, 0.5);
-  border: 3px solid transparent;
+  background: linear-gradient(180deg, rgba(242, 92, 67, 0.6) 0%, rgba(69, 182, 179, 0.6) 100%);
+  border: 1px solid transparent;
   background-clip: content-box;
 }
 
@@ -87,18 +122,76 @@
   }
 }
 
-/* Títulos de sección */
+/* Títulos de sección con efectos sutiles */
 .MainLayout__sectionTitle {
-  font-size: 24px;
-  font-weight: 700;
+  font-size: 28px;
+  font-weight: 800;
   color: var(--text);
-  margin: 0 0 16px 0;
-  letter-spacing: -0.5px;
+  margin: 0 0 20px 0;
+  letter-spacing: -0.7px;
+  position: relative;
+  display: inline-block;
+}
+
+.MainLayout__sectionTitle::after {
+  content: '';
+  position: absolute;
+  bottom: -4px;
+  left: 0;
+  width: 40px;
+  height: 3px;
+  background: linear-gradient(90deg, var(--accent) 0%, var(--secondary) 100%);
+  border-radius: 2px;
 }
 
 .MainLayout__sectionSubtitle {
   font-size: 14px;
   color: var(--text-muted);
-  margin: -8px 0 20px 0;
+  margin: -8px 0 24px 0;
   font-weight: 500;
+}
+
+/* Efecto de brillo en el contenido cuando se desplaza */
+@keyframes contentFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.MainLayout__content > * {
+  animation: contentFadeIn 0.6s ease;
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+  .MainLayout__content {
+    padding: 24px 32px;
+  }
+}
+
+@media (max-width: 768px) {
+  .MainLayout__content {
+    margin-left: 80px; /* Sidebar colapsado automáticamente en móviles */
+    padding: 20px 16px;
+  }
+  
+  .MainLayout__sectionTitle {
+    font-size: 24px;
+  }
+}
+
+@media (max-width: 480px) {
+  .MainLayout__content {
+    margin-left: 80px;
+    padding: 16px;
+  }
+  
+  .MainLayout__sectionTitle {
+    font-size: 20px;
+  }
 }

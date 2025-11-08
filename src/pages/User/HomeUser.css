@@ -16,6 +16,14 @@
   margin: 0 0 8px 0;
   letter-spacing: -1px;
   display: flex;
+.HomeUser__searchResults {
+  margin: 20px 0;
+}
+.HomeUser__resultsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 16px;
+}
   align-items: center;
   gap: 16px;
 }
@@ -292,3 +300,34 @@
   .HomeUser__genreGrid { grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); }
   .HomeUser__stats { grid-template-columns: repeat(2, 1fr); }
 }
+
+/* Advanced search panel results: make SongCard more compact */
+.AdvancedSearchPanel {
+  margin-bottom: 32px;
+}
+.AdvancedSearchPanel__results {
+  margin-top: 20px;
+}
+.AdvancedSearchPanel__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 14px;
+}
+.AdvancedSearchPanel__item .SongCard {
+  padding: 10px;
+  border-radius: 8px;
+}
+.AdvancedSearchPanel__item .SongCard__playButton {
+  width: 44px;
+  height: 44px;
+}
+.AdvancedSearchPanel__item .SongCard__title { font-size: 14px }
+.AdvancedSearchPanel__item .SongCard__artist { font-size: 12px }
+
+@media (max-width: 768px) {
+  .AdvancedSearchPanel__grid {
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: 10px;
+  }
+}
+
