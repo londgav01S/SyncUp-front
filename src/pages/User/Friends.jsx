@@ -39,12 +39,12 @@ export default function Friends() {
     try {
       const userEmail = user?.correo || localStorage.getItem('userEmail')
       const response = await getUserByCorreo(userEmail)
-      console.log('👤 Info del usuario completa:', response.data)
-      console.log('📋 Usuarios seguidos:', response.data?.seguidos)
+      console.log('Info del usuario completa:', response.data)
+      console.log('Usuarios seguidos:', response.data?.seguidos)
       // El backend devuelve 'seguidos' como lista de usuarios que sigue
       const seguidos = response.data?.seguidos || []
       setFollowing(seguidos)
-      console.log('✅ Estado following actualizado:', seguidos)
+      console.log('Estado following actualizado:', seguidos)
     } catch (err) {
       console.error('Error cargando información del usuario:', err)
     }
@@ -72,7 +72,7 @@ export default function Friends() {
     try {
       const userEmail = user?.correo || localStorage.getItem('userEmail')
       await followUser(userEmail, followEmail)
-      alert('✅ Ahora sigues a este usuario')
+      alert('Ahora sigues a este usuario')
       // Recargar ambas listas para actualizar contadores
       await loadUserInfo()
       await loadFollowers()
@@ -86,7 +86,7 @@ export default function Friends() {
     try {
       const userEmail = user?.correo || localStorage.getItem('userEmail')
       await unfollowUser(userEmail, unfollowEmail)
-      alert('✅ Dejaste de seguir a este usuario')
+      alert('Dejaste de seguir a este usuario')
       // Recargar ambas listas para actualizar contadores
       await loadUserInfo()
       await loadFollowers()
@@ -98,7 +98,7 @@ export default function Friends() {
 
   const isFollowing = (email) => {
     const result = following.some(u => (u.correo || u) === email)
-    console.log(`🔍 ¿Siguiendo a ${email}?`, result, 'Lista:', following)
+    console.log(`¿Siguiendo a ${email}?`, result, 'Lista:', following)
     return result
   }
 
@@ -112,7 +112,7 @@ export default function Friends() {
           color: 'var(--primary)', 
           marginBottom: 'var(--spacing-sm)' 
         }}>
-          👥 Amigos y Seguidores
+          Amigos y Seguidores
         </h1>
         <p style={{ fontSize: 16, color: 'var(--text-muted)' }}>
           Conecta con otros amantes de la música
@@ -172,7 +172,7 @@ export default function Friends() {
             transition: 'var(--transition-fast)'
           }}
         >
-          🔍 Buscar
+          Buscar
         </button>
       </div>
 
