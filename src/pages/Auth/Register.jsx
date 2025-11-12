@@ -2,9 +2,11 @@ import React, { useState, useContext } from 'react'
 import './Auth.css'
 import { AuthContext } from '../../context/AuthContext'
 import { createUser } from '../../api/userService'
+import { useNavigate } from 'react-router-dom'
 
 export default function Register(){
   const { login } = useContext(AuthContext)
+  const navigate = useNavigate()
   const [nombre, setNombre] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
@@ -18,7 +20,9 @@ export default function Register(){
     try {
       const payload = { nombre, correo: email, contrasena: password }
       const res = await createUser(payload)
-      setMessage({ type: 'success', text: 'Usuario creado correctamente.' })
+      setMessage({ type: 'success', text: 'Usuario creado correctamente. Redirigiendo al login…' })
+      // Espera breve para que el usuario vea el mensaje y luego redirige al login
+      setTimeout(() => navigate('/login'), 1500)
       // Optionally auto-login if backend returns enough data/token
       // If you want to login automatically using AuthContext, adapt as needed
       // login({ email })

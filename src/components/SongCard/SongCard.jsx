@@ -1,11 +1,14 @@
 import React, { useState } from 'react'
 import './SongCard.css'
 import usePlayer from '../../hooks/usePlayer'
+import { addToFavorites } from '../../api/favoriteService'
 
 export default function SongCard({ song }) {
   const { current, playing, play, pause } = usePlayer()
   const [isHovered, setIsHovered] = useState(false)
   const [imageLoaded, setImageLoaded] = useState(false)
+  const [isFavorite, setIsFavorite] = useState(false)
+  const [isAddingFavorite, setIsAddingFavorite] = useState(false)
 
   const isCurrent = current?.id === song?.id
   const isPlaying = isCurrent && playing
@@ -17,6 +20,34 @@ export default function SongCard({ song }) {
       pause()
     } else {
       play(song)
+    }
+  }
+
+  const handleLike = async (e) => {
+    e.preventDefault()
+    e.stopPropagation()
+    
+    if (isAddingFavorite) return
+
+    try {
+      setIsAddingFavorite(true)
+      
+      // TODO: Obtener nombre de usuario del contexto de autenticación
+      const userName = localStorage.getItem('userEmail') || 'test@example.com'
+      const songTitle = song?.title || song?.titulo
+      
+      await addToFavorites(userName, songTitle)
+      setIsFavorite(true)
+      
+      // Mostrar feedback visual temporal
+      setTimeout(() => {
+        // Aquí podrías mostrar una notificación tipo toast
+      }, 300)
+    } catch (error) {
+      console.error('Error al agregar a favoritos:', error)
+      alert('No se pudo agregar a favoritos. Intenta de nuevo.')
+    } finally {
+      setIsAddingFavorite(false)
     }
   }
 
@@ -97,8 +128,13 @@ export default function SongCard({ song }) {
 
         {/* Botones de acción secundarios */}
         <div className={`SongCard__actions ${isHovered ? 'SongCard__actions--visible' : ''}`}>
-          <button className="SongCard__actionButton" aria-label="Me gusta">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+          <button 
+            className={`SongCard__actionButton ${isFavorite ? 'SongCard__actionButton--liked' : ''}`}
+            aria-label="Me gusta"
+            onClick={handleLike}
+            disabled={isAddingFavorite}
+          >
+            <svg width="16" height="16" viewBox="0 0 24 24" fill={isFavorite ? "currentColor" : "none"} stroke="currentColor" strokeWidth="2">
               <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
             </svg>
           </button>

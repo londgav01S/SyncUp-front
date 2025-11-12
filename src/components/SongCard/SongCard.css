@@ -242,6 +242,29 @@
   transform: scale(0.95);
 }
 
+/* Estado de favorito (liked) */
+.SongCard__actionButton--liked {
+  background: rgba(239, 68, 68, 0.15);
+  color: #EF4444;
+}
+
+.SongCard__actionButton--liked:hover {
+  background: rgba(239, 68, 68, 0.25);
+  color: #DC2626;
+  transform: scale(1.15);
+}
+
+.SongCard__actionButton--liked svg {
+  animation: heartBeat 0.3s ease;
+}
+
+@keyframes heartBeat {
+  0%, 100% { transform: scale(1); }
+  25% { transform: scale(1.3); }
+  50% { transform: scale(1.1); }
+  75% { transform: scale(1.2); }
+}
+
 .SongCard__shine {
   position: absolute;
   top: -50%;

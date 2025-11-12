@@ -1,10 +1,13 @@
 import React, { useState, useContext } from 'react'
 import './Auth.css'
 import { AuthContext } from '../../context/AuthContext'
-import { getUserByCorreo } from '../../api/userService'
+import axios from '../../api/axiosConfig'
+import { useNavigate, useLocation } from 'react-router-dom'
 
 export default function Login(){
   const { login } = useContext(AuthContext)
+  const navigate = useNavigate()
+  const location = useLocation()
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [loading, setLoading] = useState(false)
@@ -15,21 +18,25 @@ export default function Login(){
     setMessage(null)
     setLoading(true)
     try {
-      const res = await getUserByCorreo(email)
+      // Use dedicated login endpoint that validates password on backend
+  const res = await axios.get('/usuarios/login', { params: { correo: email.trim(), contrasena: password } })
       const user = res.data
-      // Note: backend stores `contrasena` in plain text; compare client-side (not secure)
-      if (!user || !user.contrasena) {
-        setMessage({ type: 'error', text: 'Usuario no encontrado' })
-      } else if (user.contrasena !== password) {
-        setMessage({ type: 'error', text: 'Contraseña incorrecta' })
-      } else {
-        // Successful login: store user in context (minimal info)
-        login({ id: user.id, nombre: user.nombre, correo: user.usuario })
-        setMessage({ type: 'success', text: 'Login correcto' })
-      }
+      
+      // Successful login: store user in context (minimal info)
+      const role = user.correo === 'admin@gmail.com' ? 'admin' : 'user'
+      const authUser = { id: user.id, nombre: user.nombre, correo: user.correo, usuario: user.correo, role }
+      login(authUser)
+      setMessage({ type: 'success', text: 'Login correcto. Redirigiendo…' })
+      const redirectTo = location.state?.from?.pathname || '/'
+      setTimeout(() => navigate(redirectTo), 800)
     } catch (err) {
-      const text = err?.response?.data?.message || err?.message || 'Error en login'
-      setMessage({ type: 'error', text })
+      const status = err?.response?.status
+      if (status === 401 || status === 404) {
+        setMessage({ type: 'error', text: 'Correo o contraseña incorrectos' })
+      } else {
+        const text = err?.response?.data?.message || err?.message || 'Error en login'
+        setMessage({ type: 'error', text })
+      }
     } finally {
       setLoading(false)
     }

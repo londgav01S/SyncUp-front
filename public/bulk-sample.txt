@@ -1,0 +1,25 @@
+# Formato soportado por Mass Upload
+# Secciones: [ARTISTAS], [ALBUMES], [CANCIONES]
+# Separador: |
+# URLs reales de YouTube e imágenes oficiales de Spotify
+
+[ARTISTAS]
+# nombre|nacionalidad|generoPrincipal|generoSecundario|URLFotoArtista
+Bad Bunny|Puerto Rico|Reggaeton|Latin|https://i.scdn.co/image/ab6761610000e5eb13a9fe0e96d8f25ea1949af0
+Billie Eilish|Estados Unidos|Pop|Alternative|https://i.scdn.co/image/ab6761610000e5eb6a7b1baf5a8c3e0b79a9d6a8
+Coldplay|Reino Unido|Rock|Alternative|https://i.scdn.co/image/ab6761610000e5eb1ba8fc5f5c73e7e9313cc6eb
+
+[ALBUMES]
+# titulo|anio|nombreArtista|genero|URLPortadaAlbum
+Un Verano Sin Ti|2022|Bad Bunny|Reggaeton|https://i.scdn.co/image/ab67616d0000b2733b5e11ca1b063583df7e6342
+Happier Than Ever|2021|Billie Eilish|Pop|https://i.scdn.co/image/ab67616d0000b2732a038d3bf875d23e4aeaa84e
+Parachutes|2000|Coldplay|Rock|https://i.scdn.co/image/ab67616d0000b273e5d9bb210f3f8dffb85db22a
+
+[CANCIONES]
+# titulo|nombreArtista|tituloAlbum|genero|anio|duracion|URLCancion
+Tití Me Preguntó|Bad Bunny|Un Verano Sin Ti|Reggaeton|2022|243|https://www.youtube.com/watch?v=aywmbow3ryU
+Moscow Mule|Bad Bunny|Un Verano Sin Ti|Reggaeton|2022|203|https://www.youtube.com/watch?v=VZQ7jnXF728
+Happier Than Ever|Billie Eilish|Happier Than Ever|Pop|2021|298|https://www.youtube.com/watch?v=5GJWxDKyk3A
+Getting Older|Billie Eilish|Happier Than Ever|Pop|2021|244|https://www.youtube.com/watch?v=rM8KXFb8cL4
+Yellow|Coldplay|Parachutes|Rock|2000|267|https://www.youtube.com/watch?v=yKNxeF4KMsY
+Trouble|Coldplay|Parachutes|Rock|2000|270|https://www.youtube.com/watch?v=PfBbZIY2KvQ

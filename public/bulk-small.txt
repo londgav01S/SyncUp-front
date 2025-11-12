@@ -1,0 +1,16 @@
+# Ejemplo pequeño (2 artistas con 1 álbum y 2 canciones cada uno)
+# URLs reales de YouTube e imágenes de los artistas/álbumes
+
+[ARTISTAS]
+The Weeknd|Canadá|R&B|Pop|https://i.scdn.co/image/ab6761610000e5eb214f3cf1cbe7139c1e26ffbb
+Arctic Monkeys|Reino Unido|Indie Rock|Alternative|https://i.scdn.co/image/ab6761610000e5eb7da39dea0a72f581535fb11f
+
+[ALBUMES]
+After Hours|2020|The Weeknd|R&B|https://i.scdn.co/image/ab67616d0000b273ef6f77b0faec2ea8950b2a03
+AM|2013|Arctic Monkeys|Indie Rock|https://i.scdn.co/image/ab67616d0000b2734ae1c4c5c45aabe565499163
+
+[CANCIONES]
+Blinding Lights|The Weeknd|After Hours|R&B|2020|200|https://www.youtube.com/watch?v=4NRXx6U8ABQ
+Save Your Tears|The Weeknd|After Hours|R&B|2020|215|https://www.youtube.com/watch?v=XXYlFuWEuKI
+Do I Wanna Know?|Arctic Monkeys|AM|Indie Rock|2013|272|https://www.youtube.com/watch?v=bpOSxM0rNPM
+R U Mine?|Arctic Monkeys|AM|Indie Rock|2013|201|https://www.youtube.com/watch?v=ngzC_8zqInk

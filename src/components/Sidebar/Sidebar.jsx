@@ -13,11 +13,21 @@ export default function Sidebar(){
   const menuItems = [
     { path: '/', icon: 'fas fa-home', label: 'Inicio', tooltip: 'Inicio' },
     { path: '/user/discover', icon: 'fas fa-compass', label: 'Descubrir', tooltip: 'Descubrir' },
+    { path: '/favorites', icon: 'fas fa-heart', label: 'Favoritos', tooltip: 'Mis Favoritos' },
     { path: '/user/playlists', icon: 'fas fa-list', label: 'Playlists', tooltip: 'Playlists' },
   ];
 
   const userItems = user ? [
-    ...(user.role === 'admin' ? [{ path: '/admin', icon: 'fas fa-cog', label: 'Admin Panel', tooltip: 'Panel Admin' }] : []),
+    ...(user.role === 'admin'
+      ? [
+          { path: '/admin', icon: 'fas fa-gauge', label: 'Dashboard', tooltip: 'Panel Admin' },
+          { path: '/admin/artists', icon: 'fas fa-microphone', label: 'Artistas', tooltip: 'Gestionar Artistas' },
+          { path: '/admin/albums', icon: 'fas fa-compact-disc', label: 'Álbumes', tooltip: 'Gestionar Álbumes' },
+          { path: '/admin/songs', icon: 'fas fa-music', label: 'Canciones', tooltip: 'Gestionar Canciones' },
+          { path: '/admin/users', icon: 'fas fa-users', label: 'Usuarios', tooltip: 'Gestionar Usuarios' },
+          { path: '/admin/upload', icon: 'fas fa-upload', label: 'Carga Masiva', tooltip: 'Carga Masiva' },
+        ]
+      : []),
     { path: '/user/profile', icon: 'fas fa-user', label: 'Perfil', tooltip: 'Mi Perfil' },
   ] : [];
 
@@ -25,7 +35,7 @@ export default function Sidebar(){
     <aside className={`Sidebar sidebar ${isCollapsed ? 'Sidebar--collapsed' : ''}`}>
       <div className="Sidebar__brand">
         <Link to="/" className="Sidebar__brandLink">
-          <img src="/Logo.png" alt="Estructuras" className="Sidebar__logo" />
+          <img src="/Logo.png" alt="Estructuras" className="Sidebar__logo" onError={(e)=>{e.currentTarget.src='/placeholder-album.svg'}} />
           <span className="Sidebar__brand-text">SyncUp</span>
         </Link>
         <button 
@@ -70,7 +80,7 @@ export default function Sidebar(){
 
       {user && userItems.length > 0 && (
         <div className="Sidebar__section">
-          <h3 className="Sidebar__section-title">Tu Música</h3>
+          <h3 className="Sidebar__section-title">{user.role === 'admin' ? 'Administración' : 'Tu Música'}</h3>
           <ul className="Sidebar__list">
             {userItems.map((item) => (
               <li 
