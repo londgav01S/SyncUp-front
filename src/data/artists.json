@@ -1,0 +1,56 @@
+[
+  {
+    "id": "artist-1",
+    "nombre": "Arctic Monkeys",
+    "nacionalidad": "Reino Unido",
+    "generoPrincipal": "Rock",
+    "generoSecundario": "Indie Rock",
+    "URLFotoArtista": "https://i.scdn.co/image/ab6761610000e5eb7da39dea0a72f581535fb11f",
+    "descripcion": "Banda británica de rock alternativo formada en Sheffield en 2002."
+  },
+  {
+    "id": "artist-2",
+    "nombre": "Billie Eilish",
+    "nacionalidad": "Estados Unidos",
+    "generoPrincipal": "Pop",
+    "generoSecundario": "Electropop",
+    "URLFotoArtista": "https://i.scdn.co/image/ab6761610000e5eb6a7ecc2b5f73f17318e06294",
+    "descripcion": "Cantante y compositora estadounidense conocida por su estilo único y voz susurrante."
+  },
+  {
+    "id": "artist-3",
+    "nombre": "Daft Punk",
+    "nacionalidad": "Francia",
+    "generoPrincipal": "Electronic",
+    "generoSecundario": "House",
+    "URLFotoArtista": "https://i.scdn.co/image/ab6761610000e5eba7bfd7835b5c1eee0c95fa6e",
+    "descripcion": "Dúo francés de música electrónica formado en 1993, pioneros del house francés."
+  },
+  {
+    "id": "artist-4",
+    "nombre": "Kendrick Lamar",
+    "nacionalidad": "Estados Unidos",
+    "generoPrincipal": "Hip Hop",
+    "generoSecundario": "Rap",
+    "URLFotoArtista": "https://i.scdn.co/image/ab6761610000e5eb437b9e2a82505b3d93ff1022",
+    "descripcion": "Rapero, compositor y productor discográfico estadounidense ganador de múltiples Grammy."
+  },
+  {
+    "id": "artist-5",
+    "nombre": "Taylor Swift",
+    "nacionalidad": "Estados Unidos",
+    "generoPrincipal": "Pop",
+    "generoSecundario": "Country",
+    "URLFotoArtista": "https://i.scdn.co/image/ab6761610000e5ebe672b5f553298dcdccb0e676",
+    "descripcion": "Cantante y compositora estadounidense, una de las artistas más exitosas de la década."
+  },
+  {
+    "id": "artist-6",
+    "nombre": "Tame Impala",
+    "nacionalidad": "Australia",
+    "generoPrincipal": "Psychedelic Rock",
+    "generoSecundario": "Electronic",
+    "URLFotoArtista": "https://i.scdn.co/image/ab6761610000e5eb90357ef28b3a012a1d1b2fa2",
+    "descripcion": "Proyecto musical del australiano Kevin Parker, fusionando rock psicodélico con electrónica."
+  }
+]

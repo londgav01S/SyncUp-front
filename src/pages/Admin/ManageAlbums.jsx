@@ -58,6 +58,8 @@ export default function ManageAlbums(){
       setMessage({ type: 'success', text: 'Álbum creado correctamente' })
       setForm(empty)
       fetchAlbums()
+      // Disparar evento por si otras vistas necesitan refrescar
+      window.dispatchEvent(new Event('albums-updated'))
     } catch (err) {
       const text = err?.response?.data?.message || err?.message || 'Error al crear álbum'
       setMessage({ type: 'error', text })

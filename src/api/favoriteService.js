@@ -2,15 +2,15 @@ import axios from './axiosConfig'
 
 /**
  * Agregar una canción a favoritos del usuario
- * @param {string} userName - Nombre del usuario (correo según endpoint)
+ * @param {string} userEmail - Correo del usuario
  * @param {string} songTitle - Título de la canción
  * @returns {Promise} Lista actualizada de favoritos
  */
-export const addToFavorites = async (userName, songTitle) => {
+export const addToFavorites = async (userEmail, songTitle) => {
   try {
     const response = await axios.get('/usuarios/like', {
       params: {
-        nombreUsuario: userName,
+        correoUsuario: userEmail,
         tituloCancion: songTitle
       }
     })
@@ -22,16 +22,38 @@ export const addToFavorites = async (userName, songTitle) => {
 }
 
 /**
+ * Eliminar una canción de favoritos del usuario
+ * @param {string} userEmail - Correo del usuario
+ * @param {string} songTitle - Título de la canción
+ * @returns {Promise} Lista actualizada de favoritos
+ */
+export const removeFromFavorites = async (userEmail, songTitle) => {
+  try {
+    const response = await axios.get('/usuarios/dislike', {
+      params: {
+        correoUsuario: userEmail,
+        tituloCancion: songTitle
+      }
+    })
+    return response.data
+  } catch (error) {
+    console.error('Error al eliminar de favoritos:', error)
+    throw error
+  }
+}
+
+/**
  * Obtener favoritos del usuario
  * @param {string} email - Correo del usuario
- * @returns {Promise} Objeto usuario con listaFavoritos
+ * @returns {Promise} Array de canciones favoritas
  */
 export const getFavorites = async (email) => {
   try {
     const response = await axios.get('/usuarios', {
       params: { correo: email }
     })
-    return response.data.listaFavoritos || []
+    console.log('💖 Favoritos del usuario:', response.data?.listaFavoritos)
+    return response.data?.listaFavoritos || []
   } catch (error) {
     console.error('Error al obtener favoritos:', error)
     throw error

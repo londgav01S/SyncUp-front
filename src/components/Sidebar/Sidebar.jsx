@@ -14,6 +14,7 @@ export default function Sidebar(){
     { path: '/', icon: 'fas fa-home', label: 'Inicio', tooltip: 'Inicio' },
     { path: '/user/discover', icon: 'fas fa-compass', label: 'Descubrir', tooltip: 'Descubrir' },
     { path: '/favorites', icon: 'fas fa-heart', label: 'Favoritos', tooltip: 'Mis Favoritos' },
+    { path: '/friends', icon: 'fas fa-user-friends', label: 'Amigos', tooltip: 'Amigos y Seguidores' },
     { path: '/user/playlists', icon: 'fas fa-list', label: 'Playlists', tooltip: 'Playlists' },
   ];
 

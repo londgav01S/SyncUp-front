@@ -62,6 +62,8 @@ export default function ManageSongs(){
       setMessage({ type: 'success', text: 'Canción creada correctamente' })
       setForm(empty)
       fetchSongs()
+      // Disparar evento global para que HomeUser actualice sección New
+      window.dispatchEvent(new Event('songs-updated'))
     } catch (err) {
       const text = err?.response?.data?.message || err?.message || 'Error al crear canción'
       setMessage({ type: 'error', text })

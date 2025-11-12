@@ -1,0 +1,66 @@
+[
+  {
+    "id": "album-1",
+    "titulo": "AM",
+    "anio": 2013,
+    "artista": "Arctic Monkeys",
+    "genero": "Rock",
+    "URLPortadaAlbum": "https://i.scdn.co/image/ab67616d0000b273b1f8da74093d6f1908c4e1c6"
+  },
+  {
+    "id": "album-2",
+    "titulo": "Happier Than Ever",
+    "anio": 2021,
+    "artista": "Billie Eilish",
+    "genero": "Pop",
+    "URLPortadaAlbum": "https://i.scdn.co/image/ab67616d0000b273a91c10fe9472d9bd89802e5a"
+  },
+  {
+    "id": "album-3",
+    "titulo": "Random Access Memories",
+    "anio": 2013,
+    "artista": "Daft Punk",
+    "genero": "Electronic",
+    "URLPortadaAlbum": "https://i.scdn.co/image/ab67616d0000b2739b9b36b0e22870b9f542d937"
+  },
+  {
+    "id": "album-4",
+    "titulo": "DAMN.",
+    "anio": 2017,
+    "artista": "Kendrick Lamar",
+    "genero": "Hip Hop",
+    "URLPortadaAlbum": "https://i.scdn.co/image/ab67616d0000b2738b52c6b9bc4e43d873869699"
+  },
+  {
+    "id": "album-5",
+    "titulo": "1989",
+    "anio": 2014,
+    "artista": "Taylor Swift",
+    "genero": "Pop",
+    "URLPortadaAlbum": "https://i.scdn.co/image/ab67616d0000b273904445d70d04eb24d6bb79ac"
+  },
+  {
+    "id": "album-6",
+    "titulo": "Currents",
+    "anio": 2015,
+    "artista": "Tame Impala",
+    "genero": "Psychedelic Rock",
+    "URLPortadaAlbum": "https://i.scdn.co/image/ab67616d0000b27379f0e1d5f5968ba4e91828bd"
+  },
+  {
+    "id": "album-7",
+    "titulo": "Tranquility Base Hotel & Casino",
+    "anio": 2018,
+    "artista": "Arctic Monkeys",
+    "genero": "Rock",
+    "URLPortadaAlbum": "https://i.scdn.co/image/ab67616d0000b273158f7e7dae858e56c3c6e576"
+  },
+  {
+    "id": "album-8",
+    "titulo": "When We All Fall Asleep, Where Do We Go?",
+    "anio": 2019,
+    "artista": "Billie Eilish",
+    "genero": "Pop",
+    "URLPortadaAlbum": "https://i.scdn.co/image/ab67616d0000b2732a038d3bf875d23e4aeaa84e"
+  }
+]

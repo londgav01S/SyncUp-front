@@ -1,34 +1,77 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useContext } from 'react'
 import { Link } from 'react-router-dom'
-import { getFavorites, exportFavoritesToCSV } from '../../api/favoriteService'
+import { getFavorites, exportFavoritesToCSV, removeFromFavorites } from '../../api/favoriteService'
+import { AuthContext } from '../../context/AuthContext'
 import SongCard from '../../components/SongCard/SongCard'
 import './Favorites.css'
 
 export default function Favorites() {
+  const { user } = useContext(AuthContext)
   const [favorites, setFavorites] = useState([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
 
   useEffect(() => {
-    loadFavorites()
-  }, [])
+    if (user?.correo) {
+      loadFavorites()
+    }
+    
+    // Escuchar evento de actualización de favoritos
+    const handler = () => loadFavorites()
+    window.addEventListener('favorites-updated', handler)
+    return () => window.removeEventListener('favorites-updated', handler)
+  }, [user])
 
   const loadFavorites = async () => {
     try {
       setLoading(true)
       setError(null)
       
-      // TODO: Obtener email del usuario autenticado desde contexto
-      // Por ahora, usamos un placeholder
-      const userEmail = localStorage.getItem('userEmail') || 'test@example.com'
+      const userEmail = user?.correo || localStorage.getItem('userEmail')
+      if (!userEmail) {
+        setError('Usuario no autenticado')
+        setLoading(false)
+        return
+      }
       
       const favs = await getFavorites(userEmail)
-      setFavorites(favs)
+      console.log('💖 Favoritos cargados:', favs)
+      
+      // Adaptar canciones del backend al formato que espera SongCard
+      const adaptedFavs = favs.map(song => ({
+        id: song.id,
+        title: song.titulo,
+        artist: song.artista?.nombre || 'Artista desconocido',
+        cover: (
+          song.URLPortadaCancion ||
+          song.urlPortadaCancion ||
+          song.album?.urlPortadaAlbum ||
+          song.album?.URLPortadaAlbum ||
+          ''
+        ).toString().trim() || '/placeholder-song.svg',
+        genre: song.genero || 'Music',
+        year: song.anio,
+        album: song.album?.titulo
+      }))
+      
+      setFavorites(adaptedFavs)
     } catch (err) {
       console.error('Error cargando favoritos:', err)
       setError('No se pudieron cargar los favoritos')
     } finally {
       setLoading(false)
+    }
+  }
+
+  const handleRemoveFavorite = async (songTitle) => {
+    try {
+      const userEmail = user?.correo || localStorage.getItem('userEmail')
+      await removeFromFavorites(userEmail, songTitle)
+      // Recargar favoritos
+      await loadFavorites()
+    } catch (err) {
+      console.error('Error al eliminar favorito:', err)
+      alert('No se pudo eliminar de favoritos')
     }
   }
 
@@ -89,7 +132,7 @@ export default function Favorites() {
         <div className="Favorites__empty">
           <div className="Favorites__emptyIcon">🎵</div>
           <h2>No tienes favoritos aún</h2>
-          <p>Comienza a agregar canciones que te gusten</p>
+          <p>Comienza a agregar canciones que te gusten dando click en el corazón</p>
           <Link to="/" className="Favorites__emptyLink">
             Explorar música
           </Link>
@@ -97,13 +140,39 @@ export default function Favorites() {
       ) : (
         <div className="Favorites__grid">
           {favorites.map(song => (
-            <Link 
-              key={song.id || song._id} 
-              to={`/songs/${song.id || song._id}`}
-              style={{ textDecoration: 'none', color: 'inherit' }}
-            >
-              <SongCard song={song} />
-            </Link>
+            <div key={song.id} style={{ position: 'relative' }}>
+              <Link 
+                to={`/songs/${song.id}`}
+                style={{ textDecoration: 'none', color: 'inherit' }}
+              >
+                <SongCard song={song} />
+              </Link>
+              <button
+                onClick={(e) => {
+                  e.preventDefault()
+                  handleRemoveFavorite(song.title)
+                }}
+                style={{
+                  position: 'absolute',
+                  top: 8,
+                  right: 8,
+                  background: 'rgba(0,0,0,0.7)',
+                  border: 'none',
+                  borderRadius: '50%',
+                  width: 32,
+                  height: 32,
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  cursor: 'pointer',
+                  transition: 'var(--transition-fast)',
+                  zIndex: 10
+                }}
+                title="Quitar de favoritos"
+              >
+                ❌
+              </button>
+            </div>
           ))}
         </div>
       )}

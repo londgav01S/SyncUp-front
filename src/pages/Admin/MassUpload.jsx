@@ -84,6 +84,9 @@ export default function MassUpload(){
         })
       }
       appendLog('Carga masiva completada.')
+      // Disparar eventos globales para refrescar listados y sección New
+      window.dispatchEvent(new Event('albums-updated'))
+      window.dispatchEvent(new Event('songs-updated'))
     } catch (err) {
       appendLog(`Error: ${err?.response?.data?.message || err.message}`)
     } finally {

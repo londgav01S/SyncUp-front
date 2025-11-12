@@ -1,9 +1,11 @@
-import React, { useState } from 'react'
+import React, { useState, useContext } from 'react'
 import './SongCard.css'
 import usePlayer from '../../hooks/usePlayer'
-import { addToFavorites } from '../../api/favoriteService'
+import { addToFavorites, removeFromFavorites } from '../../api/favoriteService'
+import { AuthContext } from '../../context/AuthContext'
 
 export default function SongCard({ song }) {
+  const { user } = useContext(AuthContext)
   const { current, playing, play, pause } = usePlayer()
   const [isHovered, setIsHovered] = useState(false)
   const [imageLoaded, setImageLoaded] = useState(false)
@@ -32,20 +34,31 @@ export default function SongCard({ song }) {
     try {
       setIsAddingFavorite(true)
       
-      // TODO: Obtener nombre de usuario del contexto de autenticación
-      const userName = localStorage.getItem('userEmail') || 'test@example.com'
+      const userEmail = user?.correo || localStorage.getItem('userEmail')
+      if (!userEmail) {
+        alert('Debes iniciar sesión para agregar favoritos')
+        return
+      }
+      
       const songTitle = song?.title || song?.titulo
       
-      await addToFavorites(userName, songTitle)
-      setIsFavorite(true)
+      if (isFavorite) {
+        // Quitar de favoritos
+        await removeFromFavorites(userEmail, songTitle)
+        setIsFavorite(false)
+        console.log('💔 Removido de favoritos:', songTitle)
+      } else {
+        // Agregar a favoritos
+        await addToFavorites(userEmail, songTitle)
+        setIsFavorite(true)
+        console.log('💖 Agregado a favoritos:', songTitle)
+      }
       
-      // Mostrar feedback visual temporal
-      setTimeout(() => {
-        // Aquí podrías mostrar una notificación tipo toast
-      }, 300)
+      // Disparar evento para que Favorites se actualice
+      window.dispatchEvent(new Event('favorites-updated'))
     } catch (error) {
-      console.error('Error al agregar a favoritos:', error)
-      alert('No se pudo agregar a favoritos. Intenta de nuevo.')
+      console.error('Error al gestionar favoritos:', error)
+      alert('No se pudo actualizar favoritos. Verifica que la canción exista en el sistema.')
     } finally {
       setIsAddingFavorite(false)
     }

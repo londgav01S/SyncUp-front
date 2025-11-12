@@ -1,8 +1,9 @@
-import React, { useState, useRef } from 'react'
-import { Link, useLocation } from 'react-router-dom'
+import React, { useState, useRef, useEffect, useMemo } from 'react'
+import { Link } from 'react-router-dom'
 import songs from '../../data/songs.json'
 import SongCard from '../../components/SongCard/SongCard'
 import HeroCarousel from '../../components/HeroCarousel/HeroCarousel'
+import { getSongs } from '../../api/songService'
 import './HomeUser.css'
 
 // Scrollable Row Component
@@ -49,6 +50,50 @@ function ScrollableRow({ title, songs }) {
 }
 
 export default function HomeUser(){
+  const [remoteSongs, setRemoteSongs] = useState([])
+  const [loadingRemote, setLoadingRemote] = useState(false)
+  const [errorRemote, setErrorRemote] = useState(null)
+
+  // Adapt backend song shape to SongCard expected props
+  const adaptSong = (s) => ({
+    id: s.id || `${s.titulo}-${s.artista?.nombre || 'NA'}`,
+    title: s.titulo,
+    artist: s.artista?.nombre,
+    cover: (
+      s.URLPortadaCancion || // backend usa campo con P mayúscula
+      s.urlPortadaCancion || // por compatibilidad si el back lo envía así
+      s.album?.urlPortadaAlbum ||
+      s.album?.URLPortadaAlbum ||
+      ''
+    ).toString().trim() || '/placeholder-song.svg',
+    genre: s.genero || 'Music'
+  })
+
+  useEffect(() => {
+    const fetchRemote = async () => {
+      setLoadingRemote(true)
+      setErrorRemote(null)
+      try {
+        const res = await getSongs()
+        console.log('📀 Respuesta backend /canciones:', res.data)
+        const data = Array.isArray(res.data) ? res.data : []
+        console.log('🎵 Total canciones recibidas:', data.length)
+        const adapted = data.map(adaptSong)
+        console.log('✅ Canciones adaptadas para UI:', adapted)
+        setRemoteSongs(adapted)
+      } catch (err) {
+        console.error('❌ Error al cargar canciones:', err)
+        setErrorRemote(err?.response?.data?.message || 'No se pudieron cargar canciones')
+      } finally {
+        setLoadingRemote(false)
+      }
+    }
+    fetchRemote()
+    const handler = () => fetchRemote()
+    window.addEventListener('songs-updated', handler)
+    return () => window.removeEventListener('songs-updated', handler)
+  }, [])
+
   return (
     <div className="HomeUserPage">
       {/* Welcome Section */}
@@ -69,7 +114,35 @@ export default function HomeUser(){
       {/* Hero Carousel */}
       <HeroCarousel />
 
-      {/* Quick Access Cards */}
+      {/* Sección NEW (canciones desde backend) */}
+      <section className="HomeUser__scrollSection">
+        <div className="HomeUser__sectionHeader">
+          <h2 className="HomeUser__sectionTitle">New</h2>
+        </div>
+        
+        {loadingRemote && (
+          <div style={{ padding:'var(--spacing-md)', color:'var(--text-muted)', fontSize:14 }}>Cargando canciones…</div>
+        )}
+        {errorRemote && !loadingRemote && (
+          <div style={{ padding:'var(--spacing-md)', color:'#ff6b6b', fontSize:14 }}>{errorRemote}</div>
+        )}
+        {!loadingRemote && !errorRemote && (
+          <div className="HomeUser__scrollContainer">
+            {remoteSongs.map(song => (
+              <div key={song.id} className="HomeUser__scrollItem">
+                <Link to={`/songs/${song.id}`} style={{textDecoration:'none',color:'inherit'}}>
+                  <SongCard song={song} />
+                </Link>
+              </div>
+            ))}
+            {remoteSongs.length === 0 && (
+              <div style={{ padding:'var(--spacing-md)', opacity:.7, fontSize:14 }}>Sin canciones disponibles</div>
+            )}
+          </div>
+        )}
+      </section>
+
+      {/* Quick Access Cards (estático - escuchado recientemente mock) */}
       <div className="HomeUser__quickAccess">
         <h2 className="HomeUser__sectionTitle">Escuchado recientemente</h2>
         <div className="HomeUser__quickGrid">

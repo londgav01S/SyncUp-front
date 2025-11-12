@@ -9,6 +9,7 @@ import Favorites from '../pages/User/Favorites'
 import Profile from '../pages/User/Profile'
 import Playlists from '../pages/User/Playlists'
 import DiscoverWeekly from '../pages/User/DiscoverWeekly'
+import Friends from '../pages/User/Friends'
 import Dashboard from '../pages/Admin/Dashboard'
 import ManageSongs from '../pages/Admin/ManageSongs'
 import ManageArtists from '../pages/Admin/ManageArtists'
@@ -34,6 +35,7 @@ export default function AppRouter() {
           <Route path="/user" element={<HomeUser />} />
           <Route path="/search" element={<SearchPage />} />
           <Route path="/favorites" element={<Favorites />} />
+          <Route path="/friends" element={<Friends />} />
           <Route path="/user/profile" element={<Profile />} />
           <Route path="/user/playlists" element={<Playlists />} />
           <Route path="/user/discover" element={<DiscoverWeekly />} />
