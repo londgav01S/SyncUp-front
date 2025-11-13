@@ -1,10 +1,10 @@
-/* Auth page styles - Estilo moderno */
+/* Auth page styles - Neomoderno Digital */
 .auth-page {
   display: flex;
   align-items: center;
   justify-content: center;
   min-height: 100vh;
-  background: linear-gradient(135deg, var(--primary) 0%, var(--color-surface-elevated) 100%);
+  background: linear-gradient(135deg, var(--bg) 0%, rgba(26, 60, 85, 0.3) 100%);
   padding: 20px;
 }
 
@@ -12,9 +12,12 @@
   width: 100%;
   max-width: 420px;
   padding: 40px;
-  border-radius: var(--border-radius-lg);
-  background: white;
-  box-shadow: var(--shadow-lg);
+  border-radius: 16px;
+  background: var(--glass-bg);
+  -webkit-backdrop-filter: blur(16px);
+  backdrop-filter: blur(16px);
+  box-shadow: var(--shadow-lg), 0 0 40px rgba(0, 200, 194, 0.1);
+  border: 1px solid var(--glass-border);
 }
 
 .auth-form h2 {
@@ -45,39 +48,41 @@
   width: 100%;
   padding: 12px 16px;
   margin: 0 0 20px 0;
-  border-radius: var(--border-radius-sm);
-  border: 1px solid var(--border-color);
+  border-radius: 10px;
+  border: 1px solid var(--glass-border);
   font-size: 14px;
   transition: all var(--transition-fast);
-  background: var(--bg);
+  background: rgba(255, 255, 255, 0.05);
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+  color: var(--text);
 }
 
 .auth-form input:focus {
   outline: none;
-  border-color: var(--accent);
-  box-shadow: 0 0 0 3px rgba(242, 92, 67, 0.1);
-  background: white;
+  border-color: var(--secondary);
+  box-shadow: 0 0 0 3px rgba(0, 200, 194, 0.2), var(--shadow-glow);
+  background: rgba(0, 200, 194, 0.05);
 }
 
 .auth-form button {
   width: 100%;
   padding: 14px;
   margin-top: 8px;
-  background: var(--accent);
+  background: linear-gradient(135deg, var(--secondary), var(--accent));
   color: white;
   border: none;
-  border-radius: var(--border-radius-full);
+  border-radius: 10px;
   font-size: 16px;
   font-weight: 700;
   cursor: pointer;
   transition: all var(--transition-fast);
-  box-shadow: 0 4px 12px rgba(242, 92, 67, 0.3);
+  box-shadow: 0 4px 12px rgba(209, 71, 163, 0.4), var(--shadow-glow);
 }
 
 .auth-form button:hover {
-  background: #FF6F52;
-  transform: translateY(-2px);
-  box-shadow: 0 6px 16px rgba(242, 92, 67, 0.4);
+  transform: translateY(-2px) scale(1.02);
+  box-shadow: 0 6px 16px rgba(209, 71, 163, 0.5), var(--shadow-glow);
 }
 
 .auth-form button:active {
@@ -85,15 +90,16 @@
 }
 
 .auth-form a {
-  color: var(--accent);
+  color: var(--secondary);
   text-decoration: none;
   font-weight: 600;
   transition: var(--transition-fast);
 }
 
 .auth-form a:hover {
-  color: #FF6F52;
+  color: var(--accent);
   text-decoration: underline;
+  text-shadow: 0 0 10px rgba(0, 200, 194, 0.3);
 }
 
 .auth-divider {

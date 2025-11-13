@@ -4,33 +4,36 @@
   flex-direction: column;
   gap: 12px;
   padding: 16px;
-  border-radius: 12px;
-  background: white;
+  border-radius: 16px;
+  background: var(--glass-bg);
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   cursor: pointer;
-  box-shadow: 0 2px 8px rgba(28, 43, 58, 0.08);
-  border: 1px solid rgba(28, 43, 58, 0.08);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  border: 1px solid var(--glass-border);
   overflow: hidden;
 }
 
 .SongCard--hovered {
-  transform: translateY(-8px);
-  box-shadow: 0 12px 32px rgba(28, 43, 58, 0.16);
-  border-color: rgba(242, 92, 67, 0.2);
+  transform: translateY(-8px) scale(1.02);
+  box-shadow: 0 12px 32px rgba(0, 200, 194, 0.3), var(--shadow-glow);
+  border-color: var(--secondary);
 }
 
 .SongCard__imageContainer {
   position: relative;
-  border-radius: 10px;
+  border-radius: 12px;
   overflow: hidden;
   aspect-ratio: 1 / 1;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, var(--secondary) 0%, var(--accent) 100%);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
 }
 
 .SongCard__skeleton {
   position: absolute;
   inset: 0;
-  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background: linear-gradient(90deg, rgba(154, 163, 178, 0.1) 25%, rgba(154, 163, 178, 0.2) 50%, rgba(154, 163, 178, 0.1) 75%);
   background-size: 200% 100%;
   animation: shimmer 1.5s infinite;
 }
@@ -75,6 +78,7 @@
   left: 12px;
   padding: 4px 12px;
   background: rgba(255, 255, 255, 0.25);
+  -webkit-backdrop-filter: blur(10px);
   backdrop-filter: blur(10px);
   border-radius: 20px;
   font-size: 11px;
@@ -100,13 +104,13 @@
   height: 56px;
   border: none;
   border-radius: 50%;
-  background: var(--color-accent);
+  background: linear-gradient(135deg, var(--secondary), var(--accent));
   color: white;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 8px 24px rgba(242, 92, 67, 0.4);
+  box-shadow: 0 8px 24px rgba(209, 71, 163, 0.5), var(--shadow-glow);
   opacity: 0;
   transform: translateY(12px) scale(0.8);
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
@@ -119,12 +123,13 @@
 }
 
 .SongCard__playButton--active {
-  background: var(--color-secondary);
-  box-shadow: 0 8px 24px rgba(69, 182, 179, 0.5);
+  background: linear-gradient(135deg, var(--accent), var(--secondary));
+  box-shadow: 0 8px 24px rgba(0, 200, 194, 0.6), var(--shadow-glow);
 }
 
 .SongCard__playButton:hover {
   transform: translateY(0) scale(1.1);
+  box-shadow: 0 12px 32px rgba(209, 71, 163, 0.6), var(--shadow-glow);
 }
 
 .SongCard__playButton:active {
@@ -160,14 +165,15 @@
   right: 12px;
   width: 32px;
   height: 32px;
-  background: rgba(69, 182, 179, 0.9);
+  background: var(--success);
+  -webkit-backdrop-filter: blur(10px);
   backdrop-filter: blur(10px);
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
   color: white;
-  box-shadow: 0 4px 12px rgba(69, 182, 179, 0.4);
+  box-shadow: 0 4px 12px rgba(0, 230, 118, 0.4);
   z-index: 2;
   animation: pulse 2s ease-in-out infinite;
 }
@@ -184,7 +190,7 @@
   font-weight: 700;
   margin: 0;
   line-height: 1.3;
-  color: var(--color-primary);
+  color: var(--text);
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -192,12 +198,13 @@
 }
 
 .SongCard--hovered .SongCard__title {
-  color: var(--color-accent);
+  color: var(--secondary);
+  text-shadow: 0 0 10px rgba(0, 200, 194, 0.3);
 }
 
 .SongCard__artist {
   font-size: 13px;
-  color: var(--color-text-muted);
+  color: var(--text-muted);
   font-weight: 500;
   margin: 0;
   overflow: hidden;
@@ -221,10 +228,12 @@
 .SongCard__actionButton {
   width: 32px;
   height: 32px;
-  border: none;
+  border: 1px solid var(--glass-border);
   border-radius: 50%;
-  background: rgba(28, 43, 58, 0.06);
-  color: var(--color-text-muted);
+  background: rgba(255, 255, 255, 0.05);
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+  color: var(--text-muted);
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -234,8 +243,9 @@
 
 .SongCard__actionButton:hover {
   transform: scale(1.1);
-  background: rgba(242, 92, 67, 0.1);
-  color: var(--color-accent);
+  background: rgba(209, 71, 163, 0.2);
+  color: var(--accent);
+  box-shadow: 0 4px 12px rgba(209, 71, 163, 0.3);
 }
 
 .SongCard__actionButton:active {
@@ -259,8 +269,8 @@
 }
 
 .SongCard__actionButton--active {
-  background: rgba(29, 185, 84, 0.15);
-  color: var(--accent);
+  background: rgba(0, 230, 118, 0.15);
+  color: var(--success);
 }
 
 .SongCard__actionButton--radio {
@@ -268,7 +278,7 @@
 }
 
 .SongCard__actionButton--radio:hover {
-  color: var(--accent);
+  color: var(--secondary);
 }
 
 /* Playlist Dropdown */
@@ -344,7 +354,7 @@
 }
 
 .SongCard__playlistMenuItem:hover {
-  background: var(--accent);
+  background: var(--primary);
   color: #fff;
 }
 

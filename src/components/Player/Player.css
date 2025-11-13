@@ -1,27 +1,25 @@
-/* Player.css - Versión responsive que se adapta perfectamente al sidebar */
+/* Player.css - Neomoderno Digital con Glass Effect */
 .Player {
   position: fixed;
-  left: 280px; /* Ancho del sidebar expandido */
+  left: 0;
   right: 0;
   bottom: 0;
   height: 90px;
-  background: linear-gradient(180deg, rgba(28, 43, 58, 0.98) 0%, rgba(21, 32, 43, 0.98) 100%);
+  background: rgba(30, 47, 60, 0.9);
   -webkit-backdrop-filter: blur(20px);
   backdrop-filter: blur(20px);
-  color: #FAF8F4;
+  color: var(--text);
   display: grid;
   grid-template-columns: 1fr 2fr 1fr;
   align-items: center;
   padding: 0 24px;
   z-index: 90;
-  border-top: 1px solid rgba(250, 248, 244, 0.08);
-  box-shadow: 0 -8px 32px rgba(0, 0, 0, 0.3), 0 0 0 1px rgba(250, 248, 244, 0.05);
+  border-top: 1px solid var(--glass-border);
+  box-shadow: 0 -8px 32px rgba(0, 0, 0, 0.5), var(--shadow-glow);
   transform: translateY(100%);
   opacity: 0;
-  transition: left 0.3s cubic-bezier(0.4, 0, 0.2, 1), 
-              transform 0.4s cubic-bezier(0.4, 0, 0.2, 1),
-              opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1),
-              width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1),
+              opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   pointer-events: none;
 }
 
@@ -30,11 +28,6 @@
   transform: translateY(0);
   opacity: 1;
   pointer-events: all;
-}
-
-/* Adaptación al sidebar colapsado */
-.Player--sidebarCollapsed {
-  left: 80px;
 }
 
 /* Efecto de glassmorphism en el borde superior */
@@ -47,9 +40,9 @@
   height: 1px;
   background: linear-gradient(90deg, 
     transparent 0%, 
-    rgba(242, 92, 67, 0.3) 20%,
-    rgba(69, 182, 179, 0.3) 50%,
-    rgba(242, 92, 67, 0.3) 80%,
+    rgba(0, 200, 194, 0.4) 20%,
+    rgba(209, 71, 163, 0.4) 50%,
+    rgba(0, 200, 194, 0.4) 80%,
     transparent 100%
   );
 }
@@ -73,8 +66,8 @@
   height: 56px;
   border-radius: 10px;
   object-fit: cover;
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.4),
-              0 0 0 1px rgba(255, 255, 255, 0.1);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.6),
+              0 0 0 1px rgba(154, 163, 178, 0.2);
   transition: all 0.2s ease;
 }
 
@@ -109,9 +102,10 @@
 
 .Player__eqBar {
   width: 3px;
-  background: #F25C43;
+  background: linear-gradient(180deg, var(--secondary), var(--accent));
   border-radius: 2px;
   animation: eq-bounce 1s ease-in-out infinite;
+  box-shadow: 0 0 8px rgba(0, 200, 194, 0.5);
 }
 
 .Player__eqBar:nth-child(1) { height: 60%; animation-delay: 0s; }
@@ -132,18 +126,17 @@
   font-size: 14px;
   font-weight: 600;
   margin: 0 0 4px 0;
-  color: #FAF8F4;
+  color: var(--text);
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
 }
 
 .Player__trackArtist {
   font-size: 12px;
   margin: 0;
-  color: #FAF8F4;
-  opacity: 0.7;
+  color: var(--text-muted);
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -183,23 +176,26 @@
   width: 34px;
   height: 34px;
   border-radius: 50%;
-  border: none;
-  background: rgba(255, 255, 255, 0.08);
-  color: #FAF8F4;
+  border: 1px solid var(--glass-border);
+  background: rgba(255, 255, 255, 0.05);
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+  color: var(--text);
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
   transition: all 0.2s ease;
-  opacity: 0.7;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  opacity: 0.8;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
 }
 
 .Player__controlBtn:hover {
   opacity: 1;
-  background: rgba(255, 255, 255, 0.15);
+  background: rgba(0, 200, 194, 0.15);
   transform: scale(1.1);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 4px 12px rgba(0, 200, 194, 0.4), var(--shadow-glow);
+  color: var(--secondary);
 }
 
 .Player__controlBtn:active {
@@ -207,12 +203,12 @@
 }
 
 .Player__controlBtn--active {
-  color: var(--accent);
-  background: rgba(29, 185, 84, 0.15);
+  color: var(--success);
+  background: rgba(0, 230, 118, 0.15);
 }
 
 .Player__controlBtn--active:hover {
-  background: rgba(29, 185, 84, 0.25);
+  background: rgba(0, 230, 118, 0.25);
 }
 
 .Player__playButton {
@@ -220,21 +216,20 @@
   height: 42px;
   border-radius: 50%;
   border: none;
-  background: linear-gradient(135deg, #F25C43 0%, #FF6F52 100%);
+  background: linear-gradient(135deg, var(--secondary), var(--accent));
   color: white;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
   transition: all 0.2s ease;
-  box-shadow: 0 6px 16px rgba(242, 92, 67, 0.4),
-              0 0 0 4px rgba(242, 92, 67, 0.1);
+  box-shadow: 0 6px 16px rgba(209, 71, 163, 0.4),
+              0 0 0 4px rgba(0, 200, 194, 0.15);
 }
 
 .Player__playButton:hover {
   transform: scale(1.08);
-  box-shadow: 0 8px 20px rgba(242, 92, 67, 0.5),
-              0 0 0 6px rgba(242, 92, 67, 0.15);
+  box-shadow: 0 8px 20px rgba(209, 71, 163, 0.5), var(--shadow-glow);
 }
 
 .Player__playButton:active {
@@ -251,12 +246,12 @@
 .Player__time {
   font-size: 11px;
   font-weight: 600;
-  color: #FAF8F4;
-  opacity: 0.6;
+  color: var(--text);
+  opacity: 0.7;
   min-width: 42px;
   text-align: center;
   font-variant-numeric: tabular-nums;
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
 }
 
 .Player__seekBarContainer {
@@ -272,13 +267,13 @@
   appearance: none;
   width: 100%;
   height: 5px;
-  background: rgba(250, 248, 244, 0.15);
+  background: rgba(154, 163, 178, 0.2);
   border-radius: 3px;
   outline: none;
   cursor: pointer;
   position: relative;
   transition: height 0.2s ease;
-  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.3);
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.4);
 }
 
 .Player__seek:hover {
@@ -288,14 +283,14 @@
 .Player__seek::-webkit-slider-runnable-track {
   background: linear-gradient(
     to right,
-    rgba(242, 92, 67, 1) 0%,
-    rgba(242, 92, 67, 1) var(--progress, 0%),
-    rgba(250, 248, 244, 0.15) var(--progress, 0%),
-    rgba(250, 248, 244, 0.15) 100%
+    var(--secondary) 0%,
+    var(--secondary) var(--progress, 0%),
+    rgba(176, 196, 216, 0.2) var(--progress, 0%),
+    rgba(176, 196, 216, 0.2) 100%
   );
   border-radius: 3px;
   height: 5px;
-  box-shadow: 0 1px 2px rgba(242, 92, 67, 0.3);
+  box-shadow: 0 1px 2px rgba(0, 200, 194, 0.3), var(--shadow-glow);
 }
 
 .Player__seek::-webkit-slider-thumb {
@@ -304,10 +299,11 @@
   width: 16px;
   height: 16px;
   border-radius: 50%;
-  background: linear-gradient(135deg, #fff 0%, #f0f0f0 100%);
+  background: linear-gradient(135deg, #fff 0%, var(--secondary) 100%);
   cursor: grab;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4),
-              0 0 0 3px rgba(242, 92, 67, 0.3);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5),
+              0 0 0 3px rgba(0, 200, 194, 0.4),
+              var(--shadow-glow);
   opacity: 0;
   transition: opacity 0.2s ease;
   margin-top: -5.5px;
@@ -391,20 +387,20 @@
   appearance: none;
   width: 100px;
   height: 5px;
-  background: rgba(250, 248, 244, 0.15);
+  background: rgba(154, 163, 178, 0.2);
   border-radius: 3px;
   outline: none;
   cursor: pointer;
-  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.3);
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.4);
 }
 
 .Player__volumeSlider::-webkit-slider-runnable-track {
   background: linear-gradient(
     to right,
-    #FAF8F4 0%,
-    #FAF8F4 var(--volume, 80%),
-    rgba(250, 248, 244, 0.15) var(--volume, 80%),
-    rgba(250, 248, 244, 0.15) 100%
+    var(--text) 0%,
+    var(--text) var(--volume, 80%),
+    rgba(154, 163, 178, 0.2) var(--volume, 80%),
+    rgba(154, 163, 178, 0.2) 100%
   );
   border-radius: 3px;
   height: 5px;
@@ -479,7 +475,6 @@
   .Player {
     grid-template-columns: 1fr 1.5fr 0.8fr;
     padding: 0 16px;
-    left: 80px; /* Sidebar colapsado en tablets */
   }
   
   .Player__volumeSlider {
@@ -593,17 +588,7 @@
   }
 }
 
-/* Animaciones especiales cuando sidebar cambia */
-@media (min-width: 769px) {
-  .Player.Player--sidebarCollapsed {
-    animation: expandPlayer 0.3s ease;
-  }
-  
-  .Player:not(.Player--sidebarCollapsed) {
-    animation: contractPlayer 0.3s ease;
-  }
-}
-
+/* Animación especial del reproductor */
 @keyframes expandPlayer {
   from { left: 280px; }
   to { left: 80px; }

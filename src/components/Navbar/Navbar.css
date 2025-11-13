@@ -1,4 +1,4 @@
-/* Navbar styles - Estilo Spotify moderno */
+/* Navbar styles - Neomoderno Digital */
 .Navbar {
   position: sticky;
   top: 0;
@@ -7,10 +7,12 @@
   align-items: center;
   justify-content: space-between;
   padding: 16px 24px;
-  background: var(--color-surface);
-  color: var(--on-surface);
-  border-bottom: 1px solid rgba(250, 248, 244, 0.08);
-  box-shadow: 0 1px 0 rgba(0, 0, 0, 0.1);
+  background: rgba(30, 47, 60, 0.9);
+  -webkit-backdrop-filter: blur(20px);
+  backdrop-filter: blur(20px);
+  color: var(--text);
+  border-bottom: 1px solid var(--glass-border);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3), var(--shadow-glow);
   height: 72px;
 }
 
@@ -26,7 +28,7 @@
   font-weight: 700;
   font-size: 20px;
   letter-spacing: -0.3px;
-  color: var(--on-surface);
+  color: var(--text);
   transition: var(--transition-fast);
 }
 
@@ -36,7 +38,7 @@
 }
 
 .Navbar__brand:hover {
-  color: var(--accent);
+  color: var(--primary);
 }
 
 .Navbar__actions {
@@ -46,10 +48,10 @@
 }
 
 .Navbar a {
-  color: var(--on-surface);
+  color: var(--text);
   text-decoration: none;
   padding: 8px 16px;
-  border-radius: var(--border-radius-full);
+  border-radius: 10px;
   font-size: 14px;
   font-weight: 600;
   transition: var(--transition-fast);
@@ -57,26 +59,27 @@
 }
 
 .Navbar a:hover {
-  background: rgba(250, 248, 244, 0.1);
+  background: rgba(0, 200, 194, 0.1);
   opacity: 1;
-  transform: scale(1.02);
+  transform: scale(1.03);
+  color: var(--secondary);
+  box-shadow: 0 0 15px rgba(0, 200, 194, 0.2);
 }
 
 .Navbar button {
-  background: var(--accent);
+  background: linear-gradient(135deg, var(--secondary), var(--accent));
   color: white;
   border: none;
   padding: 10px 24px;
-  border-radius: var(--border-radius-full);
+  border-radius: 10px;
   font-weight: 700;
   font-size: 14px;
   cursor: pointer;
   transition: var(--transition-fast);
-  box-shadow: 0 2px 8px rgba(242, 92, 67, 0.3);
+  box-shadow: 0 4px 12px rgba(209, 71, 163, 0.4), var(--shadow-glow);
 }
 
 .Navbar button:hover {
-  background: #FF6F52;
   transform: scale(1.05);
-  box-shadow: 0 4px 12px rgba(242, 92, 67, 0.4);
+  box-shadow: 0 6px 16px rgba(209, 71, 163, 0.5), var(--shadow-glow);
 }

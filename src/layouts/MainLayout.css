@@ -1,6 +1,7 @@
-/* MainLayout.css - Versión mejorada con sidebar dinámico */
+/* MainLayout.css - Con TopNavbar horizontal */
 .MainLayout {
   display: flex;
+  flex-direction: column;
   height: 100vh;
   background: var(--bg);
   overflow: hidden;
@@ -15,7 +16,7 @@
   left: 0;
   right: 0;
   height: 300px;
-  background: radial-gradient(circle at 50% 0%, rgba(242, 92, 67, 0.03) 0%, transparent 70%);
+  background: radial-gradient(circle at 50% 0%, rgba(0, 200, 194, 0.1) 0%, transparent 70%);
   pointer-events: none;
   z-index: 0;
 }
@@ -26,24 +27,18 @@
   overflow: hidden;
   position: relative;
   z-index: 1;
+  margin-top: 80px; /* Altura del TopNavbar */
 }
 
 .MainLayout__content {
   flex: 1;
-  margin-left: 260px; /* Espacio para sidebar expandido */
-  padding: 32px 40px;
+  padding: 0 40px 32px 40px;
   overflow-y: auto;
   overflow-x: hidden;
   background: transparent;
-  transition: margin-bottom 0.4s cubic-bezier(0.4, 0, 0.2, 1),
-              margin-left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: margin-bottom 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   color: var(--text) !important;
   position: relative;
-}
-
-/* Adaptación al sidebar colapsado */
-.MainLayout__content--sidebarCollapsed {
-  margin-left: 80px; /* Espacio para sidebar colapsado */
 }
 
 /* Margen inferior cuando el player está visible */
@@ -76,12 +71,12 @@
 
 /* Estilos para links dentro del contenido */
 .MainLayout__content a {
-  color: var(--accent);
+  color: var(--primary);
   transition: var(--transition-fast);
 }
 
 .MainLayout__content a:hover {
-  color: #FF6F52;
+  color: #5C9FFF;
 }
 
 /* Mejora del scroll con diseño más suave */
@@ -94,7 +89,7 @@
 }
 
 .MainLayout__content::-webkit-scrollbar-thumb {
-  background: linear-gradient(180deg, rgba(242, 92, 67, 0.4) 0%, rgba(69, 182, 179, 0.4) 100%);
+  background: linear-gradient(180deg, var(--secondary) 0%, var(--accent) 100%);
   border-radius: 10px;
   border: 2px solid transparent;
   background-clip: content-box;
@@ -102,7 +97,7 @@
 }
 
 .MainLayout__content::-webkit-scrollbar-thumb:hover {
-  background: linear-gradient(180deg, rgba(242, 92, 67, 0.6) 0%, rgba(69, 182, 179, 0.6) 100%);
+  background: linear-gradient(180deg, rgba(0, 200, 194, 0.8) 0%, rgba(209, 71, 163, 0.8) 100%);
   border: 1px solid transparent;
   background-clip: content-box;
 }
@@ -140,8 +135,9 @@
   left: 0;
   width: 40px;
   height: 3px;
-  background: linear-gradient(90deg, var(--accent) 0%, var(--secondary) 100%);
+  background: linear-gradient(90deg, var(--secondary) 0%, var(--accent) 100%);
   border-radius: 2px;
+  box-shadow: var(--shadow-glow);
 }
 
 .MainLayout__sectionSubtitle {

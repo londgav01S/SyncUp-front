@@ -1,24 +1,21 @@
 import React from 'react'
 import { Outlet } from 'react-router-dom'
-import Sidebar from '../components/Sidebar/Sidebar'
+import TopNavbar from '../components/TopNavbar/TopNavbar'
 import Player from '../components/Player/Player'
-import { useSidebar } from '../context/SidebarContext'
 import usePlayer from '../hooks/usePlayer'
 import './MainLayout.css'
 
 export default function MainLayout(){
-  const { isCollapsed } = useSidebar()
   const { current } = usePlayer()
   
   const isPlayerVisible = current !== null
 
   return (
     <div className="MainLayout">
+      <TopNavbar />
       <div className="MainLayout__body">
-        <Sidebar />
         <main className={`MainLayout__content 
-          ${isPlayerVisible ? 'MainLayout__content--playerVisible' : 'MainLayout__content--playerHidden'} 
-          ${isCollapsed ? 'MainLayout__content--sidebarCollapsed' : ''}`}>
+          ${isPlayerVisible ? 'MainLayout__content--playerVisible' : 'MainLayout__content--playerHidden'}`}>
           <Outlet />
         </main>
       </div>

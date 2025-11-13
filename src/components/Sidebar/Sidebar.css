@@ -1,17 +1,19 @@
-/* 🎵 Sidebar - limpia, responsive y moderna */
+/* 🎵 Sidebar - Neomoderno Digital con Glass Effect */
 .Sidebar {
   position: fixed;
   top: 0;
   left: 0;
   width: 260px;
   height: 100vh;
-  background: var(--primary);
-  color: var(--on-surface);
+  background: rgba(30, 47, 60, 0.85);
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+  color: var(--text);
   display: flex;
   flex-direction: column;
   overflow-y: auto;
   overflow-x: hidden;
-  border-right: 1px solid rgba(250, 248, 244, 0.08);
+  border-right: 1px solid var(--glass-border);
   box-shadow: var(--shadow-md);
   transition: width var(--transition-medium);
   z-index: 100;
@@ -28,8 +30,8 @@
   align-items: center;
   justify-content: space-between;
   padding: 20px 24px 20px 15px;
-  background: rgba(255, 255, 255, 0.05);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(0, 200, 194, 0.05);
+  border-bottom: 1px solid var(--glass-border);
   position: relative;
 }
 
@@ -58,7 +60,7 @@
   align-items: center;
   gap: 12px;
   text-decoration: none;
-  color: var(--on-surface);
+  color: var(--text);
   font-weight: 700;
   font-size: 18px;
   white-space: nowrap;
@@ -80,28 +82,30 @@
   width: 0;
 }
 
-/* 🧭 Botón toggle estilo HeroCarousel */
+/* 🧭 Botón toggle estilo neomoderno */
 .Sidebar__toggleBtn {
   width: 48px;
   height: 48px;
-  border: 1px solid rgba(255, 255, 255, 0.3);
+  border: 1px solid var(--glass-border);
   border-radius: 50%;
-  background: rgba(255, 255, 255, 0.1);
-  color: var(--on-surface);
+  background: rgba(0, 200, 194, 0.1);
+  color: var(--secondary);
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
+  -webkit-backdrop-filter: blur(10px);
   backdrop-filter: blur(10px);
-  flex-shrink: 0; /* ✅ evita que se reduzca en flex */
-  transition: background var(--transition-fast), opacity var(--transition-fast);
-  opacity: 0.8;
+  flex-shrink: 0;
+  transition: all var(--transition-fast);
+  opacity: 0.9;
 }
 
 .Sidebar__toggleBtn:hover {
-  background: rgba(255, 255, 255, 0.2);
-  transform: scale(1.05);
+  background: rgba(0, 200, 194, 0.2);
+  transform: scale(1.08);
   opacity: 1;
+  box-shadow: 0 0 15px rgba(0, 200, 194, 0.3);
 }
 
 /* ✅ No se reduce de tamaño al hacer clic */
@@ -128,27 +132,31 @@
   left: 14px;
   top: 50%;
   transform: translateY(-50%);
-  color: rgba(250, 248, 244, 0.6);
+  color: var(--text-muted);
 }
 
 .Sidebar__search input {
   width: 100%;
   padding: 10px 12px 10px 36px;
-  border: none;
-  border-radius: 8px;
-  background: rgba(255, 255, 255, 0.1);
-  color: var(--on-surface);
+  border: 1px solid var(--glass-border);
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.05);
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+  color: var(--text);
   outline: none;
-  transition: background var(--transition-fast), box-shadow var(--transition-fast);
+  transition: all var(--transition-fast);
 }
 
 .Sidebar__search input:focus {
-  background: rgba(255, 255, 255, 0.15);
-  box-shadow: 0 0 0 2px rgba(242, 92, 67, 0.3);
+  background: rgba(0, 200, 194, 0.1);
+  border-color: var(--secondary);
+  box-shadow: 0 0 0 2px rgba(0, 200, 194, 0.2), var(--shadow-glow);
 }
 
 .Sidebar__search input::placeholder {
-  color: rgba(250, 248, 244, 0.5);
+  color: var(--text-muted);
+  opacity: 0.6;
 }
 
 .Sidebar--collapsed .Sidebar__search {
@@ -164,7 +172,7 @@
 .Sidebar__section-title {
   font-size: 12px;
   text-transform: uppercase;
-  color: rgba(250, 248, 244, 0.6);
+  color: var(--text-muted);
   letter-spacing: 1px;
   margin-bottom: 10px;
 }
@@ -186,20 +194,23 @@
   gap: 12px;
   padding: 10px 12px;
   border-radius: 8px;
-  color: rgba(250, 248, 244, 0.8);
+  color: var(--text);
+  opacity: 0.8;
   text-decoration: none;
   transition: all var(--transition-fast);
 }
 
 .Sidebar__item a:hover {
-  background: rgba(255, 255, 255, 0.1);
-  color: #fff;
+  background: rgba(0, 200, 194, 0.1);
+  opacity: 1;
+  transform: translateX(4px);
 }
 
 .Sidebar__item a.active {
-  background: linear-gradient(90deg, rgba(242, 92, 67, 0.2), rgba(242, 92, 67, 0.1));
-  box-shadow: inset 3px 0 0 var(--accent);
-  color: var(--accent);
+  background: linear-gradient(90deg, rgba(0, 200, 194, 0.2), rgba(209, 71, 163, 0.1));
+  box-shadow: inset 3px 0 0 var(--secondary);
+  color: var(--secondary);
+  opacity: 1;
 }
 
 .Sidebar__item i {
@@ -225,17 +236,18 @@
   transform: translateY(-50%);
   margin-left: 10px;
   padding: 6px 10px;
-  background: rgba(28, 43, 58, 0.95);
-  color: white;
+  background: var(--color-surface-elevated);
+  color: var(--text);
   border-radius: 6px;
   font-size: 12px;
   font-weight: 600;
   opacity: 0;
   pointer-events: none;
   transition: opacity 0.2s ease;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+  box-shadow: var(--shadow-lg);
   white-space: nowrap;
   z-index: 200;
+  border: 1px solid var(--border-color);
 }
 
 .Sidebar--collapsed .Sidebar__item:hover::after {
@@ -246,8 +258,8 @@
 .Sidebar__footer {
   margin-top: auto;
   padding: 16px 20px;
-  border-top: 1px solid rgba(250, 248, 244, 0.08);
-  background: rgba(255, 255, 255, 0.05);
+  border-top: 1px solid var(--glass-border);
+  background: rgba(0, 200, 194, 0.05);
 }
 
 .Sidebar__auth-buttons {
@@ -263,31 +275,31 @@
   gap: 10px;
   padding: 12px;
   border-radius: 10px;
-  border: 1px solid var(--accent);
-  background: var(--accent);
+  border: none;
+  background: linear-gradient(135deg, var(--secondary), var(--accent));
   color: white;
   text-decoration: none;
   font-weight: 600;
   cursor: pointer;
   transition: all var(--transition-fast);
+  box-shadow: 0 4px 12px rgba(209, 71, 163, 0.4);
 }
 
 .Sidebar__btn:hover {
-  background: rgba(242, 92, 67, 0.8);
-  transform: translateY(-2px);
-  box-shadow: 0 4px 10px rgba(242, 92, 67, 0.3);
+  transform: translateY(-2px) scale(1.03);
+  box-shadow: 0 6px 16px rgba(209, 71, 163, 0.5), var(--shadow-glow);
 }
 
 .Sidebar__btn--accent {
-  background: linear-gradient(135deg, var(--accent) 0%, #FF6F52 100%);
+  background: linear-gradient(135deg, var(--secondary), var(--accent));
   color: white;
   border: none;
-  box-shadow: 0 4px 10px rgba(242, 92, 67, 0.3);
+  box-shadow: 0 4px 12px rgba(0, 200, 194, 0.4);
 }
 
 .Sidebar__btn--accent:hover {
-  transform: translateY(-2px) scale(1.02);
-  box-shadow: 0 6px 14px rgba(242, 92, 67, 0.4);
+  transform: translateY(-2px) scale(1.03);
+  box-shadow: 0 6px 16px rgba(0, 200, 194, 0.5), var(--shadow-glow);
 }
 
 /* 🔸 Ocultar texto de botones cuando está colapsado */

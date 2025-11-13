@@ -1,9 +1,11 @@
-/* PlaylistCard styles - Estilo Spotify moderno */
+/* PlaylistCard styles - Neomoderno Digital */
 .PlaylistCard {
   position: relative;
-  background: var(--card-bg);
-  border: 1px solid var(--border-color);
-  border-radius: var(--border-radius-md);
+  background: var(--glass-bg);
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
+  border: 1px solid var(--glass-border);
+  border-radius: 16px;
   padding: var(--spacing-md);
   cursor: pointer;
   transition: var(--transition-medium);
@@ -11,9 +13,9 @@
 }
 
 .PlaylistCard:hover {
-  transform: translateY(-4px);
-  box-shadow: var(--shadow-lg);
-  border-color: var(--accent);
+  transform: translateY(-4px) scale(1.02);
+  box-shadow: var(--shadow-lg), var(--shadow-glow);
+  border-color: var(--secondary);
 }
 
 .PlaylistCard__cover {
@@ -23,7 +25,7 @@
   border-radius: var(--border-radius-sm);
   overflow: hidden;
   margin-bottom: var(--spacing-md);
-  background: linear-gradient(135deg, var(--accent) 0%, var(--primary) 100%);
+  background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
 }
 
 .PlaylistCard__cover img {
@@ -59,7 +61,7 @@
   width: 56px;
   height: 56px;
   border-radius: 50%;
-  background: var(--accent);
+  background: linear-gradient(135deg, var(--secondary), var(--accent));
   color: #fff;
   border: none;
   font-size: 20px;
@@ -68,12 +70,12 @@
   align-items: center;
   justify-content: center;
   transition: var(--transition-fast);
-  box-shadow: var(--shadow-md);
+  box-shadow: var(--shadow-md), var(--shadow-glow);
 }
 
 .PlaylistCard__play-btn:hover {
   transform: scale(1.1);
-  background: var(--primary);
+  box-shadow: 0 8px 24px rgba(209, 71, 163, 0.6), var(--shadow-glow);
 }
 
 .PlaylistCard__info {

@@ -34,13 +34,12 @@ export const getPlaylist = async (playlistId) => {
  * Crear una nueva playlist
  * @param {Object} data - Datos de la playlist
  * @param {string} data.nombre - Nombre de la playlist
- * @param {string} data.descripcion - Descripción (opcional)
  * @param {string} data.correoCreador - Correo del usuario creador
  */
-export const createPlaylist = async ({ nombre, descripcion, correoCreador }) => {
+export const createPlaylist = async ({ nombre, correoCreador }) => {
   try {
     const response = await axios.post('/playlists', null, {
-      params: { nombre, descripcion, correoCreador }
+      params: { nombre, correoCreador }
     })
     console.log('✅ Playlist creada:', response.data)
     return response.data

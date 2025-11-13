@@ -1,4 +1,4 @@
-/* Utilidades y clases helper - Estilo Spotify moderno */
+/* Utilidades y clases helper - Neomoderno Digital */
 
 /* Botones */
 .btn {
@@ -6,50 +6,52 @@
   align-items: center;
   justify-content: center;
   gap: 8px;
-  padding: 12px 24px;
-  border-radius: var(--border-radius-full);
-  font-weight: 700;
+  padding: 12px 28px;
+  border-radius: 10px;
+  font-weight: 600;
   font-size: 14px;
   cursor: pointer;
-  transition: all var(--transition-fast);
+  transition: all var(--transition-medium);
   border: none;
   text-decoration: none;
+  letter-spacing: 0.5px;
 }
 
 .btn--primary {
-  background: var(--accent);
+  background: linear-gradient(135deg, var(--secondary), var(--accent));
   color: white;
-  box-shadow: 0 4px 12px rgba(242, 92, 67, 0.3);
+  box-shadow: 0 4px 12px rgba(209, 71, 163, 0.4);
 }
 
 .btn--primary:hover {
-  background: #FF6F52;
-  transform: translateY(-2px);
-  box-shadow: 0 6px 16px rgba(242, 92, 67, 0.4);
+  transform: scale(1.03);
+  box-shadow: 0 8px 20px rgba(209, 71, 163, 0.5);
 }
 
 .btn--secondary {
-  background: var(--secondary);
+  background: linear-gradient(135deg, var(--primary), #2A5575);
   color: white;
-  box-shadow: 0 4px 12px rgba(69, 182, 179, 0.3);
+  box-shadow: 0 4px 12px rgba(26, 60, 85, 0.4);
 }
 
 .btn--secondary:hover {
-  background: #52C7C4;
-  transform: translateY(-2px);
-  box-shadow: 0 6px 16px rgba(69, 182, 179, 0.4);
+  transform: scale(1.03);
+  box-shadow: 0 8px 20px rgba(26, 60, 85, 0.5);
 }
 
 .btn--outline {
-  background: transparent;
+  background: rgba(255, 255, 255, 0.05);
   color: var(--text);
-  border: 2px solid var(--border-color);
+  border: 2px solid var(--secondary);
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
 }
 
 .btn--outline:hover {
-  background: var(--bg);
-  border-color: var(--accent);
-  color: var(--accent);
+  background: rgba(0, 200, 194, 0.1);
+  border-color: var(--secondary);
+  color: var(--secondary);
+  box-shadow: var(--shadow-glow);
 }
 
 .btn--ghost {
@@ -59,8 +61,9 @@
 }
 
 .btn--ghost:hover {
-  background: rgba(68, 75, 84, 0.1);
-  color: var(--text);
+  background: rgba(0, 200, 194, 0.1);
+  color: var(--secondary);
+  transform: scale(1.03);
 }
 
 .btn--small {
@@ -79,25 +82,30 @@
   transform: none !important;
 }
 
-/* Cards */
+/* Cards - Glass effect */
 .card {
-  background: white;
+  background: var(--glass-bg);
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
   border-radius: var(--border-radius-md);
-  padding: 20px;
-  box-shadow: var(--shadow-sm);
-  border: 1px solid var(--border-color);
+  padding: 24px;
+  box-shadow: var(--shadow-md);
+  border: 1px solid var(--glass-border);
   transition: all var(--transition-medium);
 }
 
 .card:hover {
-  box-shadow: var(--shadow-md);
-  transform: translateY(-2px);
+  box-shadow: var(--shadow-lg);
+  transform: translateY(-4px) scale(1.02);
+  border-color: rgba(0, 200, 194, 0.3);
 }
 
 .card--dark {
-  background: var(--color-surface);
-  color: var(--on-surface);
-  border-color: rgba(250, 248, 244, 0.1);
+  background: rgba(26, 60, 85, 0.3);
+  -webkit-backdrop-filter: blur(16px);
+  backdrop-filter: blur(16px);
+  color: var(--text);
+  border-color: var(--glass-border);
 }
 
 /* Grids */
@@ -147,37 +155,43 @@
 .badge {
   display: inline-flex;
   align-items: center;
-  padding: 4px 12px;
+  padding: 6px 14px;
   border-radius: var(--border-radius-full);
-  font-size: 12px;
-  font-weight: 700;
+  font-size: 11px;
+  font-weight: 600;
   text-transform: uppercase;
-  letter-spacing: 0.5px;
+  letter-spacing: 0.8px;
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
 }
 
 .badge--accent {
-  background: rgba(242, 92, 67, 0.1);
+  background: linear-gradient(135deg, rgba(209, 71, 163, 0.2), rgba(209, 71, 163, 0.3));
   color: var(--accent);
+  border: 1px solid rgba(209, 71, 163, 0.4);
 }
 
 .badge--secondary {
-  background: rgba(69, 182, 179, 0.1);
+  background: linear-gradient(135deg, rgba(0, 200, 194, 0.2), rgba(0, 200, 194, 0.3));
   color: var(--secondary);
+  border: 1px solid rgba(0, 200, 194, 0.4);
 }
 
 .badge--primary {
-  background: rgba(28, 43, 58, 0.1);
+  background: linear-gradient(135deg, rgba(26, 60, 85, 0.3), rgba(42, 85, 117, 0.4));
   color: var(--primary);
+  border: 1px solid rgba(26, 60, 85, 0.5);
 }
 
 /* Loading spinner */
 .spinner {
   width: 40px;
   height: 40px;
-  border: 4px solid var(--border-color);
-  border-top-color: var(--accent);
+  border: 4px solid rgba(0, 200, 194, 0.2);
+  border-top-color: var(--secondary);
   border-radius: 50%;
   animation: spin 0.8s linear infinite;
+  box-shadow: 0 0 15px rgba(0, 200, 194, 0.3);
 }
 
 @keyframes spin {

@@ -36,8 +36,8 @@ export default function Sidebar(){
     <aside className={`Sidebar sidebar ${isCollapsed ? 'Sidebar--collapsed' : ''}`}>
       <div className="Sidebar__brand">
         <Link to="/" className="Sidebar__brandLink">
-          <img src="/Logo.png" alt="Estructuras" className="Sidebar__logo" onError={(e)=>{e.currentTarget.src='/placeholder-album.svg'}} />
-          <span className="Sidebar__brand-text">SyncUp</span>
+          <img src="/Logo2.png" alt="Estructuras" className="Sidebar__logo" onError={(e)=>{e.currentTarget.src='/placeholder-album.svg'}} />
+          <span className="Sidebar__brand-text">BeatWave</span>
         </Link>
         <button 
           className="Sidebar__toggleBtn" 

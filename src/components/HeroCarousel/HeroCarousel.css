@@ -54,16 +54,17 @@
   align-items: center;
   gap: 8px;
   padding: 8px 16px;
-  background: rgba(242, 92, 67, 0.3);
+  background: rgba(0, 200, 194, 0.3);
+  -webkit-backdrop-filter: blur(10px);
   backdrop-filter: blur(10px);
-  border-radius: var(--border-radius-full);
+  border-radius: 10px;
   font-size: 13px;
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 1px;
   margin-bottom: 16px;
   align-self: flex-start;
-  border: 1px solid rgba(242, 92, 67, 0.5);
+  border: 1px solid rgba(0, 200, 194, 0.5);
   color: white;
 }
 
@@ -110,21 +111,20 @@
   align-items: center;
   gap: 12px;
   padding: 16px 40px;
-  background: var(--accent);
+  background: linear-gradient(135deg, var(--secondary), var(--accent));
   color: white;
   border: none;
-  border-radius: var(--border-radius-full);
+  border-radius: 10px;
   font-size: 16px;
   font-weight: 700;
   cursor: pointer;
   transition: all var(--transition-medium);
-  box-shadow: 0 8px 24px rgba(242, 92, 67, 0.4);
+  box-shadow: 0 8px 24px rgba(209, 71, 163, 0.5), var(--shadow-glow);
 }
 
 .HeroCarousel__playButton:hover {
-  background: #FF6F52;
   transform: scale(1.05);
-  box-shadow: 0 12px 32px rgba(242, 92, 67, 0.5);
+  box-shadow: 0 12px 32px rgba(209, 71, 163, 0.6), var(--shadow-glow);
 }
 
 .HeroCarousel__playButton:active {
@@ -136,11 +136,12 @@
   align-items: center;
   gap: 8px;
   padding: 16px 32px;
-  background: rgba(255, 255, 255, 0.15);
+  background: rgba(255, 255, 255, 0.05);
+  -webkit-backdrop-filter: blur(10px);
   backdrop-filter: blur(10px);
   color: white;
-  border: 2px solid rgba(255, 255, 255, 0.3);
-  border-radius: var(--border-radius-full);
+  border: 2px solid var(--glass-border);
+  border-radius: 10px;
   font-size: 16px;
   font-weight: 600;
   cursor: pointer;
@@ -148,9 +149,10 @@
 }
 
 .HeroCarousel__secondaryButton:hover {
-  background: rgba(255, 255, 255, 0.25);
-  border-color: rgba(255, 255, 255, 0.5);
-  transform: scale(1.02);
+  background: rgba(0, 200, 194, 0.15);
+  border-color: var(--secondary);
+  transform: scale(1.03);
+  box-shadow: var(--shadow-glow);
 }
 
 .HeroCarousel__secondaryButton:active {
@@ -164,6 +166,7 @@
   width: 56px;
   height: 56px;
   background: rgba(255, 255, 255, 0.2);
+  -webkit-backdrop-filter: blur(10px);
   backdrop-filter: blur(10px);
   border: 1px solid rgba(255, 255, 255, 0.3);
   border-radius: 50%;
@@ -251,8 +254,8 @@
 .HeroCarousel__thumbnail--active {
   opacity: 1;
   transform: scale(1.05);
-  border: 3px solid var(--accent);
-  box-shadow: 0 8px 24px rgba(242, 92, 67, 0.4);
+  border: 3px solid var(--secondary);
+  box-shadow: 0 8px 24px rgba(0, 200, 194, 0.5), var(--shadow-glow);
 }
 
 .HeroCarousel__thumbnailImage {

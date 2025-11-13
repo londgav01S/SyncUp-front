@@ -2,7 +2,6 @@ import React, { useRef, useEffect, useState, useMemo } from 'react'
 import ReactPlayer from 'react-player'
 import './Player.css'
 import usePlayer from '../../hooks/usePlayer'
-import { useSidebar } from '../../context/SidebarContext'
 
 export default function Player(){
   const {
@@ -33,8 +32,6 @@ export default function Player(){
     loop,
     toggleLoop,
   } = usePlayer()
-
-  const { isCollapsed } = useSidebar()
 
   // Determinar si el player debe estar visible
   const isPlayerVisible = current !== null
@@ -108,7 +105,7 @@ export default function Player(){
   const progressPercent = duration > 0 ? (displaySeconds / duration) * 100 : 0
 
   return (
-    <div className={`Player player ${isPlayerVisible ? 'Player--visible' : ''} ${isCollapsed ? 'Player--sidebarCollapsed' : ''}`}>
+    <div className={`Player player ${isPlayerVisible ? 'Player--visible' : ''}`}>
       {/* Información de la canción (izquierda) */}
       <div className="Player__songInfo">
         {current && (

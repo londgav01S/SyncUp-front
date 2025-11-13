@@ -1,0 +1,432 @@
+/* TopNavbar - Neomoderno Digital con Glass Effect */
+.TopNavbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 80px;
+  background: rgba(30, 47, 60, 0.9);
+  -webkit-backdrop-filter: blur(20px);
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--glass-border);
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.3), var(--shadow-glow);
+  z-index: 100;
+  transition: all var(--transition-medium);
+}
+
+.TopNavbar__container {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  height: 100%;
+  padding: 0 32px;
+  max-width: 100%;
+}
+
+/* Logo y Brand */
+.TopNavbar__brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  text-decoration: none;
+  color: var(--text);
+  font-weight: 700;
+  font-size: 20px;
+  flex-shrink: 0;
+  transition: all var(--transition-fast);
+}
+
+.TopNavbar__brand:hover {
+  transform: scale(1.03);
+}
+
+.TopNavbar__logo {
+  width: 42px;
+  height: 42px;
+  border-radius: 10px;
+  object-fit: contain;
+}
+
+.TopNavbar__brandText {
+  white-space: nowrap;
+  background: linear-gradient(135deg, var(--secondary), var(--accent));
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* Menú principal */
+.TopNavbar__menu {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.TopNavbar__menuItem {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 16px;
+  border-radius: 10px;
+  background: transparent;
+  border: none;
+  color: var(--text);
+  font-size: 14px;
+  font-weight: 600;
+  text-decoration: none;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  opacity: 0.85;
+  white-space: nowrap;
+}
+
+.TopNavbar__menuItem:hover {
+  background: rgba(0, 200, 194, 0.1);
+  opacity: 1;
+  color: var(--secondary);
+  transform: translateY(-2px);
+}
+
+.TopNavbar__menuItem--active {
+  background: linear-gradient(135deg, rgba(0, 200, 194, 0.2), rgba(209, 71, 163, 0.1));
+  color: var(--secondary);
+  opacity: 1;
+  box-shadow: inset 0 -3px 0 var(--secondary);
+}
+
+.TopNavbar__menuItem i {
+  font-size: 16px;
+}
+
+/* Dropdown */
+.TopNavbar__dropdown {
+  position: relative;
+}
+
+.TopNavbar__menuItem--dropdown {
+  position: relative;
+}
+
+.TopNavbar__dropdownIcon {
+  font-size: 12px;
+  margin-left: 4px;
+  transition: transform var(--transition-fast);
+}
+
+.TopNavbar__dropdownIcon--open {
+  transform: rotate(180deg);
+}
+
+.TopNavbar__dropdownMenu {
+  position: absolute;
+  top: calc(100% + 12px);
+  left: 0;
+  min-width: 220px;
+  background: var(--glass-bg);
+  -webkit-backdrop-filter: blur(16px);
+  backdrop-filter: blur(16px);
+  border: 1px solid var(--glass-border);
+  border-radius: 12px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4), var(--shadow-glow);
+  padding: 8px;
+  animation: dropdownSlideIn 0.2s ease;
+  z-index: 200;
+}
+
+.TopNavbar__dropdownMenu--right {
+  left: auto;
+  right: 0;
+}
+
+@keyframes dropdownSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.TopNavbar__dropdownItem {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  padding: 12px 16px;
+  border-radius: 8px;
+  background: transparent;
+  border: none;
+  color: var(--text);
+  font-size: 14px;
+  font-weight: 600;
+  text-align: left;
+  text-decoration: none;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.TopNavbar__dropdownItem:hover {
+  background: rgba(0, 200, 194, 0.15);
+  color: var(--secondary);
+  transform: translateX(4px);
+}
+
+.TopNavbar__dropdownItem--active {
+  background: rgba(0, 200, 194, 0.2);
+  color: var(--secondary);
+  box-shadow: inset 3px 0 0 var(--secondary);
+}
+
+.TopNavbar__dropdownItem--danger {
+  color: #EF4444;
+}
+
+.TopNavbar__dropdownItem--danger:hover {
+  background: rgba(239, 68, 68, 0.15);
+  color: #DC2626;
+}
+
+.TopNavbar__dropdownItem i {
+  width: 20px;
+  text-align: center;
+  font-size: 16px;
+}
+
+.TopNavbar__divider {
+  height: 1px;
+  background: var(--glass-border);
+  margin: 8px 0;
+}
+
+/* Barra de búsqueda */
+.TopNavbar__search {
+  flex: 1;
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+/* Usuario y acciones */
+.TopNavbar__actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-shrink: 0;
+  margin-left: auto;
+}
+
+.TopNavbar__userButton {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 16px;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.05);
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+  border: 1px solid var(--glass-border);
+  color: var(--text);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.TopNavbar__userButton:hover {
+  background: rgba(0, 200, 194, 0.1);
+  border-color: var(--secondary);
+  color: var(--secondary);
+  box-shadow: var(--shadow-glow);
+}
+
+.TopNavbar__userButton i.fa-user-circle {
+  font-size: 24px;
+  color: var(--secondary);
+}
+
+.TopNavbar__userName {
+  max-width: 150px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Botones de autenticación */
+.TopNavbar__authButtons {
+  display: flex;
+  gap: 12px;
+}
+
+.TopNavbar__btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 20px;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 600;
+  text-decoration: none;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  white-space: nowrap;
+}
+
+.TopNavbar__btn--ghost {
+  background: transparent;
+  border: 1px solid var(--glass-border);
+  color: var(--text);
+}
+
+.TopNavbar__btn--ghost:hover {
+  background: rgba(0, 200, 194, 0.1);
+  border-color: var(--secondary);
+  color: var(--secondary);
+}
+
+.TopNavbar__btn--primary {
+  background: linear-gradient(135deg, var(--secondary), var(--accent));
+  border: none;
+  color: white;
+  box-shadow: 0 4px 12px rgba(209, 71, 163, 0.4);
+}
+
+.TopNavbar__btn--primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(209, 71, 163, 0.5), var(--shadow-glow);
+}
+
+/* Responsive */
+.TopNavbar__hamburger {
+  display: none;
+}
+
+@media (max-width: 1200px) {
+  .TopNavbar__container {
+    padding: 0 24px;
+    gap: 16px;
+  }
+
+  .TopNavbar__search {
+    max-width: 400px;
+  }
+
+  .TopNavbar__menuItem span,
+  .TopNavbar__btn span {
+    display: none;
+  }
+
+  .TopNavbar__menuItem,
+  .TopNavbar__btn {
+    padding: 10px 12px;
+  }
+
+  .TopNavbar__brandText {
+    display: none;
+  }
+}
+
+@media (max-width: 768px) {
+  .TopNavbar {
+    height: 70px;
+  }
+
+  .TopNavbar__container {
+    padding: 0 16px;
+    gap: 12px;
+  }
+
+  .TopNavbar__hamburger {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--glass-border);
+    border-radius: 10px;
+    color: var(--text);
+    font-size: 20px;
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    margin-left: auto;
+  }
+
+  .TopNavbar__hamburger:hover {
+    background: rgba(0, 200, 194, 0.1);
+    color: var(--secondary);
+  }
+
+  .TopNavbar__menu {
+    position: fixed;
+    top: 70px;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(15, 30, 40, 0.98);
+    -webkit-backdrop-filter: blur(20px);
+    backdrop-filter: blur(20px);
+    flex-direction: column;
+    align-items: stretch;
+    padding: 24px;
+    gap: 12px;
+    transform: translateX(-100%);
+    opacity: 0;
+    transition: all 0.3s ease;
+    z-index: 90;
+  }
+
+  .TopNavbar__menu--open {
+    transform: translateX(0);
+    opacity: 1;
+  }
+
+  .TopNavbar__menuItem {
+    width: 100%;
+    justify-content: flex-start;
+    padding: 14px 20px;
+    font-size: 16px;
+  }
+
+  .TopNavbar__menuItem span {
+    display: inline;
+  }
+
+  .TopNavbar__search {
+    order: -1;
+    flex: 1;
+    max-width: none;
+  }
+
+  .TopNavbar__actions {
+    display: none;
+  }
+
+  .TopNavbar__userName {
+    display: none;
+  }
+
+  .TopNavbar__userButton {
+    padding: 8px 12px;
+  }
+
+  .TopNavbar__btn {
+    padding: 8px 12px;
+  }
+}
+
+@media (max-width: 480px) {
+  .TopNavbar__logo {
+    width: 36px;
+    height: 36px;
+  }
+
+  .TopNavbar__authButtons {
+    gap: 8px;
+  }
+
+  .TopNavbar__btn i {
+    font-size: 18px;
+  }
+}

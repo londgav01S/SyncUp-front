@@ -5,9 +5,60 @@ import { PlayerContext } from '../../context/PlayerContext'
 import { getFavorites } from '../../api/favoriteService'
 import { getSongs } from '../../api/songService'
 import SongCard from '../../components/SongCard/SongCard'
-import { FaHeadphones, FaPlay, FaSync, FaMusic, FaHeart, FaCheckCircle, FaExclamationTriangle, FaBrain } from 'react-icons/fa'
+import { FaHeadphones, FaPlay, FaSync, FaMusic, FaHeart, FaCheckCircle, FaExclamationTriangle, FaBrain, FaStar, FaFire, FaCompactDisc } from 'react-icons/fa'
 import { MdMusicNote } from 'react-icons/md'
 import './DiscoverWeekly.css'
+
+// Featured Song Card - Tarjeta destacada horizontal grande
+function FeaturedSongCard({ song, onPlay }) {
+  return (
+    <div className="Discover__featuredSong">
+      <div className="Discover__featuredBg" style={{ backgroundImage: `url(${song.cover})` }} />
+      <div className="Discover__featuredOverlay" />
+      <div className="Discover__featuredContent">
+        <span className="Discover__featuredBadge">
+          <FaStar /> Top Match
+        </span>
+        <h3 className="Discover__featuredTitle">{song.title}</h3>
+        <p className="Discover__featuredArtist">{song.artist}</p>
+        <p className="Discover__featuredGenre">{song.genre}</p>
+        <button 
+          className="Discover__featuredPlayBtn"
+          onClick={(e) => {
+            e.preventDefault()
+            onPlay(song)
+          }}
+        >
+          <FaPlay /> Reproducir
+        </button>
+      </div>
+    </div>
+  )
+}
+
+// Compact Song Row - Fila compacta para lista
+function CompactSongRow({ song, index, onPlay }) {
+  return (
+    <div className="Discover__compactRow">
+      <span className="Discover__compactIndex">{index}</span>
+      <img src={song.cover} alt={song.title} className="Discover__compactCover" />
+      <div className="Discover__compactInfo">
+        <h4 className="Discover__compactTitle">{song.title}</h4>
+        <p className="Discover__compactArtist">{song.artist}</p>
+      </div>
+      <span className="Discover__compactGenre">{song.genre}</span>
+      <button 
+        className="Discover__compactPlay"
+        onClick={(e) => {
+          e.preventDefault()
+          onPlay(song)
+        }}
+      >
+        <FaPlay />
+      </button>
+    </div>
+  )
+}
 
 export default function DiscoverWeekly() {
   const { user } = useContext(AuthContext)
@@ -199,94 +250,130 @@ export default function DiscoverWeekly() {
 
   return (
     <div className="DiscoverWeeklyPage">
-      {/* Hero Section */}
-      <div className="DiscoverWeekly__hero">
-        <div className="DiscoverWeekly__heroContent">
-          <div className="DiscoverWeekly__icon">
-            <FaHeadphones size={48} />
-          </div>
-          <h1 className="DiscoverWeekly__title" style={{ color: '#FAF8F4' }}>Descubrimiento Semanal</h1>
-          <p className="DiscoverWeekly__subtitle" style={{ color: '#FAF8F4' }}>
-            Playlist personalizada basada en tus gustos musicales
+      {/* Header compacto */}
+      <div className="Discover__header">
+        <div className="Discover__headerIcon">
+          <FaBrain />
+        </div>
+        <div>
+          <h1 className="Discover__headerTitle">Descubrimiento Semanal</h1>
+          <p className="Discover__headerSubtitle">
+            {stats.total} canciones seleccionadas para ti
           </p>
+        </div>
+        <div className="Discover__headerActions">
+          <button 
+            className="Discover__btn Discover__btn--play"
+            onClick={handlePlayAll}
+          >
+            <FaPlay /> Reproducir todo
+          </button>
+          <button 
+            className="Discover__btn Discover__btn--refresh"
+            onClick={generateRecommendations}
+          >
+            <FaSync />
+          </button>
+        </div>
+      </div>
 
-          <div className="DiscoverWeekly__stats">
-            <div className="DiscoverWeekly__stat">
-              <span className="DiscoverWeekly__statValue" style={{ color: '#FAF8F4' }}>{stats.total}</span>
-              <span className="DiscoverWeekly__statLabel" style={{ color: '#FAF8F4' }}>Canciones nuevas</span>
-            </div>
-            <div className="DiscoverWeekly__stat">
-              <span className="DiscoverWeekly__statValue" style={{ color: '#FAF8F4' }}>{stats.genres.length}</span>
-              <span className="DiscoverWeekly__statLabel" style={{ color: '#FAF8F4' }}>Géneros</span>
-            </div>
-            <div className="DiscoverWeekly__stat">
-              <span className="DiscoverWeekly__statValue" style={{ color: '#FAF8F4' }}>{stats.artists.length}</span>
-              <span className="DiscoverWeekly__statLabel" style={{ color: '#FAF8F4' }}>Artistas favoritos</span>
+      {/* Bento Grid Layout */}
+      <div className="Discover__bentoGrid">
+        {/* Canción destacada (top recommendation) */}
+        <div className="Discover__bentoItem Discover__bentoItem--featured">
+          <FeaturedSongCard song={recommendations[0]} onPlay={playSong} />
+        </div>
+
+        {/* Stats Card */}
+        <div className="Discover__bentoItem Discover__bentoItem--stats">
+          <div className="Discover__statsCard">
+            <h3 className="Discover__statsTitle">Tus gustos</h3>
+            <div className="Discover__statsGrid">
+              <div className="Discover__statBox">
+                <div className="Discover__statIcon"><FaMusic /></div>
+                <div className="Discover__statValue">{stats.total}</div>
+                <div className="Discover__statLabel">Nuevas</div>
+              </div>
+              <div className="Discover__statBox">
+                <div className="Discover__statIcon"><FaCompactDisc /></div>
+                <div className="Discover__statValue">{stats.genres.length}</div>
+                <div className="Discover__statLabel">Géneros</div>
+              </div>
+              <div className="Discover__statBox">
+                <div className="Discover__statIcon"><FaHeadphones /></div>
+                <div className="Discover__statValue">{stats.artists.length}</div>
+                <div className="Discover__statLabel">Artistas</div>
+              </div>
             </div>
           </div>
+        </div>
 
-          <div className="DiscoverWeekly__actions">
-            <button 
-              className="DiscoverWeekly__btn DiscoverWeekly__btn--primary"
-              onClick={handlePlayAll}
-            >
-              <FaPlay style={{ fontSize: 14 }} /> Reproducir todo
-            </button>
-            <button 
-              className="DiscoverWeekly__btn DiscoverWeekly__btn--secondary"
-              onClick={generateRecommendations}
-            >
-              <FaSync style={{ fontSize: 14 }} /> Actualizar
-            </button>
+        {/* Top 10 Recommendations List */}
+        <div className="Discover__bentoItem Discover__bentoItem--topList">
+          <div className="Discover__topList">
+            <h3 className="Discover__topListTitle">
+              <FaFire /> Top 10 para ti
+            </h3>
+            <div className="Discover__topListRows">
+              {recommendations.slice(0, 10).map((song, idx) => (
+                <CompactSongRow 
+                  key={song.id}
+                  song={song}
+                  index={idx + 1}
+                  onPlay={playSong}
+                />
+              ))}
+            </div>
+          </div>
+        </div>
+
+        {/* Cómo funciona el algoritmo */}
+        <div className="Discover__bentoItem Discover__bentoItem--algorithm">
+          <div className="Discover__algorithmCard">
+            <h3 className="Discover__algorithmTitle">
+              <FaBrain /> ¿Cómo funciona?
+            </h3>
+            <ul className="Discover__algorithmList">
+              <li>
+                <FaCheckCircle />
+                <span>Analizamos tus favoritos</span>
+              </li>
+              <li>
+                <FaCheckCircle />
+                <span>Buscamos similares por género</span>
+              </li>
+              <li>
+                <FaCheckCircle />
+                <span>Priorizamos tus artistas</span>
+              </li>
+              <li>
+                <FaCheckCircle />
+                <span>Añadimos variedad</span>
+              </li>
+            </ul>
           </div>
         </div>
       </div>
 
-      {/* Algoritmo Info */}
-      <div className="DiscoverWeekly__algorithm">
-        <h3 className="DiscoverWeekly__algorithmTitle">
-          <FaBrain style={{ marginRight: 8, color: 'var(--accent)' }} /> ¿Cómo generamos tus recomendaciones?
-        </h3>
-        <ul className="DiscoverWeekly__algorithmList">
-          <li className="DiscoverWeekly__algorithmItem">
-            <FaCheckCircle className="DiscoverWeekly__algorithmIcon" />
-            Analizamos tus canciones favoritas
-          </li>
-          <li className="DiscoverWeekly__algorithmItem">
-            <FaCheckCircle className="DiscoverWeekly__algorithmIcon" />
-            Buscamos canciones del mismo género y artistas similares
-          </li>
-          <li className="DiscoverWeekly__algorithmItem">
-            <FaCheckCircle className="DiscoverWeekly__algorithmIcon" />
-            Priorizamos álbumes y épocas que te gustan
-          </li>
-          <li className="DiscoverWeekly__algorithmItem">
-            <FaCheckCircle className="DiscoverWeekly__algorithmIcon" />
-            Añadimos variedad para que descubras música nueva
-          </li>
-        </ul>
-      </div>
-
-      {/* Recommendations Grid */}
-      <div className="DiscoverWeekly__section">
-        <div className="DiscoverWeekly__sectionHeader">
-          <div>
-            <h2 className="DiscoverWeekly__sectionTitle">Tus Recomendaciones</h2>
-            <p className="DiscoverWeekly__sectionSubtitle">
-              Seleccionadas especialmente para ti
-            </p>
-          </div>
+      {/* Grid completo de recomendaciones */}
+      <div className="Discover__section">
+        <div className="Discover__sectionHeader">
+          <h2 className="Discover__sectionTitle">
+            <FaStar /> Todas tus recomendaciones
+          </h2>
+          <span className="Discover__sectionCount">{recommendations.length} canciones</span>
         </div>
 
-        <div className="DiscoverWeekly__grid">
+        <div className="Discover__grid">
           {recommendations.map(song => (
-            <Link 
-              key={song.id}
-              to={`/songs/${song.id}`}
-              style={{ textDecoration: 'none', color: 'inherit' }}
-            >
-              <SongCard song={song} />
-            </Link>
+            <div key={song.id} className="Discover__gridItem">
+              <Link 
+                to={`/songs/${song.id}`}
+                style={{ textDecoration: 'none', color: 'inherit' }}
+              >
+                <SongCard song={song} />
+              </Link>
+            </div>
           ))}
         </div>
       </div>
