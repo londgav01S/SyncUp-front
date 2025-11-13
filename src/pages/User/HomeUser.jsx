@@ -99,6 +99,10 @@ export default function HomeUser(){
     return () => window.removeEventListener('songs-updated', handler)
   }, [])
 
+  // Usar canciones de la BD si hay suficientes (más de 10), sino usar datos estáticos
+  const useDatabaseSongs = remoteSongs.length > 10
+  const displaySongs = useDatabaseSongs ? remoteSongs : songs
+
   return (
     <div className="HomeUserPage">
       {/* Welcome Section */}
@@ -122,7 +126,10 @@ export default function HomeUser(){
       {/* Sección NEW (canciones desde backend) */}
       <section className="HomeUser__scrollSection">
         <div className="HomeUser__sectionHeader">
-          <h2 className="HomeUser__sectionTitle">New</h2>
+          <h2 className="HomeUser__sectionTitle">
+            {useDatabaseSongs ? 'Todas las canciones' : 'New'}
+            {useDatabaseSongs && <span style={{ marginLeft: 8, fontSize: 14, opacity: 0.7 }}>({displaySongs.length})</span>}
+          </h2>
         </div>
         
         {loadingRemote && (
@@ -133,25 +140,25 @@ export default function HomeUser(){
         )}
         {!loadingRemote && !errorRemote && (
           <div className="HomeUser__scrollContainer">
-            {remoteSongs.map(song => (
+            {displaySongs.map(song => (
               <div key={song.id} className="HomeUser__scrollItem">
                 <Link to={`/songs/${song.id}`} style={{textDecoration:'none',color:'inherit'}}>
                   <SongCard song={song} />
                 </Link>
               </div>
             ))}
-            {remoteSongs.length === 0 && (
+            {displaySongs.length === 0 && (
               <div style={{ padding:'var(--spacing-md)', opacity:.7, fontSize:14 }}>Sin canciones disponibles</div>
             )}
           </div>
         )}
       </section>
 
-      {/* Quick Access Cards (estático - escuchado recientemente mock) */}
+      {/* Quick Access Cards (escuchado recientemente) */}
       <div className="HomeUser__quickAccess">
         <h2 className="HomeUser__sectionTitle">Escuchado recientemente</h2>
         <div className="HomeUser__quickGrid">
-          {songs.slice(0, 6).map((song) => (
+          {displaySongs.slice(0, 6).map((song) => (
             <Link key={song.id} to={`/songs/${song.id}`} className="HomeUser__quickCard" style={{textDecoration:'none'}}>
               <img src={song.cover} alt={song.title} className="HomeUser__quickImage" />
               <div className="HomeUser__quickInfo">
@@ -169,9 +176,9 @@ export default function HomeUser(){
       </div>
 
       {/* Scrollable Sections */}
-      <ScrollableRow title="Tendencias ahora" songs={songs.slice(0, 10)} />
-      <ScrollableRow title="Nuevos lanzamientos" songs={songs.slice(5, 15)} />
-      <ScrollableRow title="Recomendado para ti" songs={songs.slice(10, 20)} />
+      <ScrollableRow title="Tendencias ahora" songs={displaySongs.slice(0, 10)} />
+      <ScrollableRow title="Nuevos lanzamientos" songs={displaySongs.slice(5, 15)} />
+      <ScrollableRow title="Recomendado para ti" songs={displaySongs.slice(10, 20)} />
 
       {/* Genre Tags */}
       <div className="HomeUser__genres">

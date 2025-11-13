@@ -42,45 +42,46 @@ function adaptSongForPlayer(song) {
  */
 export const getSimilarSongs = async (songTitle, limit = 20) => {
   try {
-    // Intentar endpoint del backend primero
-    const response = await axios.get('/canciones/similares', {
-      params: { titulo: songTitle, limite: limit }
-    })
-    const songs = response.data || []
-    console.log('✅ Canciones similares desde backend:', songs.length)
-    return songs.map(adaptSongForPlayer)
-  } catch (error) {
-    console.warn('⚠️ Backend no disponible, usando lógica client-side:', error.message)
+    // Primero buscar la canción para obtener su ID
+    const allSongsResponse = await axios.get('/canciones')
+    const allSongs = allSongsResponse.data || []
     
-    // Fallback: lógica client-side basada en todas las canciones
+    const baseSong = allSongs.find(s => s.titulo === songTitle)
+    if (!baseSong) {
+      console.error('❌ Canción base no encontrada:', songTitle)
+      return []
+    }
+    
     try {
-      const allSongsResponse = await axios.get('/canciones')
-      const allSongs = allSongsResponse.data || []
+      // Intentar endpoint del backend (grafo de similitud)
+      const response = await axios.get(`/grafo-similitud/generar-radio/${baseSong.id}`, {
+        params: { cantidad: limit }
+      })
+      const songs = response.data || []
+      console.log('✅ Radio desde backend (con canción base):', songs.length)
+      return songs.map(adaptSongForPlayer)
+    } catch (backendError) {
+      console.warn('⚠️ Backend grafo no disponible, usando lógica client-side:', backendError.message)
       
-      // Encontrar la canción base
-      const baseSong = allSongs.find(s => s.titulo === songTitle)
-      if (!baseSong) {
-        console.error('❌ Canción base no encontrada:', songTitle)
-        return []
-      }
-      
-      // Filtrar canciones similares
+      // Fallback: lógica client-side basada en similitud
       const similar = allSongs
-        .filter(song => song.titulo !== songTitle) // Excluir la misma canción
+        .filter(song => song.id !== baseSong.id) // Excluir la misma canción
         .map(song => ({
           song,
           score: calculateSimilarityScore(baseSong, song)
         }))
         .sort((a, b) => b.score - a.score) // Ordenar por score descendente
-        .slice(0, limit)
+        .slice(0, limit - 1) // Dejar espacio para la canción base
         .map(item => item.song)
       
-      console.log('✅ Canciones similares (client-side):', similar.length)
-      return similar.map(adaptSongForPlayer)
-    } catch (fallbackError) {
-      console.error('❌ Error obteniendo canciones similares:', fallbackError)
-      return []
+      // Incluir la canción base al inicio
+      const radioQueue = [baseSong, ...similar]
+      console.log('✅ Radio (client-side con canción base):', radioQueue.length)
+      return radioQueue.map(adaptSongForPlayer)
     }
+  } catch (error) {
+    console.error('❌ Error obteniendo canciones similares:', error)
+    return []
   }
 }
 

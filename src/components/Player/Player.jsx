@@ -25,6 +25,13 @@ export default function Player(){
     radioBaseSong,
     exitRadioMode,
     playNextRadioSong,
+    // Playback controls
+    playNext,
+    playPrevious,
+    shuffle,
+    toggleShuffle,
+    loop,
+    toggleLoop,
   } = usePlayer()
 
   const { isCollapsed } = useSidebar()
@@ -142,13 +149,23 @@ export default function Player(){
       <div className="Player__controls">
         {/* Botones de control */}
         <div className="Player__controlButtons">
-          <button className="Player__controlBtn" aria-label="Aleatorio">
+          <button 
+            className={`Player__controlBtn ${shuffle ? 'Player__controlBtn--active' : ''}`}
+            onClick={toggleShuffle}
+            aria-label="Aleatorio"
+            title={shuffle ? 'Aleatorio activado' : 'Aleatorio desactivado'}
+          >
             <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
               <path d="M10.59 9.17L5.41 4 4 5.41l5.17 5.17 1.42-1.41zM14.5 4l2.04 2.04L4 18.59 5.41 20 17.96 7.46 20 9.5V4h-5.5zm.33 9.41l-1.41 1.41 3.13 3.13L14.5 20H20v-5.5l-2.04 2.04-3.13-3.13z" />
             </svg>
           </button>
 
-          <button className="Player__controlBtn" aria-label="Anterior">
+          <button 
+            className="Player__controlBtn" 
+            onClick={playPrevious}
+            aria-label="Anterior"
+            disabled={!current}
+          >
             <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
               <path d="M6 6h2v12H6zm3.5 6l8.5 6V6z" />
             </svg>
@@ -171,7 +188,12 @@ export default function Player(){
             )}
           </button>
 
-          <button className="Player__controlBtn" aria-label="Siguiente">
+          <button 
+            className="Player__controlBtn" 
+            onClick={playNext}
+            aria-label="Siguiente"
+            disabled={!current}
+          >
             <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
               <path d="M16 18h2V6h-2zM6 18l8.5-6L6 6z" />
             </svg>
@@ -190,9 +212,21 @@ export default function Player(){
               </svg>
             </button>
           ) : (
-            <button className="Player__controlBtn" aria-label="Repetir">
+            <button 
+              className={`Player__controlBtn ${loop !== 'off' ? 'Player__controlBtn--active' : ''}`}
+              onClick={toggleLoop}
+              aria-label="Repetir"
+              title={loop === 'off' ? 'Repetir desactivado' : loop === 'one' ? 'Repetir una canción' : 'Repetir todas'}
+            >
               <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-                <path d="M7 7h10v3l4-4-4-4v3H5v6h2V7zm10 10H7v-3l-4 4 4 4v-3h12v-6h-2v4z" />
+                {loop === 'one' ? (
+                  <>
+                    <path d="M7 7h10v3l4-4-4-4v3H5v6h2V7zm10 10H7v-3l-4 4 4 4v-3h12v-6h-2v4z" />
+                    <text x="12" y="16" fontSize="10" textAnchor="middle" fill="currentColor" fontWeight="bold">1</text>
+                  </>
+                ) : (
+                  <path d="M7 7h10v3l4-4-4-4v3H5v6h2V7zm10 10H7v-3l-4 4 4 4v-3h12v-6h-2v4z" />
+                )}
               </svg>
             </button>
           )}
@@ -312,8 +346,14 @@ export default function Player(){
               if (isRadioMode) {
                 console.log('🔄 Auto-reproduciendo siguiente canción en radio')
                 playNextRadioSong()
+              } else if (loop === 'one') {
+                console.log('🔁 Repitiendo la misma canción')
+                if (playerRef.current) {
+                  playerRef.current.seekTo(0)
+                  play(current)
+                }
               } else {
-                pause();
+                playNext()
               }
               setLogs((l) => [...l.slice(-20), 'onEnded']) 
             }}
@@ -355,8 +395,14 @@ export default function Player(){
               if (isRadioMode) {
                 console.log('🔄 Auto-reproduciendo siguiente canción en radio')
                 playNextRadioSong()
+              } else if (loop === 'one') {
+                console.log('🔁 Repitiendo la misma canción')
+                if (playerRef.current) {
+                  playerRef.current.seekTo(0)
+                  play(current)
+                }
               } else {
-                pause();
+                playNext()
               }
               setLogs((l) => [...l.slice(-20), 'onEnded']) 
             }}
