@@ -73,3 +73,42 @@ export const getFollowers = async (userEmail) => {
     throw error
   }
 }
+
+/**
+ * Actualizar datos del usuario
+ * @param {string} correo - Correo actual del usuario
+ * @param {string} nuevoCorreo - Nuevo correo (opcional)
+ * @param {string} nombre - Nuevo nombre (opcional)
+ * @param {string} nuevaContrasena - Nueva contraseña (opcional)
+ */
+export const updateUser = async (correo, nuevoCorreo, nombre, nuevaContrasena) => {
+  try {
+    const params = { correo }
+    if (nuevoCorreo && nuevoCorreo !== correo) params.nuevoCorreo = nuevoCorreo
+    if (nombre) params.nombre = nombre
+    if (nuevaContrasena) params.nuevaContrasena = nuevaContrasena
+
+    const response = await axios.put('/usuarios', null, { params })
+    console.log('✅ Usuario actualizado correctamente')
+    return response.data
+  } catch (error) {
+    console.error('❌ Error al actualizar usuario:', error)
+    throw error
+  }
+}
+
+/**
+ * Eliminar cuenta de usuario
+ * @param {string} correo - Correo del usuario a eliminar
+ */
+export const deleteUser = async (correo) => {
+  try {
+    await axios.delete('/usuarios', {
+      params: { correo }
+    })
+    console.log('✅ Usuario eliminado correctamente')
+  } catch (error) {
+    console.error('❌ Error al eliminar usuario:', error)
+    throw error
+  }
+}

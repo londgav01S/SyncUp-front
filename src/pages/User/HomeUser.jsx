@@ -4,6 +4,7 @@ import songs from '../../data/songs.json'
 import SongCard from '../../components/SongCard/SongCard'
 import HeroCarousel from '../../components/HeroCarousel/HeroCarousel'
 import { getSongs } from '../../api/songService'
+import { FaMusic, FaHeadphones, FaHeart, FaBook, FaClock } from 'react-icons/fa'
 import './HomeUser.css'
 
 // Scrollable Row Component
@@ -64,9 +65,13 @@ export default function HomeUser(){
       s.urlPortadaCancion || // por compatibilidad si el back lo envía así
       s.album?.urlPortadaAlbum ||
       s.album?.URLPortadaAlbum ||
+      s.artista?.urlfotoArtista ||
       ''
     ).toString().trim() || '/placeholder-song.svg',
-    genre: s.genero || 'Music'
+    url: s.URLCancion || s.url || s.urlCancion, // Campo crítico para reproducción
+    genre: s.genero || 'Music',
+    // Mantener datos originales
+    ...s
   })
 
   useEffect(() => {
@@ -174,7 +179,7 @@ export default function HomeUser(){
         <div className="HomeUser__genreGrid">
           {['Indie', 'Pop', 'Electronic', 'Rock', 'Acoustic', 'Jazz', 'Classical', 'R&B'].map((genre) => (
             <button key={genre} className="HomeUser__genreTag">
-              <span className="HomeUser__genreIcon">🎵</span>
+              <FaMusic className="HomeUser__genreIcon" />
               {genre}
             </button>
           ))}
@@ -184,22 +189,22 @@ export default function HomeUser(){
       {/* Stats Cards */}
       <div className="HomeUser__stats">
         <div className="HomeUser__statCard">
-          <div className="HomeUser__statIcon">🎧</div>
+          <div className="HomeUser__statIcon"><FaHeadphones style={{ fontSize: 24 }} /></div>
           <div className="HomeUser__statValue">2,547</div>
           <div className="HomeUser__statLabel">Canciones reproducidas</div>
         </div>
         <div className="HomeUser__statCard">
-          <div className="HomeUser__statIcon">❤️</div>
+          <div className="HomeUser__statIcon"><FaHeart style={{ fontSize: 24 }} /></div>
           <div className="HomeUser__statValue">143</div>
           <div className="HomeUser__statLabel">Canciones favoritas</div>
         </div>
         <div className="HomeUser__statCard">
-          <div className="HomeUser__statIcon">📚</div>
+          <div className="HomeUser__statIcon"><FaBook style={{ fontSize: 24 }} /></div>
           <div className="HomeUser__statValue">18</div>
           <div className="HomeUser__statLabel">Playlists creadas</div>
         </div>
         <div className="HomeUser__statCard">
-          <div className="HomeUser__statIcon">⏱️</div>
+          <div className="HomeUser__statIcon"><FaClock style={{ fontSize: 24 }} /></div>
           <div className="HomeUser__statValue">42h</div>
           <div className="HomeUser__statLabel">Tiempo de escucha</div>
         </div>

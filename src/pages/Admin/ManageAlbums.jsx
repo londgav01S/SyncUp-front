@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState } from 'react'
-import { createAlbum, getAlbums } from '../../api/albumService'
+import { createAlbum, getAlbums, deleteAlbum, updateAlbum } from '../../api/albumService'
 import { GENEROS } from '../../data/genres'
 
 export default function ManageAlbums(){
@@ -16,6 +16,8 @@ export default function ManageAlbums(){
   const [loading, setLoading] = useState(false)
   const [saving, setSaving] = useState(false)
   const [message, setMessage] = useState(null)
+  const [editMode, setEditMode] = useState(false)
+  const [editingAlbumId, setEditingAlbumId] = useState(null)
 
   const fetchAlbums = async () => {
     setLoading(true)
@@ -38,6 +40,27 @@ export default function ManageAlbums(){
 
   const canSubmit = form.titulo && form.nombreArtista && form.genero && form.anio && form.URLPortadaAlbum
 
+  const handleEdit = (album) => {
+    setEditMode(true)
+    setEditingAlbumId(album.id)
+    setForm({
+      titulo: album.titulo,
+      anio: album.anio,
+      nombreArtista: album.artista?.nombre || '',
+      genero: album.genero,
+      URLPortadaAlbum: album.urlPortadaAlbum || album.URLPortadaAlbum || ''
+    })
+    setMessage(null)
+    window.scrollTo({ top: 0, behavior: 'smooth' })
+  }
+
+  const handleCancelEdit = () => {
+    setEditMode(false)
+    setEditingAlbumId(null)
+    setForm(empty)
+    setMessage(null)
+  }
+
   const onSubmit = async (e) => {
     e.preventDefault()
     setMessage(null)
@@ -54,17 +77,40 @@ export default function ManageAlbums(){
         genero: form.genero,
         URLPortadaAlbum: form.URLPortadaAlbum.trim()
       }
-      await createAlbum(payload)
-      setMessage({ type: 'success', text: 'Álbum creado correctamente' })
+
+      if (editMode && editingAlbumId) {
+        await updateAlbum(editingAlbumId, payload)
+        setMessage({ type: 'success', text: 'Álbum actualizado correctamente' })
+        setEditMode(false)
+        setEditingAlbumId(null)
+      } else {
+        await createAlbum(payload)
+        setMessage({ type: 'success', text: 'Álbum creado correctamente' })
+      }
+
       setForm(empty)
       fetchAlbums()
-      // Disparar evento por si otras vistas necesitan refrescar
       window.dispatchEvent(new Event('albums-updated'))
     } catch (err) {
-      const text = err?.response?.data?.message || err?.message || 'Error al crear álbum'
+      const text = err?.response?.data?.message || err?.message || `Error al ${editMode ? 'actualizar' : 'crear'} álbum`
       setMessage({ type: 'error', text })
     } finally {
       setSaving(false)
+    }
+  }
+
+  const handleDelete = async (album) => {
+    const confirmDelete = window.confirm(`¿Estás seguro de eliminar el álbum "${album.titulo}"?`)
+    if (!confirmDelete) return
+
+    try {
+      await deleteAlbum(album.id)
+      setMessage({ type: 'success', text: `Álbum "${album.titulo}" eliminado correctamente` })
+      fetchAlbums()
+      window.dispatchEvent(new Event('albums-updated'))
+    } catch (err) {
+      const text = err?.response?.data?.message || err?.message || 'Error al eliminar álbum'
+      setMessage({ type: 'error', text })
     }
   }
 
@@ -81,7 +127,29 @@ export default function ManageAlbums(){
           padding:'var(--spacing-lg)',
           boxShadow:'var(--shadow-sm)'
         }}>
-          <h3 className="heading-3" style={{ marginBottom: 'var(--spacing-md)', color:'var(--text)' }}>Crear nuevo álbum</h3>
+          <div style={{ display:'flex', justifyContent:'space-between', alignItems:'center', marginBottom: 'var(--spacing-md)' }}>
+            <h3 className="heading-3" style={{ color:'var(--text)' }}>
+              {editMode ? 'Editar álbum' : 'Crear nuevo álbum'}
+            </h3>
+            {editMode && (
+              <button
+                onClick={handleCancelEdit}
+                className="btn btn--secondary"
+                style={{
+                  padding:'var(--spacing-xs) var(--spacing-md)',
+                  background:'var(--text-muted)',
+                  color:'#fff',
+                  border:'none',
+                  borderRadius:'var(--border-radius-sm)',
+                  fontSize:13,
+                  fontWeight:500,
+                  cursor:'pointer'
+                }}
+              >
+                Cancelar
+              </button>
+            )}
+          </div>
           <form onSubmit={onSubmit} className="form" style={{ 
             display:'grid', 
             gridTemplateColumns:'repeat(auto-fit, minmax(220px, 1fr))', 
@@ -199,7 +267,7 @@ export default function ManageAlbums(){
                   transition:'var(--transition-fast)'
                 }}
               >
-                {saving ? 'Guardando…' : 'Crear álbum'}
+                {saving ? (editMode ? 'Actualizando…' : 'Guardando…') : (editMode ? 'Actualizar álbum' : 'Crear álbum')}
               </button>
               {message && (
                 <span style={{ 
@@ -235,6 +303,7 @@ export default function ManageAlbums(){
                     <th style={{ padding:'var(--spacing-sm)', fontSize:14, fontWeight:600, color:'var(--text-muted)' }}>Artista</th>
                     <th style={{ padding:'var(--spacing-sm)', fontSize:14, fontWeight:600, color:'var(--text-muted)' }}>Año</th>
                     <th style={{ padding:'var(--spacing-sm)', fontSize:14, fontWeight:600, color:'var(--text-muted)' }}>Género</th>
+                    <th style={{ padding:'var(--spacing-sm)', fontSize:14, fontWeight:600, color:'var(--text-muted)' }}>Acciones</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -257,6 +326,48 @@ export default function ManageAlbums(){
                       <td style={{ padding:'var(--spacing-sm)', fontSize:14, color:'var(--text)' }}>{a.artista?.nombre || 'N/A'}</td>
                       <td style={{ padding:'var(--spacing-sm)', fontSize:14, color:'var(--text-muted)' }}>{a.anio}</td>
                       <td style={{ padding:'var(--spacing-sm)', fontSize:14, color:'var(--text-muted)' }}>{a.genero}</td>
+                      <td style={{ padding:'var(--spacing-sm)' }}>
+                        <div style={{ display:'flex', gap:'var(--spacing-xs)' }}>
+                          <button
+                            onClick={() => handleEdit(a)}
+                            className="btn btn--edit"
+                            style={{
+                              padding:'var(--spacing-xs) var(--spacing-sm)',
+                              background:'var(--secondary)',
+                              color:'#fff',
+                              border:'none',
+                              borderRadius:'var(--border-radius-sm)',
+                              fontSize:13,
+                              fontWeight:500,
+                              cursor:'pointer',
+                              transition:'var(--transition-fast)'
+                            }}
+                            onMouseEnter={(e) => e.currentTarget.style.background = '#3da8a5'}
+                            onMouseLeave={(e) => e.currentTarget.style.background = 'var(--secondary)'}
+                          >
+                            Editar
+                          </button>
+                          <button
+                            onClick={() => handleDelete(a)}
+                            className="btn btn--danger"
+                            style={{
+                              padding:'var(--spacing-xs) var(--spacing-sm)',
+                              background:'#ff6b6b',
+                              color:'#fff',
+                              border:'none',
+                              borderRadius:'var(--border-radius-sm)',
+                              fontSize:13,
+                              fontWeight:500,
+                              cursor:'pointer',
+                              transition:'var(--transition-fast)'
+                            }}
+                            onMouseEnter={(e) => e.currentTarget.style.background = '#ff5252'}
+                            onMouseLeave={(e) => e.currentTarget.style.background = '#ff6b6b'}
+                          >
+                            Eliminar
+                          </button>
+                        </div>
+                      </td>
                     </tr>
                   ))}
                   {albums.length === 0 && (

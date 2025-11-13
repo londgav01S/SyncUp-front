@@ -147,6 +147,18 @@
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+  display: flex;
+  align-items: center;
+}
+
+.Player__radioIndicator {
+  display: inline-flex;
+  align-items: center;
+  color: var(--accent);
+  font-size: 11px;
+  font-weight: 600;
+  margin-left: 8px;
+  opacity: 1;
 }
 
 /* Controles centrales */
@@ -192,6 +204,15 @@
 
 .Player__controlBtn:active {
   transform: scale(0.95);
+}
+
+.Player__controlBtn--active {
+  color: var(--accent);
+  background: rgba(29, 185, 84, 0.15);
+}
+
+.Player__controlBtn--active:hover {
+  background: rgba(29, 185, 84, 0.25);
 }
 
 .Player__playButton {

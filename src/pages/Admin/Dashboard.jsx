@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 
 export default function Dashboard(){
   const cards = [
+    { to: '/admin/metrics', title: 'Métricas', desc: 'Estadísticas y gráficos', icon: 'fas fa-chart-bar' },
     { to: '/admin/artists', title: 'Artistas', desc: 'Crear y listar artistas', icon: 'fas fa-microphone' },
     { to: '/admin/albums', title: 'Álbumes', desc: 'Gestionar álbumes', icon: 'fas fa-compact-disc' },
     { to: '/admin/songs', title: 'Canciones', desc: 'Gestionar canciones', icon: 'fas fa-music' },

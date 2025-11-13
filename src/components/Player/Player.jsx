@@ -19,6 +19,12 @@ export default function Player(){
     setVolume,
     muted,
     setMuted,
+    // Radio mode
+    isRadioMode,
+    radioQueue,
+    radioBaseSong,
+    exitRadioMode,
+    playNextRadioSong,
   } = usePlayer()
 
   const { isCollapsed } = useSidebar()
@@ -37,6 +43,20 @@ export default function Player(){
       isPlayerVisible
     })
   }, [current, playing, isPlayerVisible])
+
+  // Escuchar evento radio-started
+  useEffect(() => {
+    const handleRadioStarted = (e) => {
+      const { baseSong, queue } = e.detail
+      console.log('📻 Evento radio-started recibido en Player', { baseSong, queueLength: queue?.length })
+      if (window.PlayerContext?.startRadioMode) {
+        window.PlayerContext.startRadioMode(baseSong, queue)
+      }
+    }
+    
+    window.addEventListener('radio-started', handleRadioStarted)
+    return () => window.removeEventListener('radio-started', handleRadioStarted)
+  }, [])
 
   const playerRef = useRef(null)
   const [seeking, setSeeking] = useState(false)
@@ -96,7 +116,18 @@ export default function Player(){
             />
             <div className="Player__trackDetails">
               <h4 className="Player__trackTitle">{current.title}</h4>
-              <p className="Player__trackArtist">{current.artist}</p>
+              <p className="Player__trackArtist">
+                {current.artist}
+                {isRadioMode && (
+                  <span className="Player__radioIndicator">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" style={{ marginLeft: 8, marginRight: 4 }}>
+                      <circle cx="12" cy="12" r="2" />
+                      <path d="M16.24 7.76a6 6 0 0 1 0 8.49m-8.48-.01a6 6 0 0 1 0-8.49m11.31-2.82a10 10 0 0 1 0 14.14m-14.14 0a10 10 0 0 1 0-14.14" />
+                    </svg>
+                    Radio: {radioBaseSong?.title || radioBaseSong?.titulo}
+                  </span>
+                )}
+              </p>
             </div>
             <button className="Player__iconButton" aria-label="Me gusta">
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -146,11 +177,25 @@ export default function Player(){
             </svg>
           </button>
 
-          <button className="Player__controlBtn" aria-label="Repetir">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-              <path d="M7 7h10v3l4-4-4-4v3H5v6h2V7zm10 10H7v-3l-4 4 4 4v-3h12v-6h-2v4z" />
-            </svg>
-          </button>
+          {isRadioMode ? (
+            <button 
+              className="Player__controlBtn Player__controlBtn--active" 
+              aria-label="Salir de Radio"
+              onClick={exitRadioMode}
+              title="Salir del modo radio"
+            >
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                <circle cx="12" cy="12" r="2" />
+                <path d="M16.24 7.76a6 6 0 0 1 0 8.49m-8.48-.01a6 6 0 0 1 0-8.49m11.31-2.82a10 10 0 0 1 0 14.14m-14.14 0a10 10 0 0 1 0-14.14" />
+              </svg>
+            </button>
+          ) : (
+            <button className="Player__controlBtn" aria-label="Repetir">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M7 7h10v3l4-4-4-4v3H5v6h2V7zm10 10H7v-3l-4 4 4 4v-3h12v-6h-2v4z" />
+              </svg>
+            </button>
+          )}
         </div>
 
         {/* Barra de progreso */}
@@ -226,6 +271,11 @@ export default function Player(){
           <div>playing: {String(playing)} | state: {lastState}</div>
           <div>dur: {Math.round(duration)}s | cur: {Math.round(playedSeconds)}s</div>
           <div>vol: {Math.round((muted ? 0 : volume) * 100)}% | muted: {String(muted)}</div>
+          {isRadioMode && (
+            <div style={{ background: '#1DB954', padding: 4, borderRadius: 4, marginTop: 4 }}>
+              📻 Radio Mode: {radioQueue?.length || 0} en cola
+            </div>
+          )}
           {!current && (
             <button
               onClick={() => play({ id: 999, title: 'Debug: Shape of You', artist: 'Ed Sheeran', cover: 'https://picsum.photos/seed/hero-shapeofyou/512/512', url: 'https://www.youtube.com/watch?v=JGwWNGJdvx8' })}
@@ -257,7 +307,16 @@ export default function Player(){
             onStart={() => { setLastState('PLAYING'); setLogs((l) => [...l.slice(-20), 'onStart']) }}
             onPlay={() => { setLastState('PLAYING'); setLogs((l) => [...l.slice(-20), 'onPlay']) }}
             onPause={() => { setLastState('PAUSED'); setLogs((l) => [...l.slice(-20), 'onPause']) }}
-            onEnded={() => { setLastState('ENDED'); pause(); setLogs((l) => [...l.slice(-20), 'onEnded']) }}
+            onEnded={() => { 
+              setLastState('ENDED'); 
+              if (isRadioMode) {
+                console.log('🔄 Auto-reproduciendo siguiente canción en radio')
+                playNextRadioSong()
+              } else {
+                pause();
+              }
+              setLogs((l) => [...l.slice(-20), 'onEnded']) 
+            }}
             onBuffer={() => setLogs((l) => [...l.slice(-20), 'onBuffer'])}
             onError={(e) => setLogs((l) => [...l.slice(-20), `onError: ${e?.message || e}`])}
             onDuration={(d) => { setDuration(d); setLogs((l) => [...l.slice(-20), `onDuration: ${Math.round(d)}s`]) }}
@@ -291,7 +350,16 @@ export default function Player(){
             onStart={() => { setLastState('PLAYING'); setLogs((l) => [...l.slice(-20), 'onStart']) }}
             onPlay={() => { setLastState('PLAYING'); setLogs((l) => [...l.slice(-20), 'onPlay']) }}
             onPause={() => { setLastState('PAUSED'); setLogs((l) => [...l.slice(-20), 'onPause']) }}
-            onEnded={() => { setLastState('ENDED'); pause(); setLogs((l) => [...l.slice(-20), 'onEnded']) }}
+            onEnded={() => { 
+              setLastState('ENDED'); 
+              if (isRadioMode) {
+                console.log('🔄 Auto-reproduciendo siguiente canción en radio')
+                playNextRadioSong()
+              } else {
+                pause();
+              }
+              setLogs((l) => [...l.slice(-20), 'onEnded']) 
+            }}
             onBuffer={() => setLogs((l) => [...l.slice(-20), 'onBuffer'])}
             onError={(e) => setLogs((l) => [...l.slice(-20), `onError: ${e?.message || e}`])}
             onDuration={(d) => { setDuration(d); setLogs((l) => [...l.slice(-20), `onDuration: ${Math.round(d)}s`]) }}

@@ -12,3 +12,9 @@ export const createSong = (payload) => axios.post('/canciones/por-nombres', payl
 
 // Alternative: create by IDs if needed
 export const createSongByIds = (payload) => axios.post('/canciones', payload)
+
+// Delete song by ID
+export const deleteSong = (id) => axios.delete(`/canciones/${id}`)
+
+// Update song by ID
+export const updateSong = (id, payload) => axios.put(`/canciones/${id}`, payload)

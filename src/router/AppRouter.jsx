@@ -8,6 +8,7 @@ import SearchPage from '../pages/User/SearchPage'
 import Favorites from '../pages/User/Favorites'
 import Profile from '../pages/User/Profile'
 import Playlists from '../pages/User/Playlists'
+import PlaylistDetail from '../pages/User/PlaylistDetail'
 import DiscoverWeekly from '../pages/User/DiscoverWeekly'
 import Friends from '../pages/User/Friends'
 import Dashboard from '../pages/Admin/Dashboard'
@@ -16,6 +17,7 @@ import ManageArtists from '../pages/Admin/ManageArtists'
 import ManageAlbums from '../pages/Admin/ManageAlbums'
 import ManageUsers from '../pages/Admin/ManageUsers'
 import MassUpload from '../pages/Admin/MassUpload'
+import Metrics from '../pages/Admin/Metrics'
 import SongDetails from '../pages/Song/SongDetails'
 import MainLayout from '../layouts/MainLayout'
 import PrivateRoute from './PrivateRoute'
@@ -38,6 +40,7 @@ export default function AppRouter() {
           <Route path="/friends" element={<Friends />} />
           <Route path="/user/profile" element={<Profile />} />
           <Route path="/user/playlists" element={<Playlists />} />
+          <Route path="/playlists/:id" element={<PlaylistDetail />} />
           <Route path="/user/discover" element={<DiscoverWeekly />} />
 
           {/* Songs */}
@@ -45,6 +48,7 @@ export default function AppRouter() {
 
           {/* Admin (protected) */}
           <Route path="/admin" element={<PrivateRoute roles={["admin"]}><Dashboard /></PrivateRoute>} />
+          <Route path="/admin/metrics" element={<PrivateRoute roles={["admin"]}><Metrics /></PrivateRoute>} />
           <Route path="/admin/artists" element={<PrivateRoute roles={["admin"]}><ManageArtists /></PrivateRoute>} />
           <Route path="/admin/albums" element={<PrivateRoute roles={["admin"]}><ManageAlbums /></PrivateRoute>} />
           <Route path="/admin/songs" element={<PrivateRoute roles={["admin"]}><ManageSongs /></PrivateRoute>} />

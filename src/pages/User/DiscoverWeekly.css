@@ -1,0 +1,262 @@
+.DiscoverWeeklyPage {
+  padding: var(--spacing-lg);
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.DiscoverWeekly__hero {
+  background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
+  border-radius: var(--border-radius-lg);
+  padding: var(--spacing-xl);
+  margin-bottom: var(--spacing-xl);
+  color: #fff;
+  position: relative;
+  overflow: hidden;
+}
+
+.DiscoverWeekly__hero::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  right: -20%;
+  width: 500px;
+  height: 500px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 50%;
+}
+
+.DiscoverWeekly__heroContent {
+  position: relative;
+  z-index: 1;
+}
+
+.DiscoverWeekly__icon {
+  font-size: 48px;
+  margin-bottom: var(--spacing-md);
+  color: #FAF8F4;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.DiscoverWeekly__title {
+  font-size: 36px;
+  font-weight: 700;
+  margin-bottom: var(--spacing-sm);
+  color: #FAF8F4 !important;
+}
+
+.DiscoverWeekly__subtitle {
+  font-size: 16px;
+  color: #FAF8F4 !important;
+  opacity: 0.95;
+  margin-bottom: var(--spacing-lg);
+}
+
+.DiscoverWeekly__stats {
+  display: flex;
+  gap: var(--spacing-lg);
+  margin-top: var(--spacing-md);
+}
+
+.DiscoverWeekly__stat {
+  display: flex;
+  flex-direction: column;
+}
+
+.DiscoverWeekly__statValue {
+  font-size: 24px;
+  font-weight: 700;
+  color: #FAF8F4 !important;
+}
+
+.DiscoverWeekly__statLabel {
+  font-size: 14px;
+  color: #FAF8F4 !important;
+  opacity: 0.85;
+}
+
+.DiscoverWeekly__actions {
+  display: flex;
+  gap: var(--spacing-md);
+  margin-top: var(--spacing-lg);
+}
+
+.DiscoverWeekly__btn {
+  padding: var(--spacing-sm) var(--spacing-xl);
+  border: none;
+  border-radius: var(--border-radius-full);
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition-fast);
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+}
+
+.DiscoverWeekly__btn--primary {
+  background: #fff;
+  color: var(--primary);
+}
+
+.DiscoverWeekly__btn--primary:hover {
+  transform: scale(1.05);
+  box-shadow: var(--shadow-lg);
+}
+
+.DiscoverWeekly__btn--secondary {
+  background: rgba(255, 255, 255, 0.2);
+  color: #fff;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.DiscoverWeekly__btn--secondary:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+.DiscoverWeekly__loading {
+  text-align: center;
+  padding: var(--spacing-xl);
+}
+
+.DiscoverWeekly__spinner {
+  width: 50px;
+  height: 50px;
+  border: 4px solid var(--border-color);
+  border-top-color: var(--accent);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin: 0 auto var(--spacing-md);
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.DiscoverWeekly__empty {
+  text-align: center;
+  padding: var(--spacing-xl);
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius-lg);
+}
+
+.DiscoverWeekly__emptyIcon {
+  font-size: 64px;
+  margin-bottom: var(--spacing-md);
+}
+
+.DiscoverWeekly__emptyTitle {
+  font-size: 24px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: var(--spacing-sm);
+}
+
+.DiscoverWeekly__emptyText {
+  font-size: 16px;
+  color: var(--text-muted);
+  margin-bottom: var(--spacing-lg);
+}
+
+.DiscoverWeekly__emptyLink {
+  display: inline-block;
+  padding: var(--spacing-sm) var(--spacing-lg);
+  background: var(--accent);
+  color: #fff;
+  text-decoration: none;
+  border-radius: var(--border-radius-full);
+  font-weight: 600;
+  transition: var(--transition-fast);
+}
+
+.DiscoverWeekly__emptyLink:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+.DiscoverWeekly__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: var(--spacing-lg);
+}
+
+.DiscoverWeekly__section {
+  margin-bottom: var(--spacing-xl);
+}
+
+.DiscoverWeekly__sectionHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--spacing-lg);
+}
+
+.DiscoverWeekly__sectionTitle {
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--text);
+}
+
+.DiscoverWeekly__sectionSubtitle {
+  font-size: 14px;
+  color: var(--text-muted);
+}
+
+.DiscoverWeekly__algorithm {
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius-md);
+  padding: var(--spacing-lg);
+  margin-bottom: var(--spacing-xl);
+}
+
+.DiscoverWeekly__algorithmTitle {
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: var(--spacing-md);
+}
+
+.DiscoverWeekly__algorithmList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  gap: var(--spacing-sm);
+}
+
+.DiscoverWeekly__algorithmItem {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  font-size: 14px;
+  color: var(--text-muted);
+}
+
+.DiscoverWeekly__algorithmIcon {
+  color: var(--secondary);
+  font-size: 16px;
+  flex-shrink: 0;
+}
+
+@media (max-width: 768px) {
+  .DiscoverWeekly__grid {
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: var(--spacing-md);
+  }
+
+  .DiscoverWeekly__title {
+    font-size: 28px;
+  }
+
+  .DiscoverWeekly__actions {
+    flex-direction: column;
+  }
+
+  .DiscoverWeekly__btn {
+    width: 100%;
+    justify-content: center;
+  }
+}

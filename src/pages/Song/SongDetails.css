@@ -5,6 +5,17 @@
   background: var(--color-bg, #FAF8F4);
 }
 
+/* Loading state */
+.SongDetails__loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 400px;
+  gap: 16px;
+  color: var(--text-muted);
+}
+
 /* Hero con fondo blur y overlay */
 .SongDetails__hero {
   position: relative;

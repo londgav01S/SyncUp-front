@@ -1,12 +1,19 @@
-import React, { useEffect, useMemo, useState } from 'react'
+import React, { useEffect, useMemo, useState, useContext } from 'react'
 import { useParams, Link } from 'react-router-dom'
-import data from '../../data/songs.json'
+import { getSong, getSongs } from '../../api/songService'
+import { addToFavorites, removeFromFavorites, getFavorites } from '../../api/favoriteService'
+import { AuthContext } from '../../context/AuthContext'
 import usePlayer from '../../hooks/usePlayer'
+import { FaExclamationTriangle } from 'react-icons/fa'
 import './SongDetails.css'
 
 export default function SongDetails(){
   const { id } = useParams()
-  const song = useMemo(() => data.find(s => String(s.id) === String(id)), [id])
+  const { user } = useContext(AuthContext)
+  const [song, setSong] = useState(null)
+  const [allSongs, setAllSongs] = useState([])
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState(null)
   const {
     current,
     playing,
@@ -22,29 +29,147 @@ export default function SongDetails(){
   const [seeking, setSeeking] = useState(false)
   const [tempSeekValue, setTempSeekValue] = useState(0)
   const [isFavorite, setIsFavorite] = useState(false)
+  const [loadingFavorite, setLoadingFavorite] = useState(false)
   const [showLyrics, setShowLyrics] = useState(false)
 
-  if(!song){
-    return (
-      <div className="SongDetails song-details">
-        <div className="SongDetails__error">
-          <h2>⚠️ Canción no encontrada</h2>
-          <Link className="SongDetails__btn SongDetails__btn--secondary" to="/">Volver al inicio</Link>
-        </div>
-      </div>
-    )
+  // Cargar canción por ID
+  useEffect(() => {
+    const loadSong = async () => {
+      try {
+        setLoading(true)
+        setError(null)
+        console.log('🔍 Buscando canción con ID:', id)
+        
+        const response = await getSong(id)
+        const songData = response.data
+        
+        console.log('✅ Canción encontrada:', songData)
+        
+        // Adaptar canción del backend
+        const adapted = {
+          // Mantener datos originales primero
+          ...songData,
+          // Sobrescribir con propiedades adaptadas para el frontend
+          id: songData.id || songData._id,
+          title: songData.titulo,
+          artist: songData.artista?.nombre || 'Desconocido',
+          album: songData.album?.nombre || '',
+          cover: songData.URLPortadaCancion || songData.album?.URLPortadaAlbum || songData.artista?.urlfotoArtista || '',
+          url: songData.URLCancion || songData.url,
+          duration: songData.duracion || 0,
+          genre: songData.genero || '',
+          year: songData.anio || '',
+          lyrics: songData.letra || null
+        }
+        
+        console.log('🔄 Canción adaptada:', {
+          title: adapted.title,
+          album: adapted.album,
+          url: adapted.url,
+          URLCancion: songData.URLCancion
+        })
+        
+        setSong(adapted)
+      } catch (err) {
+        console.error('❌ Error cargando canción:', err)
+        setError(err.message)
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    loadSong()
+  }, [id])
+
+  // Verificar si la canción está en favoritos
+  useEffect(() => {
+    const checkFavorite = async () => {
+      if (!user?.correo || !song?.title) return
+      
+      try {
+        const favorites = await getFavorites(user.correo)
+        const isInFavorites = favorites.some(fav => 
+          fav.titulo === song.title || fav.id === song.id
+        )
+        setIsFavorite(isInFavorites)
+      } catch (err) {
+        console.error('Error verificando favoritos:', err)
+      }
+    }
+
+    checkFavorite()
+  }, [user, song])
+
+  // Manejar like/dislike
+  const handleToggleFavorite = async () => {
+    if (!user?.correo) {
+      alert('Debes iniciar sesión para guardar favoritos')
+      return
+    }
+
+    if (!song?.title) return
+
+    setLoadingFavorite(true)
+    try {
+      if (isFavorite) {
+        await removeFromFavorites(user.correo, song.title)
+        setIsFavorite(false)
+        console.log('💔 Eliminado de favoritos')
+      } else {
+        await addToFavorites(user.correo, song.title)
+        setIsFavorite(true)
+        console.log('💖 Agregado a favoritos')
+      }
+    } catch (err) {
+      console.error('Error al actualizar favoritos:', err)
+      alert('Error al actualizar favoritos. Intenta de nuevo.')
+    } finally {
+      setLoadingFavorite(false)
+    }
   }
 
-  const isCurrent = current?.id === song.id
+  // Cargar todas las canciones para relacionadas
+  useEffect(() => {
+    const loadAllSongs = async () => {
+      try {
+        const response = await getSongs()
+        const songs = response.data || []
+        
+        const adapted = songs.map(s => ({
+          id: s.id || s._id,
+        title: s.titulo,
+        artist: s.artista?.nombre || 'Desconocido',
+        album: s.album?.nombre || '',
+        cover: s.URLPortadaCancion || s.album?.URLPortadaAlbum || s.artista?.urlfotoArtista || '',
+        url: s.URLCancion || s.url,
+          duration: s.duracion || 0,
+          genre: s.genero || '',
+          year: s.anio || ''
+        }))
+        
+        setAllSongs(adapted)
+      } catch (err) {
+        console.error('Error cargando canciones relacionadas:', err)
+      }
+    }
+    
+    loadAllSongs()
+  }, [])
+
+  const isCurrent = current?.id === song?.id
   const isPlaying = isCurrent && playing
   
   const onToggle = () => {
     console.log('🎛️ SongDetails Toggle:', { isPlaying, songTitle: song?.title })
-    isPlaying ? pause() : play(song)
+    if (song) {
+      isPlaying ? pause() : play(song)
+    }
   }
 
   // Auto reproducir al entrar
   useEffect(() => {
+    if (!song) return
+    
     console.log('🎵 SongDetails useEffect:', {
       songId: song?.id,
       songTitle: song?.title,
@@ -55,23 +180,21 @@ export default function SongDetails(){
       url: song?.url
     })
     // Si no es la canción actual, o si es la actual pero no está reproduciendo, iniciar
-    if (song) {
-      if (!isCurrent) {
-        console.log('▶️ Playing (not current):', song.title)
-        play(song)
-      } else if (!playing) {
-        console.log('▶️ Playing (current but paused):', song.title)
-        play(song)
-      } else {
-        console.log('✅ Already playing:', song.title)
-      }
+    if (!isCurrent) {
+      console.log('▶️ Playing (not current):', song.title)
+      play(song)
+    } else if (!playing) {
+      console.log('▶️ Playing (current but paused):', song.title)
+      play(song)
+    } else {
+      console.log('✅ Already playing:', song.title)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [song?.id])
 
   // Valores para el progreso
   const displaySeconds = seeking ? tempSeekValue : (isCurrent ? playedSeconds : 0)
-  const displayDuration = isCurrent ? duration : (song.duration || 0)
+  const displayDuration = isCurrent ? duration : (song?.duration || 0)
   const progressPercent = displayDuration > 0 ? Math.min(100, Math.max(0, (displaySeconds / displayDuration) * 100)) : 0
 
   // Handlers de seek
@@ -87,13 +210,40 @@ export default function SongDetails(){
 
   // Relacionadas por género (fallback 4 cualquiera)
   const related = useMemo(() => {
-    const same = data.filter(s => s.genre === song.genre && s.id !== song.id).slice(0,4)
+    if (!song || allSongs.length === 0) return []
+    
+    const same = allSongs.filter(s => s.genre === song.genre && s.id !== song.id).slice(0,4)
     if (same.length < 4) {
-      const others = data.filter(s => s.id !== song.id && !same.some(x => x.id === s.id))
+      const others = allSongs.filter(s => s.id !== song.id && !same.some(x => x.id === s.id))
       return [...same, ...others.slice(0, 4 - same.length)]
     }
     return same
-  }, [song])
+  }, [song, allSongs])
+
+  if(loading){
+    return (
+      <div className="SongDetails song-details">
+        <div className="SongDetails__loading">
+          <i className="fas fa-spinner fa-spin" style={{ fontSize: 48, color: 'var(--accent)' }}></i>
+          <p>Cargando canción...</p>
+        </div>
+      </div>
+    )
+  }
+
+  if(error || !song){
+    return (
+      <div className="SongDetails song-details">
+        <div className="SongDetails__error">
+          <h2>
+            <FaExclamationTriangle style={{ marginRight: '8px', color: '#ff6b6b' }} />
+            Canción no encontrada
+          </h2>
+          <Link className="SongDetails__btn SongDetails__btn--secondary" to="/">Volver al inicio</Link>
+        </div>
+      </div>
+    )
+  }
 
   return (
     <div className="SongDetails song-details">
@@ -196,10 +346,11 @@ export default function SongDetails(){
         <div className="SongDetails__actions">
           <button
             className={`SongDetails__btn ${isFavorite ? 'is-active' : ''}`}
-            onClick={() => setIsFavorite(v => !v)}
+            onClick={handleToggleFavorite}
+            disabled={loadingFavorite}
           >
             <svg width="24" height="24" viewBox="0 0 24 24" fill={isFavorite ? 'currentColor' : 'none'} stroke="currentColor" strokeWidth="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" /></svg>
-            {isFavorite ? 'Guardado' : 'Me gusta'}
+            {loadingFavorite ? 'Cargando...' : (isFavorite ? 'Quitar de favoritos' : 'Me gusta')}
           </button>
 
           <button className="SongDetails__btn SongDetails__btn--secondary">

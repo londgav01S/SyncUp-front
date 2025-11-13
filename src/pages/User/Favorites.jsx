@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import { getFavorites, exportFavoritesToCSV, removeFromFavorites } from '../../api/favoriteService'
 import { AuthContext } from '../../context/AuthContext'
 import SongCard from '../../components/SongCard/SongCard'
+import { FaHeart, FaFileDownload, FaMusic, FaTimes, FaExclamationTriangle } from 'react-icons/fa'
 import './Favorites.css'
 
 export default function Favorites() {
@@ -47,11 +48,15 @@ export default function Favorites() {
           song.urlPortadaCancion ||
           song.album?.urlPortadaAlbum ||
           song.album?.URLPortadaAlbum ||
+          song.artista?.urlfotoArtista ||
           ''
         ).toString().trim() || '/placeholder-song.svg',
+        url: song.URLCancion || song.url || song.urlCancion, // Campo crítico para reproducción
         genre: song.genero || 'Music',
         year: song.anio,
-        album: song.album?.titulo
+        album: song.album?.titulo,
+        // Mantener datos originales
+        ...song
       }))
       
       setFavorites(adaptedFavs)
@@ -95,7 +100,10 @@ export default function Favorites() {
     return (
       <div className="FavoritesPage">
         <div className="Favorites__error">
-          <h2>⚠️ Error</h2>
+          <h2>
+            <FaExclamationTriangle style={{ marginRight: '8px', color: '#ff6b6b' }} />
+            Error
+          </h2>
           <p>{error}</p>
           <button onClick={loadFavorites} className="btn-retry">
             Reintentar
@@ -110,7 +118,10 @@ export default function Favorites() {
       {/* Header */}
       <div className="Favorites__header">
         <div className="Favorites__headerContent">
-          <h1 className="Favorites__title">❤️ Mis Favoritos</h1>
+          <h1 className="Favorites__title">
+            <FaHeart style={{ color: 'var(--accent)', marginRight: '12px' }} />
+            Mis Favoritos
+          </h1>
           <p className="Favorites__subtitle">
             {favorites.length} {favorites.length === 1 ? 'canción' : 'canciones'}
           </p>
@@ -122,7 +133,8 @@ export default function Favorites() {
             className="Favorites__exportBtn"
             title="Exportar a CSV"
           >
-            📊 Exportar CSV
+            <FaFileDownload style={{ marginRight: '8px' }} />
+            Exportar CSV
           </button>
         )}
       </div>
@@ -130,7 +142,9 @@ export default function Favorites() {
       {/* Content */}
       {favorites.length === 0 ? (
         <div className="Favorites__empty">
-          <div className="Favorites__emptyIcon">🎵</div>
+          <div className="Favorites__emptyIcon">
+            <FaMusic style={{ fontSize: 64, color: 'var(--text-muted)' }} />
+          </div>
           <h2>No tienes favoritos aún</h2>
           <p>Comienza a agregar canciones que te gusten dando click en el corazón</p>
           <Link to="/" className="Favorites__emptyLink">
@@ -170,7 +184,7 @@ export default function Favorites() {
                 }}
                 title="Quitar de favoritos"
               >
-                ❌
+                <FaTimes style={{ color: '#fff', fontSize: 16 }} />
               </button>
             </div>
           ))}

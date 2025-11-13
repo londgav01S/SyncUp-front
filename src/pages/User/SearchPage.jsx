@@ -36,11 +36,15 @@ export default function SearchPage(){
       s.urlPortadaCancion ||
       s.album?.urlPortadaAlbum ||
       s.album?.URLPortadaAlbum ||
+      s.artista?.urlfotoArtista ||
       s.cover ||
       ''
     ).toString().trim() || '/placeholder-song.svg',
+    url: s.URLCancion || s.url || s.urlCancion, // Campo crítico para reproducción
     genre: s.genero || s.genre || 'Music',
-    year: s.anio || s.year
+    year: s.anio || s.year,
+    // Mantener datos originales
+    ...s
   })
 
   const adaptArtist = (a) => ({

@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState } from 'react'
-import { createArtist } from '../../api/artistService'
+import { createArtist, deleteArtist, updateArtist } from '../../api/artistService'
 import { GENEROS } from '../../data/genres'
 import axios from '../../api/axiosConfig'
 
@@ -17,6 +17,8 @@ export default function ManageArtists(){
   const [loading, setLoading] = useState(false)
   const [saving, setSaving] = useState(false)
   const [message, setMessage] = useState(null)
+  const [editMode, setEditMode] = useState(false)
+  const [editingArtistId, setEditingArtistId] = useState(null)
 
   const fetchArtists = async () => {
     setLoading(true)
@@ -39,6 +41,27 @@ export default function ManageArtists(){
 
   const canSubmit = form.nombre && form.nacionalidad && form.generoPrincipal && form.URLFotoArtista
 
+  const handleEdit = (artist) => {
+    setEditMode(true)
+    setEditingArtistId(artist.id)
+    setForm({
+      nombre: artist.nombre,
+      nacionalidad: artist.nacionalidad,
+      generoPrincipal: artist.generoPrincipal,
+      generoSecundario: artist.generoSecundario || '',
+      URLFotoArtista: artist.urlFotoArtista || artist.URLFotoArtista || ''
+    })
+    setMessage(null)
+    window.scrollTo({ top: 0, behavior: 'smooth' })
+  }
+
+  const handleCancelEdit = () => {
+    setEditMode(false)
+    setEditingArtistId(null)
+    setForm(empty)
+    setMessage(null)
+  }
+
   const onSubmit = async (e) => {
     e.preventDefault()
     setMessage(null)
@@ -55,15 +78,38 @@ export default function ManageArtists(){
         generoSecundario: form.generoSecundario || form.generoPrincipal,
         URLFotoArtista: form.URLFotoArtista.trim()
       }
-      await createArtist(payload)
-      setMessage({ type: 'success', text: 'Artista creado correctamente' })
+
+      if (editMode && editingArtistId) {
+        await updateArtist(editingArtistId, payload)
+        setMessage({ type: 'success', text: 'Artista actualizado correctamente' })
+        setEditMode(false)
+        setEditingArtistId(null)
+      } else {
+        await createArtist(payload)
+        setMessage({ type: 'success', text: 'Artista creado correctamente' })
+      }
+
       setForm(empty)
       fetchArtists()
     } catch (err) {
-      const text = err?.response?.data?.message || err?.message || 'Error al crear artista'
+      const text = err?.response?.data?.message || err?.message || `Error al ${editMode ? 'actualizar' : 'crear'} artista`
       setMessage({ type: 'error', text })
     } finally {
       setSaving(false)
+    }
+  }
+
+  const handleDelete = async (artist) => {
+    const confirmDelete = window.confirm(`¿Estás seguro de eliminar al artista "${artist.nombre}"?`)
+    if (!confirmDelete) return
+
+    try {
+      await deleteArtist(artist.id)
+      setMessage({ type: 'success', text: `Artista "${artist.nombre}" eliminado correctamente` })
+      fetchArtists()
+    } catch (err) {
+      const text = err?.response?.data?.message || err?.message || 'Error al eliminar artista'
+      setMessage({ type: 'error', text })
     }
   }
 
@@ -80,7 +126,29 @@ export default function ManageArtists(){
           padding:'var(--spacing-lg)',
           boxShadow:'var(--shadow-sm)'
         }}>
-          <h3 className="heading-3" style={{ marginBottom: 'var(--spacing-md)', color:'var(--text)' }}>Crear nuevo artista</h3>
+          <div style={{ display:'flex', justifyContent:'space-between', alignItems:'center', marginBottom: 'var(--spacing-md)' }}>
+            <h3 className="heading-3" style={{ color:'var(--text)' }}>
+              {editMode ? 'Editar artista' : 'Crear nuevo artista'}
+            </h3>
+            {editMode && (
+              <button
+                onClick={handleCancelEdit}
+                className="btn btn--secondary"
+                style={{
+                  padding:'var(--spacing-xs) var(--spacing-md)',
+                  background:'var(--text-muted)',
+                  color:'#fff',
+                  border:'none',
+                  borderRadius:'var(--border-radius-sm)',
+                  fontSize:13,
+                  fontWeight:500,
+                  cursor:'pointer'
+                }}
+              >
+                Cancelar
+              </button>
+            )}
+          </div>
           <form onSubmit={onSubmit} className="form" style={{ 
             display:'grid', 
             gridTemplateColumns:'repeat(auto-fit, minmax(220px, 1fr))', 
@@ -197,7 +265,7 @@ export default function ManageArtists(){
                   transition:'var(--transition-fast)'
                 }}
               >
-                {saving ? 'Guardando…' : 'Crear artista'}
+                {saving ? (editMode ? 'Actualizando…' : 'Guardando…') : (editMode ? 'Actualizar artista' : 'Crear artista')}
               </button>
               {message && (
                 <span style={{ 
@@ -232,6 +300,7 @@ export default function ManageArtists(){
                     <th style={{ padding:'var(--spacing-sm)', fontSize:14, fontWeight:600, color:'var(--text-muted)' }}>Nombre</th>
                     <th style={{ padding:'var(--spacing-sm)', fontSize:14, fontWeight:600, color:'var(--text-muted)' }}>Nacionalidad</th>
                     <th style={{ padding:'var(--spacing-sm)', fontSize:14, fontWeight:600, color:'var(--text-muted)' }}>Géneros</th>
+                    <th style={{ padding:'var(--spacing-sm)', fontSize:14, fontWeight:600, color:'var(--text-muted)' }}>Acciones</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -255,11 +324,53 @@ export default function ManageArtists(){
                       <td style={{ padding:'var(--spacing-sm)', fontSize:14, color:'var(--text-muted)' }}>
                         {[a.generoPrincipal, a.generoSecundario].filter(Boolean).join(' / ')}
                       </td>
+                      <td style={{ padding:'var(--spacing-sm)' }}>
+                        <div style={{ display:'flex', gap:'var(--spacing-xs)' }}>
+                          <button
+                            onClick={() => handleEdit(a)}
+                            className="btn btn--edit"
+                            style={{
+                              padding:'var(--spacing-xs) var(--spacing-sm)',
+                              background:'var(--secondary)',
+                              color:'#fff',
+                              border:'none',
+                              borderRadius:'var(--border-radius-sm)',
+                              fontSize:13,
+                              fontWeight:500,
+                              cursor:'pointer',
+                              transition:'var(--transition-fast)'
+                            }}
+                            onMouseEnter={(e) => e.currentTarget.style.background = '#3da8a5'}
+                            onMouseLeave={(e) => e.currentTarget.style.background = 'var(--secondary)'}
+                          >
+                            Editar
+                          </button>
+                          <button
+                            onClick={() => handleDelete(a)}
+                            className="btn btn--danger"
+                            style={{
+                              padding:'var(--spacing-xs) var(--spacing-sm)',
+                              background:'#ff6b6b',
+                              color:'#fff',
+                              border:'none',
+                              borderRadius:'var(--border-radius-sm)',
+                              fontSize:13,
+                              fontWeight:500,
+                              cursor:'pointer',
+                              transition:'var(--transition-fast)'
+                            }}
+                            onMouseEnter={(e) => e.currentTarget.style.background = '#ff5252'}
+                            onMouseLeave={(e) => e.currentTarget.style.background = '#ff6b6b'}
+                          >
+                            Eliminar
+                          </button>
+                        </div>
+                      </td>
                     </tr>
                   ))}
                   {artists.length === 0 && (
                     <tr>
-                      <td colSpan={4} style={{ padding:'var(--spacing-lg)', opacity:.7, textAlign:'center', color:'var(--text-muted)' }}>
+                      <td colSpan={5} style={{ padding:'var(--spacing-lg)', opacity:.7, textAlign:'center', color:'var(--text-muted)' }}>
                         Sin artistas registrados
                       </td>
                     </tr>

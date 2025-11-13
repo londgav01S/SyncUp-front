@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState } from 'react'
-import { createSong, getSongs } from '../../api/songService'
+import { createSong, getSongs, deleteSong, updateSong } from '../../api/songService'
 import { GENEROS } from '../../data/genres'
 
 export default function ManageSongs(){
@@ -18,6 +18,8 @@ export default function ManageSongs(){
   const [loading, setLoading] = useState(false)
   const [saving, setSaving] = useState(false)
   const [message, setMessage] = useState(null)
+  const [editMode, setEditMode] = useState(false)
+  const [editingSongId, setEditingSongId] = useState(null)
 
   const fetchSongs = async () => {
     setLoading(true)
@@ -40,6 +42,30 @@ export default function ManageSongs(){
 
   const canSubmit = form.titulo && form.nombreArtista && form.tituloAlbum && form.genero && form.anio && form.duracion && form.URLCancion
 
+  const handleEdit = (song) => {
+    setEditMode(true)
+    setEditingSongId(song.id)
+    setForm({
+      titulo: song.titulo,
+      nombreArtista: song.artista?.nombre || '',
+      tituloAlbum: song.album?.titulo || '',
+      genero: song.genero,
+      anio: song.anio,
+      duracion: song.duracion,
+      URLCancion: song.urlCancion || song.URLCancion || ''
+    })
+    setMessage(null)
+    // Scroll al formulario
+    window.scrollTo({ top: 0, behavior: 'smooth' })
+  }
+
+  const handleCancelEdit = () => {
+    setEditMode(false)
+    setEditingSongId(null)
+    setForm(empty)
+    setMessage(null)
+  }
+
   const onSubmit = async (e) => {
     e.preventDefault()
     setMessage(null)
@@ -58,14 +84,24 @@ export default function ManageSongs(){
         duracion: parseFloat(form.duracion),
         URLCancion: form.URLCancion.trim()
       }
-      await createSong(payload)
-      setMessage({ type: 'success', text: 'Canción creada correctamente' })
+
+      if (editMode && editingSongId) {
+        // Actualizar canción existente
+        await updateSong(editingSongId, payload)
+        setMessage({ type: 'success', text: 'Canción actualizada correctamente' })
+        setEditMode(false)
+        setEditingSongId(null)
+      } else {
+        // Crear nueva canción
+        await createSong(payload)
+        setMessage({ type: 'success', text: 'Canción creada correctamente' })
+      }
+      
       setForm(empty)
       fetchSongs()
-      // Disparar evento global para que HomeUser actualice sección New
       window.dispatchEvent(new Event('songs-updated'))
     } catch (err) {
-      const text = err?.response?.data?.message || err?.message || 'Error al crear canción'
+      const text = err?.response?.data?.message || err?.message || `Error al ${editMode ? 'actualizar' : 'crear'} canción`
       setMessage({ type: 'error', text })
     } finally {
       setSaving(false)
@@ -77,6 +113,21 @@ export default function ManageSongs(){
     const mins = Math.floor(seconds / 60)
     const secs = Math.floor(seconds % 60)
     return `${mins}:${secs.toString().padStart(2, '0')}`
+  }
+
+  const handleDelete = async (song) => {
+    const confirmDelete = window.confirm(`¿Estás seguro de eliminar la canción "${song.titulo}"?`)
+    if (!confirmDelete) return
+
+    try {
+      await deleteSong(song.id)
+      setMessage({ type: 'success', text: `Canción "${song.titulo}" eliminada correctamente` })
+      fetchSongs()
+      window.dispatchEvent(new Event('songs-updated'))
+    } catch (err) {
+      const text = err?.response?.data?.message || err?.message || 'Error al eliminar canción'
+      setMessage({ type: 'error', text })
+    }
   }
 
   return (
@@ -92,7 +143,29 @@ export default function ManageSongs(){
           padding:'var(--spacing-lg)',
           boxShadow:'var(--shadow-sm)'
         }}>
-          <h3 className="heading-3" style={{ marginBottom: 'var(--spacing-md)', color:'var(--text)' }}>Crear nueva canción</h3>
+          <div style={{ display:'flex', justifyContent:'space-between', alignItems:'center', marginBottom: 'var(--spacing-md)' }}>
+            <h3 className="heading-3" style={{ color:'var(--text)' }}>
+              {editMode ? 'Editar canción' : 'Crear nueva canción'}
+            </h3>
+            {editMode && (
+              <button
+                onClick={handleCancelEdit}
+                className="btn btn--secondary"
+                style={{
+                  padding:'var(--spacing-xs) var(--spacing-md)',
+                  background:'var(--text-muted)',
+                  color:'#fff',
+                  border:'none',
+                  borderRadius:'var(--border-radius-sm)',
+                  fontSize:13,
+                  fontWeight:500,
+                  cursor:'pointer'
+                }}
+              >
+                Cancelar
+              </button>
+            )}
+          </div>
           <form onSubmit={onSubmit} className="form" style={{ 
             display:'grid', 
             gridTemplateColumns:'repeat(auto-fit, minmax(220px, 1fr))', 
@@ -249,7 +322,7 @@ export default function ManageSongs(){
                   transition:'var(--transition-fast)'
                 }}
               >
-                {saving ? 'Guardando…' : 'Crear canción'}
+                {saving ? (editMode ? 'Actualizando…' : 'Guardando…') : (editMode ? 'Actualizar canción' : 'Crear canción')}
               </button>
               {message && (
                 <span style={{ 
@@ -287,6 +360,7 @@ export default function ManageSongs(){
                     <th style={{ padding:'var(--spacing-sm)', fontSize:14, fontWeight:600, color:'var(--text-muted)' }}>Género</th>
                     <th style={{ padding:'var(--spacing-sm)', fontSize:14, fontWeight:600, color:'var(--text-muted)' }}>Año</th>
                     <th style={{ padding:'var(--spacing-sm)', fontSize:14, fontWeight:600, color:'var(--text-muted)' }}>Duración</th>
+                    <th style={{ padding:'var(--spacing-sm)', fontSize:14, fontWeight:600, color:'var(--text-muted)' }}>Acciones</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -311,11 +385,53 @@ export default function ManageSongs(){
                       <td style={{ padding:'var(--spacing-sm)', fontSize:14, color:'var(--text-muted)' }}>{s.genero}</td>
                       <td style={{ padding:'var(--spacing-sm)', fontSize:14, color:'var(--text-muted)' }}>{s.anio}</td>
                       <td style={{ padding:'var(--spacing-sm)', fontSize:14, color:'var(--text-muted)' }}>{formatDuration(s.duracion)}</td>
+                      <td style={{ padding:'var(--spacing-sm)' }}>
+                        <div style={{ display:'flex', gap:'var(--spacing-xs)' }}>
+                          <button
+                            onClick={() => handleEdit(s)}
+                            className="btn btn--edit"
+                            style={{
+                              padding:'var(--spacing-xs) var(--spacing-sm)',
+                              background:'var(--secondary)',
+                              color:'#fff',
+                              border:'none',
+                              borderRadius:'var(--border-radius-sm)',
+                              fontSize:13,
+                              fontWeight:500,
+                              cursor:'pointer',
+                              transition:'var(--transition-fast)'
+                            }}
+                            onMouseEnter={(e) => e.currentTarget.style.background = '#3da8a5'}
+                            onMouseLeave={(e) => e.currentTarget.style.background = 'var(--secondary)'}
+                          >
+                            Editar
+                          </button>
+                          <button
+                            onClick={() => handleDelete(s)}
+                            className="btn btn--danger"
+                            style={{
+                              padding:'var(--spacing-xs) var(--spacing-sm)',
+                              background:'#ff6b6b',
+                              color:'#fff',
+                              border:'none',
+                              borderRadius:'var(--border-radius-sm)',
+                              fontSize:13,
+                              fontWeight:500,
+                              cursor:'pointer',
+                              transition:'var(--transition-fast)'
+                            }}
+                            onMouseEnter={(e) => e.currentTarget.style.background = '#ff5252'}
+                            onMouseLeave={(e) => e.currentTarget.style.background = '#ff6b6b'}
+                          >
+                            Eliminar
+                          </button>
+                        </div>
+                      </td>
                     </tr>
                   ))}
                   {songs.length === 0 && (
                     <tr>
-                      <td colSpan={7} style={{ padding:'var(--spacing-lg)', opacity:.7, textAlign:'center', color:'var(--text-muted)' }}>
+                      <td colSpan={8} style={{ padding:'var(--spacing-lg)', opacity:.7, textAlign:'center', color:'var(--text-muted)' }}>
                         Sin canciones registradas
                       </td>
                     </tr>

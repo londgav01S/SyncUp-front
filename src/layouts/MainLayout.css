@@ -62,14 +62,14 @@
 }
 
 /* Asegurar que los textos sean legibles */
-.MainLayout__content h1,
+.MainLayout__content h1:not(.DiscoverWeekly__title),
 .MainLayout__content h2,
 .MainLayout__content h3,
 .MainLayout__content h4,
 .MainLayout__content h5,
 .MainLayout__content h6,
-.MainLayout__content p,
-.MainLayout__content span,
+.MainLayout__content p:not(.DiscoverWeekly__subtitle),
+.MainLayout__content span:not(.DiscoverWeekly__statValue):not(.DiscoverWeekly__statLabel),
 .MainLayout__content label {
   color: var(--text) !important;
 }

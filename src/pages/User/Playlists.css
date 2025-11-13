@@ -1,0 +1,255 @@
+.PlaylistsPage {
+  padding: var(--spacing-lg);
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.PlaylistsPage__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--spacing-xl);
+}
+
+.PlaylistsPage__title {
+  font-size: 32px;
+  font-weight: 700;
+  color: var(--primary);
+  margin: 0 0 var(--spacing-xs) 0;
+}
+
+.PlaylistsPage__subtitle {
+  font-size: 16px;
+  color: var(--text-muted);
+  margin: 0;
+}
+
+.PlaylistsPage__create-btn {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  padding: var(--spacing-sm) var(--spacing-lg);
+  background: var(--accent);
+  color: #fff;
+  border: none;
+  border-radius: var(--border-radius-full);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition-fast);
+}
+
+.PlaylistsPage__create-btn:hover {
+  background: var(--primary);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+.PlaylistsPage__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: var(--spacing-lg);
+}
+
+/* States */
+.PlaylistsPage__loading,
+.PlaylistsPage__error,
+.PlaylistsPage__empty {
+  text-align: center;
+  padding: var(--spacing-xl);
+  color: var(--text-muted);
+}
+
+.PlaylistsPage__loading i,
+.PlaylistsPage__error i,
+.PlaylistsPage__empty i {
+  font-size: 48px;
+  margin-bottom: var(--spacing-md);
+  display: block;
+}
+
+.PlaylistsPage__error {
+  color: #ff6b6b;
+}
+
+.PlaylistsPage__empty i {
+  color: var(--accent);
+}
+
+.PlaylistsPage__empty h3 {
+  font-size: 24px;
+  margin: var(--spacing-md) 0 var(--spacing-sm) 0;
+  color: var(--text);
+}
+
+.PlaylistsPage__empty p {
+  margin-bottom: var(--spacing-lg);
+}
+
+/* Modal */
+.PlaylistsPage__modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: var(--spacing-lg);
+}
+
+.PlaylistsPage__modal {
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius-lg);
+  max-width: 500px;
+  width: 100%;
+  box-shadow: var(--shadow-xl);
+}
+
+.PlaylistsPage__modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--spacing-lg);
+  border-bottom: 1px solid var(--border-color);
+}
+
+.PlaylistsPage__modal-header h2 {
+  font-size: 24px;
+  font-weight: 600;
+  color: var(--text);
+  margin: 0;
+}
+
+.PlaylistsPage__modal-close {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: transparent;
+  color: var(--text-muted);
+  border: none;
+  font-size: 18px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: var(--transition-fast);
+}
+
+.PlaylistsPage__modal-close:hover {
+  background: var(--bg);
+  color: var(--text);
+}
+
+.PlaylistsPage__modal-form {
+  padding: var(--spacing-lg);
+}
+
+.PlaylistsPage__form-group {
+  margin-bottom: var(--spacing-lg);
+}
+
+.PlaylistsPage__form-group label {
+  display: block;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: var(--spacing-sm);
+}
+
+.PlaylistsPage__form-group input,
+.PlaylistsPage__form-group textarea {
+  width: 100%;
+  padding: var(--spacing-sm) var(--spacing-md);
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius-sm);
+  font-size: 14px;
+  background: var(--bg);
+  color: var(--text);
+  transition: var(--transition-fast);
+  font-family: inherit;
+}
+
+.PlaylistsPage__form-group input:focus,
+.PlaylistsPage__form-group textarea:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(29, 185, 84, 0.1);
+}
+
+.PlaylistsPage__form-group textarea {
+  resize: vertical;
+  min-height: 80px;
+}
+
+.PlaylistsPage__modal-actions {
+  display: flex;
+  gap: var(--spacing-md);
+  justify-content: flex-end;
+  padding-top: var(--spacing-md);
+}
+
+.PlaylistsPage__btn-cancel,
+.PlaylistsPage__btn-create {
+  padding: var(--spacing-sm) var(--spacing-lg);
+  border-radius: var(--border-radius-sm);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition-fast);
+}
+
+.PlaylistsPage__btn-cancel {
+  background: transparent;
+  color: var(--text);
+  border: 1px solid var(--border-color);
+}
+
+.PlaylistsPage__btn-cancel:hover {
+  background: var(--bg);
+}
+
+.PlaylistsPage__btn-create {
+  background: var(--accent);
+  color: #fff;
+  border: none;
+}
+
+.PlaylistsPage__btn-create:hover:not(:disabled) {
+  background: var(--primary);
+}
+
+.PlaylistsPage__btn-create:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .PlaylistsPage {
+    padding: var(--spacing-md);
+  }
+
+  .PlaylistsPage__header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--spacing-md);
+  }
+
+  .PlaylistsPage__title {
+    font-size: 24px;
+  }
+
+  .PlaylistsPage__grid {
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: var(--spacing-md);
+  }
+
+  .PlaylistsPage__modal {
+    margin: var(--spacing-md);
+  }
+}

@@ -1,0 +1,351 @@
+.ManageUsersPage {
+  padding: var(--spacing-lg);
+}
+
+.ManageUsers__header {
+  margin-bottom: var(--spacing-xl);
+}
+
+.ManageUsers__title {
+  font-size: 32px;
+  font-weight: 700;
+  color: var(--primary);
+  margin-bottom: var(--spacing-sm);
+}
+
+.ManageUsers__subtitle {
+  font-size: 16px;
+  color: var(--text-muted);
+}
+
+.ManageUsers__filters {
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius-md);
+  padding: var(--spacing-lg);
+  margin-bottom: var(--spacing-lg);
+  display: flex;
+  gap: var(--spacing-md);
+  align-items: center;
+}
+
+.ManageUsers__searchInput {
+  flex: 1;
+  padding: var(--spacing-sm) var(--spacing-md);
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius-sm);
+  font-size: 14px;
+  background: var(--bg);
+  color: var(--text);
+}
+
+.ManageUsers__stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: var(--spacing-md);
+  margin-bottom: var(--spacing-lg);
+}
+
+.ManageUsers__statCard {
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius-md);
+  padding: var(--spacing-lg);
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+}
+
+.ManageUsers__statIcon {
+  width: 50px;
+  height: 50px;
+  border-radius: var(--border-radius-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+}
+
+.ManageUsers__statIcon--users {
+  background: rgba(69, 182, 179, 0.1);
+  color: var(--secondary);
+}
+
+.ManageUsers__statIcon--admins {
+  background: rgba(242, 92, 67, 0.1);
+  color: var(--accent);
+}
+
+.ManageUsers__statIcon--active {
+  background: rgba(46, 213, 115, 0.1);
+  color: #2ed573;
+}
+
+.ManageUsers__statContent {
+  flex: 1;
+}
+
+.ManageUsers__statValue {
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--text);
+}
+
+.ManageUsers__statLabel {
+  font-size: 14px;
+  color: var(--text-muted);
+}
+
+.ManageUsers__tableContainer {
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius-md);
+  overflow: hidden;
+}
+
+.ManageUsers__table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.ManageUsers__table thead {
+  background: var(--bg);
+}
+
+.ManageUsers__table th {
+  padding: var(--spacing-md);
+  text-align: left;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-muted);
+  border-bottom: 1px solid var(--border-color);
+}
+
+.ManageUsers__table td {
+  padding: var(--spacing-md);
+  font-size: 14px;
+  color: var(--text);
+  border-bottom: 1px solid var(--border-color);
+}
+
+.ManageUsers__table tbody tr:hover {
+  background: rgba(242, 92, 67, 0.05);
+}
+
+.ManageUsers__userInfo {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+}
+
+.ManageUsers__userAvatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: var(--primary);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  font-size: 16px;
+}
+
+.ManageUsers__userName {
+  font-weight: 600;
+  color: var(--text);
+}
+
+.ManageUsers__userEmail {
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+.ManageUsers__badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 12px;
+  border-radius: var(--border-radius-full);
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.ManageUsers__badge--admin {
+  background: rgba(242, 92, 67, 0.1);
+  color: var(--accent);
+}
+
+.ManageUsers__badge--user {
+  background: rgba(69, 182, 179, 0.1);
+  color: var(--secondary);
+}
+
+.ManageUsers__actions {
+  display: flex;
+  gap: var(--spacing-sm);
+}
+
+.ManageUsers__actionBtn {
+  padding: var(--spacing-xs) var(--spacing-sm);
+  border: none;
+  border-radius: var(--border-radius-sm);
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: var(--transition-fast);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.ManageUsers__actionBtn--view {
+  background: rgba(69, 182, 179, 0.1);
+  color: var(--secondary);
+}
+
+.ManageUsers__actionBtn--view:hover {
+  background: rgba(69, 182, 179, 0.2);
+}
+
+.ManageUsers__actionBtn--delete {
+  background: rgba(255, 107, 107, 0.1);
+  color: #ff6b6b;
+}
+
+.ManageUsers__actionBtn--delete:hover {
+  background: rgba(255, 107, 107, 0.2);
+}
+
+.ManageUsers__loading {
+  text-align: center;
+  padding: var(--spacing-xl);
+}
+
+.ManageUsers__spinner {
+  width: 50px;
+  height: 50px;
+  border: 4px solid var(--border-color);
+  border-top-color: var(--accent);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin: 0 auto var(--spacing-md);
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.ManageUsers__empty {
+  text-align: center;
+  padding: var(--spacing-xl);
+  color: var(--text-muted);
+}
+
+.ManageUsers__modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: var(--spacing-lg);
+}
+
+.ManageUsers__modalContent {
+  background: var(--card-bg);
+  border-radius: var(--border-radius-lg);
+  padding: var(--spacing-xl);
+  max-width: 600px;
+  width: 100%;
+  max-height: 80vh;
+  overflow-y: auto;
+}
+
+.ManageUsers__modalHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--spacing-lg);
+}
+
+.ManageUsers__modalTitle {
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--text);
+}
+
+.ManageUsers__modalClose {
+  background: none;
+  border: none;
+  font-size: 24px;
+  color: var(--text-muted);
+  cursor: pointer;
+  padding: 0;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--border-radius-sm);
+  transition: var(--transition-fast);
+}
+
+.ManageUsers__modalClose:hover {
+  background: var(--bg);
+  color: var(--text);
+}
+
+.ManageUsers__modalSection {
+  margin-bottom: var(--spacing-lg);
+}
+
+.ManageUsers__modalSectionTitle {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: var(--spacing-md);
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+}
+
+.ManageUsers__detailRow {
+  display: flex;
+  justify-content: space-between;
+  padding: var(--spacing-sm) 0;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.ManageUsers__detailLabel {
+  font-weight: 500;
+  color: var(--text-muted);
+}
+
+.ManageUsers__detailValue {
+  font-weight: 600;
+  color: var(--text);
+}
+
+@media (max-width: 768px) {
+  .ManageUsers__filters {
+    flex-direction: column;
+  }
+
+  .ManageUsers__table {
+    font-size: 12px;
+  }
+
+  .ManageUsers__table th,
+  .ManageUsers__table td {
+    padding: var(--spacing-sm);
+  }
+
+  .ManageUsers__modalContent {
+    padding: var(--spacing-lg);
+  }
+}
