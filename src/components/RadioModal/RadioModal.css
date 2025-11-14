@@ -53,6 +53,12 @@
   align-items: center;
 }
 
+.RadioModal__header-actions {
+  display: flex;
+  gap: var(--spacing-sm);
+  align-items: center;
+}
+
 .RadioModal__icon {
   width: 48px;
   height: 48px;
@@ -100,6 +106,68 @@
 .RadioModal__close:hover {
   background: var(--bg);
   color: var(--text);
+}
+
+.RadioModal__collapse-btn {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: transparent;
+  color: var(--text-muted);
+  border: none;
+  font-size: 16px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: var(--transition-fast);
+}
+
+.RadioModal__collapse-btn:hover {
+  background: var(--bg);
+  color: var(--accent);
+}
+
+/* Estado colapsado */
+.RadioModal--collapsed {
+  width: 80px;
+  transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.RadioModal--collapsed .RadioModal__header-content h2,
+.RadioModal--collapsed .RadioModal__header-content p {
+  display: none;
+}
+
+.RadioModal--collapsed .RadioModal__info,
+.RadioModal--collapsed .RadioModal__queue,
+.RadioModal--collapsed .RadioModal__actions,
+.RadioModal--collapsed .RadioModal__loading,
+.RadioModal--collapsed .RadioModal__empty {
+  display: none;
+}
+
+.RadioModal--collapsed .RadioModal__header {
+  padding: var(--spacing-md);
+  justify-content: center;
+  border-bottom: none;
+}
+
+.RadioModal--collapsed .RadioModal__header-content {
+  flex-direction: column;
+}
+
+.RadioModal--collapsed .RadioModal__header-actions {
+  position: absolute;
+  top: var(--spacing-sm);
+  right: var(--spacing-sm);
+  flex-direction: column;
+}
+
+.RadioModal--collapsed .RadioModal__icon {
+  width: 40px;
+  height: 40px;
+  animation: pulse 2s infinite;
 }
 
 .RadioModal__info {
@@ -257,6 +325,11 @@
   object-fit: cover;
 }
 
+.RadioModal__queue-info {
+  flex: 1;
+  min-width: 0;
+}
+
 .RadioModal__queue-info h4 {
   font-size: 14px;
   font-weight: 600;
@@ -280,6 +353,8 @@
   display: flex;
   gap: var(--spacing-sm);
   align-items: center;
+  flex-shrink: 0;
+  margin-left: auto;
 }
 
 .RadioModal__queue-genre,
@@ -340,11 +415,26 @@
   cursor: not-allowed;
 }
 
+@keyframes pulse {
+  0%, 100% { 
+    transform: scale(1); 
+    opacity: 1; 
+  }
+  50% { 
+    transform: scale(1.05); 
+    opacity: 0.8; 
+  }
+}
+
 /* Responsive */
 @media (max-width: 768px) {
   .RadioModal {
     width: 100%;
     max-width: 100%;
+  }
+
+  .RadioModal--collapsed {
+    width: 60px;
   }
 
   .RadioModal__header {

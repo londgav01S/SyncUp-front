@@ -2,12 +2,16 @@ import React, { useState, useEffect } from 'react'
 import { createPortal } from 'react-dom'
 import { getSimilarSongs } from '../../api/radioService'
 import SongCard from '../SongCard/SongCard'
+import ImageWithFallback from '../ImageWithFallback'
 import './RadioModal.css'
 
 export default function RadioModal({ isOpen, onClose, baseSong }) {
   const [radioQueue, setRadioQueue] = useState([])
   const [loading, setLoading] = useState(false)
+  const [regenerating, setRegenerating] = useState(false)
   const [currentIndex, setCurrentIndex] = useState(0)
+  const [isCollapsed, setIsCollapsed] = useState(false)
+  const [currentPlayingSong, setCurrentPlayingSong] = useState(null)
 
   useEffect(() => {
     if (isOpen && baseSong) {
@@ -15,9 +19,33 @@ export default function RadioModal({ isOpen, onClose, baseSong }) {
     }
   }, [isOpen, baseSong])
 
-  const loadRadioQueue = async () => {
+  // Escuchar cambios en el player para destacar canción actual
+  useEffect(() => {
+    const handlePlayerUpdate = () => {
+      if (window.PlayerContext?.current && window.PlayerContext?.isRadioMode) {
+        setCurrentPlayingSong(window.PlayerContext.current)
+        // Encontrar índice de la canción actual en la cola
+        const currentIdx = radioQueue.findIndex(song => 
+          song.id === window.PlayerContext.current.id || 
+          song.titulo === window.PlayerContext.current.title
+        )
+        if (currentIdx !== -1) {
+          setCurrentIndex(currentIdx)
+        }
+      }
+    }
+
+    const interval = setInterval(handlePlayerUpdate, 1000)
+    return () => clearInterval(interval)
+  }, [radioQueue])
+
+  const loadRadioQueue = async (isRegenerate = false) => {
     try {
-      setLoading(true)
+      if (isRegenerate) {
+        setRegenerating(true)
+      } else {
+        setLoading(true)
+      }
       const songTitle = baseSong.title || baseSong.titulo
       console.log('📻 Cargando radio para:', songTitle)
       const similar = await getSimilarSongs(songTitle, 30)
@@ -27,8 +55,10 @@ export default function RadioModal({ isOpen, onClose, baseSong }) {
       setCurrentIndex(0)
     } catch (err) {
       console.error('Error cargando radio:', err)
+      alert('❌ Error al cargar la radio. Inténtalo de nuevo.')
     } finally {
       setLoading(false)
+      setRegenerating(false)
     }
   }
 
@@ -50,7 +80,7 @@ export default function RadioModal({ isOpen, onClose, baseSong }) {
         e.stopPropagation()
         onClose()
       }} />
-      <div className="RadioModal">
+      <div className={`RadioModal ${isCollapsed ? 'RadioModal--collapsed' : ''}`}>
         {/* Header */}
         <div className="RadioModal__header">
           <div className="RadioModal__header-content">
@@ -64,12 +94,25 @@ export default function RadioModal({ isOpen, onClose, baseSong }) {
               </p>
             </div>
           </div>
-          <button className="RadioModal__close" onClick={(e) => {
-            e.stopPropagation()
-            onClose()
-          }}>
-            <i className="fas fa-times"></i>
-          </button>
+          <div className="RadioModal__header-actions">
+            <button 
+              className="RadioModal__collapse-btn" 
+              onClick={(e) => {
+                e.preventDefault()
+                e.stopPropagation()
+                setIsCollapsed(!isCollapsed)
+              }}
+              title={isCollapsed ? 'Expandir radio' : 'Contraer radio'}
+            >
+              <i className={`fas ${isCollapsed ? 'fa-expand' : 'fa-compress'}`}></i>
+            </button>
+            <button className="RadioModal__close" onClick={(e) => {
+              e.stopPropagation()
+              onClose()
+            }}>
+              <i className="fas fa-times"></i>
+            </button>
+          </div>
         </div>
 
         {/* Queue Info */}
@@ -107,23 +150,36 @@ export default function RadioModal({ isOpen, onClose, baseSong }) {
               <h3>Cola de Reproducción</h3>
               <button 
                 className="RadioModal__shuffle-btn"
-                onClick={loadRadioQueue}
+                onClick={(e) => {
+                  e.preventDefault()
+                  e.stopPropagation()
+                  console.log('🔄 Regenerando radio...')
+                  loadRadioQueue(true)
+                }}
+                disabled={regenerating}
                 title="Regenerar cola"
               >
-                <i className="fas fa-sync-alt"></i>
-                Regenerar
+                <i className={`fas ${regenerating ? 'fa-spinner fa-spin' : 'fa-sync-alt'}`}></i>
+                {regenerating ? 'Regenerando...' : 'Regenerar'}
               </button>
             </div>
             
             <div className="RadioModal__queue-list">
-              {radioQueue.map((song, index) => (
+              {radioQueue.map((song, index) => {
+                const isCurrentSong = currentPlayingSong && (
+                  song.id === currentPlayingSong.id ||
+                  song.titulo === currentPlayingSong.title ||
+                  song.titulo === currentPlayingSong.titulo
+                )
+                
+                return (
                 <div 
-                  key={index} 
-                  className={`RadioModal__queue-item ${index === currentIndex ? 'RadioModal__queue-item--current' : ''}`}
+                  key={`${song.id || index}-${song.titulo}`}
+                  className={`RadioModal__queue-item ${isCurrentSong ? 'RadioModal__queue-item--current' : ''}`}
                 >
                   <div className="RadioModal__queue-number">
-                    {index === currentIndex ? (
-                      <i className="fas fa-play"></i>
+                    {isCurrentSong ? (
+                      <i className="fas fa-play" style={{ color: 'var(--accent)' }}></i>
                     ) : (
                       <span>{index + 1}</span>
                     )}
@@ -131,9 +187,12 @@ export default function RadioModal({ isOpen, onClose, baseSong }) {
                   
                   <div className="RadioModal__queue-song">
                     <img 
-                      src={song.URLPortadaCancion || song.album?.URLPortadaAlbum || song.artista?.urlfotoArtista || 'https://via.placeholder.com/48'} 
+                      src={song.URLPortadaCancion || song.album?.URLPortadaAlbum || song.artista?.urlfotoArtista}
                       alt={song.titulo}
                       className="RadioModal__queue-cover"
+                      onError={(e) => {
+                        e.currentTarget.src = `data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='48' height='48'%3E%3Cdefs%3E%3ClinearGradient id='grad-${index}' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' style='stop-color:%2345B6B3;stop-opacity:1' /%3E%3Cstop offset='100%25' style='stop-color:%231C2B3A;stop-opacity:1' /%3E%3C/linearGradient%3E%3C/defs%3E%3Crect fill='url(%23grad-${index})' width='48' height='48'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' font-family='Arial' font-size='20' font-weight='bold' fill='white' opacity='0.9'%3E♪%3C/text%3E%3C/svg%3E`
+                      }}
                     />
                     <div className="RadioModal__queue-info">
                       <h4>{song.titulo}</h4>
@@ -146,7 +205,8 @@ export default function RadioModal({ isOpen, onClose, baseSong }) {
                     <span className="RadioModal__queue-year">{song.anio}</span>
                   </div>
                 </div>
-              ))}
+              )
+              })}
             </div>
           </div>
         )}
@@ -167,27 +227,48 @@ export default function RadioModal({ isOpen, onClose, baseSong }) {
             onClick={(e) => {
               e.stopPropagation()
               console.log('🎵 Iniciar radio con cola:', radioQueue.length, 'canciones')
-              console.log('🔍 URLs de las primeras 5 canciones:')
-              radioQueue.slice(0, 5).forEach((song, i) => {
-                console.log(`  ${i + 1}. ${song.titulo}:`)
-                console.log(`     - URLCancion: ${song.URLCancion}`)
-                console.log(`     - url: ${song.url}`)
-                console.log(`     - Objeto completo:`, song)
-              })
+              console.log('🔍 Canción base:', baseSong?.title || baseSong?.titulo)
+              console.log('🎧 Adaptando canciones para el player...')
               
+              // Adaptar canciones para el player
+              const adaptedQueue = radioQueue.map((song, idx) => ({
+                id: song.id || idx,
+                title: song.titulo || 'Sin título',
+                artist: song.artista?.nombre || 'Artista desconocido',
+                album: song.album?.nombre || song.album?.titulo || '',
+                cover: song.URLPortadaCancion || song.album?.URLPortadaAlbum || song.artista?.urlfotoArtista,
+                url: song.URLCancion || song.url || song.urlCancion,
+                duration: song.duracion || 0,
+                genre: song.genero || '',
+                year: song.anio || '',
+                titulo: song.titulo,
+                ...song
+              }))
+              
+              console.log('✅ Cola adaptada:', adaptedQueue.length, 'canciones')
+              console.log('🎯 Primera canción adaptada:', adaptedQueue[0])
+              
+              // Disparar evento para el player
               window.dispatchEvent(new CustomEvent('radio-started', { 
                 detail: { 
                   baseSong, 
-                  queue: radioQueue 
+                  queue: adaptedQueue 
                 }
               }))
               
+              // Usar PlayerContext si está disponible
               if (window.PlayerContext?.startRadioMode) {
-                window.PlayerContext.startRadioMode(baseSong, radioQueue)
+                const adaptedBaseSong = {
+                  id: baseSong.id,
+                  title: baseSong.title || baseSong.titulo,
+                  artist: baseSong.artist || baseSong.artista?.nombre,
+                  ...baseSong
+                }
+                window.PlayerContext.startRadioMode(adaptedBaseSong, adaptedQueue)
               }
               onClose()
             }}
-            disabled={radioQueue.length === 0}
+            disabled={radioQueue.length === 0 || loading || regenerating}
           >
             <i className="fas fa-play"></i>
             Reproducir Radio

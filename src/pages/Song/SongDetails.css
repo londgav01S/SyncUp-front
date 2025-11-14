@@ -60,15 +60,33 @@
 
 .SongDetails__right { color: #fff; }
 .SongDetails__type { display: inline-block; padding: 6px 14px; background: rgba(255,255,255,0.2); border: 1px solid rgba(255,255,255,0.35); border-radius: 20px; font-size: 12px; font-weight: 800; letter-spacing: 1px; -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px); margin-bottom: 16px; }
-.SongDetails__title { margin: 0 0 12px; font-size: 72px; line-height: 1; font-weight: 900; letter-spacing: -2px; text-shadow: 0 4px 20px rgba(0,0,0,0.5); color: #fff !important; }
-.SongDetails__artist { margin: 0 0 20px; font-size: 26px; font-weight: 700; opacity: .95; color: #fff !important; }
-.SongDetails__meta { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; font-size: 15px; font-weight: 600; opacity: .95; color: #fff !important; }
+.SongDetails__title { margin: 0 0 12px; font-size: 72px; line-height: 1; font-weight: 900; letter-spacing: -2px; text-shadow: 0 4px 20px rgba(0,0,0,0.5); }
+.SongDetails__artist { margin: 0 0 20px; font-size: 26px; font-weight: 700; opacity: .98; }
+.SongDetails__meta { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; font-size: 15px; font-weight: 600; opacity: .95; }
 
-/* Super-specific overrides to beat .MainLayout__content h1,h2... which uses !important */
+/* Ultra-specific overrides to beat any !important styles */
 .MainLayout__content .SongDetails__title,
+.MainLayout__content .song-details .SongDetails__title,
+.song-details .SongDetails__title,
+body .SongDetails__title,
+html .SongDetails__title {
+  color: #FFFFFF !important;
+}
+
 .MainLayout__content .SongDetails__artist,
-.MainLayout__content .SongDetails__meta {
-  color: #fff !important;
+.MainLayout__content .song-details .SongDetails__artist,
+.song-details .SongDetails__artist,
+body .SongDetails__artist,
+html .SongDetails__artist {
+  color: #FFFFFF !important;
+}
+
+.MainLayout__content .SongDetails__meta,
+.MainLayout__content .song-details .SongDetails__meta,
+.song-details .SongDetails__meta,
+body .SongDetails__meta,
+html .SongDetails__meta {
+  color: #FFFFFF !important;
 }
 .SongDetails__meta span::after { content: '•'; margin-left: 10px; opacity: .5; }
 .SongDetails__meta span:last-child::after { content: '' }

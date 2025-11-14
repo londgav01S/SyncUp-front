@@ -19,9 +19,9 @@ export default function PlaylistCard({ playlist, onDelete }) {
   // Calcular cantidad de canciones
   const songCount = playlist.canciones?.length || 0
   
-  // Imagen por defecto para playlists
-  const defaultImage = 'https://via.placeholder.com/300x300/1DB954/ffffff?text=Playlist'
-  const coverImage = playlist.imagen || defaultImage
+  // SVG placeholder generado localmente
+  const svgPlaceholder = `data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Crect fill='%23F25C43' width='300' height='300'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' font-family='Arial' font-size='28' font-weight='bold' fill='white'%3E♫ Playlist%3C/text%3E%3C/svg%3E`
+  const coverImage = playlist.imagen || svgPlaceholder
 
   return (
     <div className="PlaylistCard" onClick={handleClick}>
@@ -29,7 +29,7 @@ export default function PlaylistCard({ playlist, onDelete }) {
         <img 
           src={coverImage} 
           alt={playlist.nombre}
-          onError={(e) => { e.target.src = defaultImage }}
+          onError={(e) => { e.target.src = svgPlaceholder }}
         />
         <div className="PlaylistCard__overlay">
           <button className="PlaylistCard__play-btn">

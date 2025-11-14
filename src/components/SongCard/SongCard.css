@@ -10,7 +10,7 @@
   cursor: pointer;
   box-shadow: 0 2px 8px rgba(28, 43, 58, 0.08);
   border: 1px solid rgba(28, 43, 58, 0.08);
-  overflow: hidden;
+  overflow: visible;
 }
 
 .SongCard--hovered {
@@ -276,93 +276,108 @@
   position: relative;
 }
 
-.SongCard__playlistMenu {
+.SongCard__playlistDropdownMenu {
   position: absolute;
   bottom: 100%;
   left: 50%;
-  transform: translateX(-50%) translateY(-8px);
-  background: var(--card-bg);
-  border: 1px solid var(--border-color);
-  border-radius: var(--border-radius-md);
-  box-shadow: var(--shadow-xl);
-  min-width: 200px;
+  transform: translateX(-50%);
+  margin-bottom: 8px;
+  background: white;
+  border: 1px solid rgba(28, 43, 58, 0.12);
+  border-radius: 12px;
+  box-shadow: 0 8px 32px rgba(28, 43, 58, 0.2);
+  min-width: 220px;
   max-width: 280px;
-  z-index: 1000;
-  animation: slideUpFade 0.2s ease;
+  z-index: 10000;
+  overflow: hidden;
 }
 
-@keyframes slideUpFade {
-  from {
-    opacity: 0;
-    transform: translateX(-50%) translateY(0);
-  }
-  to {
-    opacity: 1;
-    transform: translateX(-50%) translateY(-8px);
-  }
-}
-
-.SongCard__playlistMenuHeader {
-  padding: var(--spacing-sm) var(--spacing-md);
-  border-bottom: 1px solid var(--border-color);
-  font-size: 12px;
-  font-weight: 600;
-  color: var(--text-muted);
+.SongCard__playlistDropdownHeader {
+  padding: 12px 16px;
+  background: linear-gradient(135deg, var(--primary) 0%, var(--color-surface-elevated) 100%);
+  color: white;
+  font-size: 11px;
+  font-weight: 700;
   text-transform: uppercase;
-  letter-spacing: 0.5px;
+  letter-spacing: 1px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
 }
 
-.SongCard__playlistMenuContent {
+.SongCard__playlistDropdownHeader::before {
+  content: '♫';
+  font-size: 13px;
+  opacity: 0.9;
+}
+
+.SongCard__playlistDropdownContent {
   max-height: 240px;
   overflow-y: auto;
-  padding: var(--spacing-xs);
+  padding: 6px;
+  background: white;
 }
 
-.SongCard__playlistMenuContent::-webkit-scrollbar {
+.SongCard__playlistDropdownContent::-webkit-scrollbar {
   width: 6px;
 }
 
-.SongCard__playlistMenuContent::-webkit-scrollbar-thumb {
-  background: var(--border-color);
+.SongCard__playlistDropdownContent::-webkit-scrollbar-track {
+  background: rgba(28, 43, 58, 0.04);
   border-radius: 3px;
 }
 
-.SongCard__playlistMenuItem {
+.SongCard__playlistDropdownContent::-webkit-scrollbar-thumb {
+  background: rgba(28, 43, 58, 0.2);
+  border-radius: 3px;
+}
+
+.SongCard__playlistDropdownItem {
   width: 100%;
-  padding: var(--spacing-sm) var(--spacing-md);
+  padding: 10px 14px;
   background: transparent;
-  color: var(--text);
+  color: var(--primary);
   border: none;
-  border-radius: var(--border-radius-sm);
+  border-radius: 8px;
   font-size: 14px;
+  font-weight: 500;
   text-align: left;
   cursor: pointer;
   display: flex;
   align-items: center;
-  gap: var(--spacing-sm);
-  transition: var(--transition-fast);
+  gap: 10px;
+  transition: all 0.2s ease;
 }
 
-.SongCard__playlistMenuItem:hover {
-  background: var(--accent);
-  color: #fff;
+.SongCard__playlistDropdownItem:hover {
+  background: linear-gradient(90deg, rgba(242, 92, 67, 0.1) 0%, rgba(242, 92, 67, 0.05) 100%);
+  color: var(--accent);
+  transform: translateX(4px);
 }
 
-.SongCard__playlistMenuItem i {
-  font-size: 12px;
-  opacity: 0.7;
+.SongCard__playlistDropdownItem i {
+  font-size: 13px;
+  min-width: 16px;
+  text-align: center;
 }
 
-.SongCard__playlistMenuLoading,
-.SongCard__playlistMenuEmpty {
-  padding: var(--spacing-md);
+.SongCard__playlistDropdownLoading,
+.SongCard__playlistDropdownEmpty {
+  padding: 16px;
   text-align: center;
   font-size: 13px;
   color: var(--text-muted);
 }
 
-.SongCard__playlistMenuLoading i {
-  margin-right: var(--spacing-xs);
+.SongCard__playlistDropdownLoading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.SongCard__playlistDropdownLoading i {
+  color: var(--accent);
 }
 
 @keyframes heartBeat {

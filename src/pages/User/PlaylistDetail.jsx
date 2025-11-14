@@ -2,6 +2,8 @@ import React, { useState, useEffect, useContext } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import { AuthContext } from '../../context/AuthContext'
 import { getPlaylist, updatePlaylistName, deletePlaylist, removeSongFromPlaylist } from '../../api/playlistService'
+import { getSong } from '../../api/songService'
+import usePlayer from '../../hooks/usePlayer'
 import SongCard from '../../components/SongCard/SongCard'
 import './PlaylistDetail.css'
 
@@ -9,12 +11,15 @@ export default function PlaylistDetail() {
   const { id } = useParams()
   const navigate = useNavigate()
   const { user } = useContext(AuthContext)
+  const { play } = usePlayer()
   
   const [playlist, setPlaylist] = useState(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
   const [isEditing, setIsEditing] = useState(false)
   const [editName, setEditName] = useState('')
+  const [fullSongs, setFullSongs] = useState([])
+  const [loadingSongs, setLoadingSongs] = useState(false)
 
   useEffect(() => {
     loadPlaylist()
@@ -27,11 +32,41 @@ export default function PlaylistDetail() {
       const data = await getPlaylist(id)
       setPlaylist(data)
       setEditName(data.nombre)
+      
+      // Cargar datos completos de las canciones
+      if (data.canciones && data.canciones.length > 0) {
+        await loadFullSongData(data.canciones)
+      } else {
+        setFullSongs([])
+      }
     } catch (err) {
       console.error('Error cargando playlist:', err)
       setError('No se pudo cargar la playlist')
     } finally {
       setLoading(false)
+    }
+  }
+
+  const loadFullSongData = async (songs) => {
+    try {
+      setLoadingSongs(true)
+      const promises = songs.map(song => 
+        getSong(song.id)
+          .then(response => response.data)
+          .catch(err => {
+            console.error(`Error cargando canción ${song.id}:`, err)
+            return null
+          })
+      )
+      
+      const results = await Promise.all(promises)
+      const validSongs = results.filter(song => song !== null)
+      setFullSongs(validSongs)
+    } catch (err) {
+      console.error('Error cargando datos de canciones:', err)
+      setFullSongs([])
+    } finally {
+      setLoadingSongs(false)
     }
   }
 
@@ -79,25 +114,37 @@ export default function PlaylistDetail() {
     }
   }
 
-  const adaptSong = (song) => ({
-    id: song.id,
-    title: song.titulo,
-    artist: song.artista?.nombre || 'Desconocido',
-    album: song.album?.nombre || '',
-    cover: song.URLPortadaCancion || song.album?.URLPortadaAlbum || song.artista?.urlfotoArtista || '',
-    url: song.URLCancion || song.url || song.urlCancion, // Campo crítico para reproducción
-    duration: song.duracion || 0,
-    genre: song.genero || '',
-    year: song.anio || '',
-    // Mantener datos originales
-    ...song
-  })
+  const handlePlayAll = () => {
+    if (fullSongs.length === 0) return
+    
+    const adaptedSongs = fullSongs.map(song => adaptSong(song))
+    play(adaptedSongs[0], adaptedSongs)
+  }
 
-  if (loading) {
+  const adaptSong = (song) => {
+    const svgCover = `data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cdefs%3E%3ClinearGradient id='grad' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' style='stop-color:%2345B6B3;stop-opacity:1' /%3E%3Cstop offset='100%25' style='stop-color:%231C2B3A;stop-opacity:1' /%3E%3C/linearGradient%3E%3C/defs%3E%3Crect fill='url(%23grad)' width='300' height='300'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' font-family='Arial' font-size='32' font-weight='bold' fill='white' opacity='0.9'%3E♪%3C/text%3E%3C/svg%3E`
+    
+    return {
+      id: song.id,
+      title: song.titulo || 'Sin título',
+      artist: song.artista?.nombre || 'Artista desconocido',
+      album: song.album?.nombre || song.album?.titulo || '',
+      cover: song.URLPortadaCancion || song.album?.URLPortadaAlbum || song.artista?.urlfotoArtista || svgCover,
+      url: song.URLCancion || song.url || song.urlCancion,
+      duration: song.duracion || 0,
+      genre: song.genero || '',
+      year: song.anio || '',
+      titulo: song.titulo,
+      // Mantener datos originales
+      ...song
+    }
+  }
+
+  if (loading || loadingSongs) {
     return (
       <div className="PlaylistDetail__loading">
         <i className="fas fa-spinner fa-spin"></i>
-        Cargando playlist...
+        {loadingSongs ? 'Cargando canciones...' : 'Cargando playlist...'}
       </div>
     )
   }
@@ -114,8 +161,8 @@ export default function PlaylistDetail() {
     )
   }
 
-  const songs = playlist.canciones || []
-  const isOwner = user?.correo === playlist.creador?.correo
+  const songs = fullSongs
+  const isOwner = user?.correo === playlist.correoCreador || user?.correo === playlist.creador?.correo
 
   return (
     <div className="PlaylistDetail">
@@ -123,7 +170,7 @@ export default function PlaylistDetail() {
       <div className="PlaylistDetail__header">
         <div className="PlaylistDetail__cover">
           <img 
-            src={playlist.imagen || 'https://via.placeholder.com/300x300/1DB954/ffffff?text=Playlist'} 
+            src={playlist.imagen || `data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Crect fill='%23F25C43' width='300' height='300'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' font-family='Arial' font-size='32' font-weight='bold' fill='white'%3E♫ ${encodeURIComponent(playlist.nombre || 'Playlist')}%3C/text%3E%3C/svg%3E`} 
             alt={playlist.nombre}
           />
         </div>
@@ -151,15 +198,19 @@ export default function PlaylistDetail() {
           )}
 
           <p className="PlaylistDetail__meta">
-            {playlist.creador && (
-              <span>Por {playlist.creador.nombre || playlist.creador.correo}</span>
+            {playlist.correoCreador && (
+              <span>Por {playlist.correoCreador}</span>
             )}
             <span className="separator">•</span>
-            <span>{songs.length} {songs.length === 1 ? 'canción' : 'canciones'}</span>
+            <span>{fullSongs.length} {fullSongs.length === 1 ? 'canción' : 'canciones'}</span>
           </p>
 
           <div className="PlaylistDetail__actions">
-            <button className="PlaylistDetail__play-btn">
+            <button 
+              className="PlaylistDetail__play-btn"
+              onClick={handlePlayAll}
+              disabled={fullSongs.length === 0}
+            >
               <i className="fas fa-play"></i>
               Reproducir
             </button>

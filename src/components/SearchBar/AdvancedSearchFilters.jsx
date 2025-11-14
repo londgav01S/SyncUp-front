@@ -38,6 +38,18 @@ export default function AdvancedSearchFilters({ submitPath = '/user' }){
     setOp(params.get('op') || 'and')
   }, [location.search])
 
+  // Limpiar la barra de búsqueda principal cuando se abre búsqueda avanzada
+  useEffect(() => {
+    // Buscar y limpiar el input de AutocompleteSearch en el sidebar
+    const autocompleteInput = document.querySelector('.Sidebar__search input[type="search"], .AutocompleteSearch input[type="search"]')
+    if (autocompleteInput) {
+      autocompleteInput.value = ''
+      // Disparar evento para que el componente se actualice
+      const event = new Event('input', { bubbles: true })
+      autocompleteInput.dispatchEvent(event)
+    }
+  }, []) // Solo se ejecuta al montar el componente
+
   const buildQuery = () => {
     const q = new URLSearchParams()
     if(keyword && keyword.trim()) q.set('search', keyword.trim())

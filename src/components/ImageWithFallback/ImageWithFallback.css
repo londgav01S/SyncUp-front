@@ -1,0 +1,24 @@
+.ImageWithFallback__container {
+  position: relative;
+  display: inline-block;
+}
+
+.ImageWithFallback {
+  transition: opacity 0.2s ease;
+}
+
+.ImageWithFallback--loading {
+  opacity: 0;
+}
+
+.ImageWithFallback__placeholder {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+}
+
+.ImageWithFallback__placeholder img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}

@@ -28,13 +28,22 @@ export function PlayerProvider({ children }){
     seekToFraction: () => {},
   })
 
-  const play = (song) => {
+  const play = (song, newQueue = null) => {
     console.log('🎮 PlayerContext.play() called:', {
       songId: song?.id,
       songTitle: song?.title,
       hasUrl: !!song?.url,
-      url: song?.url
+      url: song?.url,
+      queueLength: newQueue?.length
     })
+    
+    // Si se proporciona una nueva cola, actualizarla
+    if (newQueue && Array.isArray(newQueue)) {
+      setQueue(newQueue)
+      setHistory([]) // Limpiar historial al iniciar nueva cola
+      console.log('📋 Cola actualizada:', newQueue.length, 'canciones')
+    }
+    
     setCurrent(song)
     setPlaying(true)
   }
@@ -55,17 +64,23 @@ export function PlayerProvider({ children }){
   const startRadioMode = (baseSong, queue) => {
     console.log('📻 Iniciando modo radio con:', baseSong?.title || baseSong?.titulo)
     console.log('📻 Cola de radio:', queue.length, 'canciones')
-    console.log('🔍 Primera canción de la cola:')
-    console.log('   - titulo:', queue[0]?.titulo)
-    console.log('   - URLCancion:', queue[0]?.URLCancion)
-    console.log('   - url:', queue[0]?.url)
-    console.log('   - Objeto completo:', queue[0])
+    
+    // Mezclar cola si shuffle está activado
+    let finalQueue = [...queue]
+    if (shuffle) {
+      console.log('🔀 Mezclando cola de radio...')
+      finalQueue = [...queue].sort(() => Math.random() - 0.5)
+    }
+    
+    console.log('🔍 Primera canción de la cola:', finalQueue[0]?.titulo)
     
     setRadioBaseSong(baseSong)
-    setRadioQueue(queue)
+    setRadioQueue(finalQueue)
     setIsRadioMode(true)
-    if (queue.length > 0) {
-      play(queue[0])
+    setHistory([]) // Limpiar historial al iniciar radio
+    
+    if (finalQueue.length > 0) {
+      play(finalQueue[0], finalQueue) // Pasar la cola completa al play
     }
   }
 
@@ -79,12 +94,30 @@ export function PlayerProvider({ children }){
   const playNextRadioSong = () => {
     if (!isRadioMode || radioQueue.length === 0) return
     
-    const currentIndex = radioQueue.findIndex(s => s.id === current?.id || s.titulo === current?.title)
-    const nextIndex = currentIndex + 1
+    const currentIndex = radioQueue.findIndex(s => 
+      s.id === current?.id || 
+      s.titulo === current?.title || 
+      s.titulo === current?.titulo
+    )
     
-    if (nextIndex < radioQueue.length) {
+    let nextIndex = currentIndex + 1
+    
+    // Si shuffle está activado en radio, elegir canción aleatoria
+    if (shuffle && radioQueue.length > 1) {
+      const availableIndices = radioQueue
+        .map((_, i) => i)
+        .filter(i => i !== currentIndex)
+      nextIndex = availableIndices[Math.floor(Math.random() * availableIndices.length)]
+      console.log('🔀 Radio shuffle: saltando a índice', nextIndex)
+    }
+    
+    if (nextIndex < radioQueue.length && nextIndex >= 0) {
       console.log('⏭️ Siguiente en radio:', radioQueue[nextIndex]?.titulo)
-      play(radioQueue[nextIndex])
+      // Agregar a historial
+      if (current) {
+        setHistory(prev => [...prev, current])
+      }
+      play(radioQueue[nextIndex], radioQueue)
     } else {
       console.log('🔚 Fin de la cola de radio')
       exitRadioMode()

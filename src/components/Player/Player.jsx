@@ -3,6 +3,7 @@ import ReactPlayer from 'react-player'
 import './Player.css'
 import usePlayer from '../../hooks/usePlayer'
 import { useSidebar } from '../../context/SidebarContext'
+import ImageWithFallback from '../ImageWithFallback'
 
 export default function Player(){
   const {
@@ -113,28 +114,27 @@ export default function Player(){
       <div className="Player__songInfo">
         {current && (
           <>
-            <img
+            <ImageWithFallback
               src={current.cover}
               alt={current.title}
               className="Player__albumArt"
-              onError={(e) => {
-                e.currentTarget.src = '/logo.png'
-              }}
+              fallbackType="music"
+              size="small"
             />
             <div className="Player__trackDetails">
               <h4 className="Player__trackTitle">{current.title}</h4>
               <p className="Player__trackArtist">
                 {current.artist}
-                {isRadioMode && (
-                  <span className="Player__radioIndicator">
-                    <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" style={{ marginLeft: 8, marginRight: 4 }}>
-                      <circle cx="12" cy="12" r="2" />
-                      <path d="M16.24 7.76a6 6 0 0 1 0 8.49m-8.48-.01a6 6 0 0 1 0-8.49m11.31-2.82a10 10 0 0 1 0 14.14m-14.14 0a10 10 0 0 1 0-14.14" />
-                    </svg>
-                    Radio: {radioBaseSong?.title || radioBaseSong?.titulo}
-                  </span>
-                )}
               </p>
+              {isRadioMode && (
+                <div className="Player__radioIndicator">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" style={{ marginRight: 4 }}>
+                    <circle cx="12" cy="12" r="2" />
+                    <path d="M16.24 7.76a6 6 0 0 1 0 8.49m-8.48-.01a6 6 0 0 1 0-8.49m11.31-2.82a10 10 0 0 1 0 14.14m-14.14 0a10 10 0 0 1 0-14.14" />
+                  </svg>
+                  Radio: {radioBaseSong?.title || radioBaseSong?.titulo}
+                </div>
+              )}
             </div>
             <button className="Player__iconButton" aria-label="Me gusta">
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -350,9 +350,10 @@ export default function Player(){
                 console.log('🔁 Repitiendo la misma canción')
                 if (playerRef.current) {
                   playerRef.current.seekTo(0)
-                  play(current)
+                  setTimeout(() => play(current), 100)
                 }
               } else {
+                console.log('⏭️ Reproduciendo siguiente canción')
                 playNext()
               }
               setLogs((l) => [...l.slice(-20), 'onEnded']) 
@@ -399,9 +400,10 @@ export default function Player(){
                 console.log('🔁 Repitiendo la misma canción')
                 if (playerRef.current) {
                   playerRef.current.seekTo(0)
-                  play(current)
+                  setTimeout(() => play(current), 100)
                 }
               } else {
+                console.log('⏭️ Reproduciendo siguiente canción')
                 playNext()
               }
               setLogs((l) => [...l.slice(-20), 'onEnded']) 

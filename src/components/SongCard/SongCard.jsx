@@ -18,20 +18,24 @@ export default function SongCard({ song }) {
   const [playlists, setPlaylists] = useState([])
   const [loadingPlaylists, setLoadingPlaylists] = useState(false)
   const [showRadioModal, setShowRadioModal] = useState(false)
+  const playlistButtonRef = React.useRef(null)
+  const dropdownRef = React.useRef(null)
 
   const isCurrent = current?.id === song?.id
   const isPlaying = isCurrent && playing
 
-  // Cargar playlists del usuario
+  // Cerrar menú al hacer click fuera
   useEffect(() => {
-    const handlePlaylistsUpdated = () => {
-      if (showPlaylistMenu) {
-        loadPlaylists()
+    if (!showPlaylistMenu) return
+
+    const handleClickOutside = (event) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setShowPlaylistMenu(false)
       }
     }
-    
-    window.addEventListener('playlists-updated', handlePlaylistsUpdated)
-    return () => window.removeEventListener('playlists-updated', handlePlaylistsUpdated)
+
+    document.addEventListener('mousedown', handleClickOutside)
+    return () => document.removeEventListener('mousedown', handleClickOutside)
   }, [showPlaylistMenu])
 
   const loadPlaylists = async () => {
@@ -93,12 +97,15 @@ export default function SongCard({ song }) {
     }
   }
 
-  const handleAddToPlaylistClick = async (e) => {
+  const handleAddToPlaylistClick = (e) => {
     e.preventDefault()
     e.stopPropagation()
-    setShowPlaylistMenu(!showPlaylistMenu)
-    if (!showPlaylistMenu) {
-      await loadPlaylists()
+    
+    const newState = !showPlaylistMenu
+    setShowPlaylistMenu(newState)
+    
+    if (newState && playlists.length === 0) {
+      loadPlaylists()
     }
   }
 
@@ -109,9 +116,8 @@ export default function SongCard({ song }) {
     try {
       const songTitle = song?.title || song?.titulo
       await addSongToPlaylist(playlistId, songTitle)
-      alert(`✅ Canción agregada a "${playlistName}"`)
       setShowPlaylistMenu(false)
-      window.dispatchEvent(new Event('playlists-updated'))
+      alert(`✅ Canción agregada a "${playlistName}"`)
     } catch (err) {
       console.error('Error agregando a playlist:', err)
       alert('❌ No se pudo agregar la canción a la playlist')
@@ -212,8 +218,9 @@ export default function SongCard({ song }) {
             </svg>
           </button>
 
-          <div className="SongCard__playlistDropdown">
+          <div className="SongCard__playlistDropdown" ref={dropdownRef}>
             <button 
+              ref={playlistButtonRef}
               className={`SongCard__actionButton ${showPlaylistMenu ? 'SongCard__actionButton--active' : ''}`}
               aria-label="Agregar a playlist"
               onClick={handleAddToPlaylistClick}
@@ -225,28 +232,29 @@ export default function SongCard({ song }) {
             </button>
 
             {showPlaylistMenu && (
-              <div className="SongCard__playlistMenu" onClick={(e) => e.stopPropagation()}>
-                <div className="SongCard__playlistMenuHeader">
+              <div className="SongCard__playlistDropdownMenu">
+                <div className="SongCard__playlistDropdownHeader">
                   Agregar a playlist
                 </div>
-                <div className="SongCard__playlistMenuContent">
+                <div className="SongCard__playlistDropdownContent">
                   {loadingPlaylists ? (
-                    <div className="SongCard__playlistMenuLoading">
-                      <i className="fas fa-spinner fa-spin"></i> Cargando...
+                    <div className="SongCard__playlistDropdownLoading">
+                      <i className="fas fa-spinner fa-spin"></i>
+                      <span>Cargando...</span>
                     </div>
                   ) : playlists.length === 0 ? (
-                    <div className="SongCard__playlistMenuEmpty">
-                      No tienes playlists aún
+                    <div className="SongCard__playlistDropdownEmpty">
+                      No tienes playlists
                     </div>
                   ) : (
                     playlists.map(playlist => (
                       <button
                         key={playlist.id}
-                        className="SongCard__playlistMenuItem"
+                        className="SongCard__playlistDropdownItem"
                         onClick={(e) => handleAddToPlaylist(e, playlist.id, playlist.nombre)}
                       >
                         <i className="fas fa-list-music"></i>
-                        {playlist.nombre}
+                        <span>{playlist.nombre}</span>
                       </button>
                     ))
                   )}

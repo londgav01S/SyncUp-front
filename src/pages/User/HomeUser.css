@@ -184,9 +184,12 @@
   display: flex;
   gap: 20px;
   overflow-x: auto;
+  overflow-y: hidden;
   scrollbar-width: none;
   -ms-overflow-style: none;
   padding-bottom: 8px;
+  height: fit-content;
+  align-items: flex-start;
 }
 
 .HomeUser__scrollContainer::-webkit-scrollbar {
