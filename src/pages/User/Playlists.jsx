@@ -46,13 +46,13 @@ export default function Playlists() {
       const userEmail = user?.correo || localStorage.getItem('userEmail')
       await createPlaylist({
         nombre: newPlaylistName.trim(),
-        descripcion: newPlaylistDesc.trim(),
         correoCreador: userEmail
       })
       setNewPlaylistName('')
       setNewPlaylistDesc('')
       setShowCreateModal(false)
       await loadPlaylists()
+      window.dispatchEvent(new Event('playlists-updated'))
       alert('✅ Playlist creada exitosamente')
     } catch (err) {
       console.error('Error creando playlist:', err)

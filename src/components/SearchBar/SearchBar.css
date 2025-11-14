@@ -1,5 +1,6 @@
 /* SearchBar styles - Estilo Spotify moderno */
 .SearchBar {
+  position: relative;
   padding: 8px 8px 8px 8px;
   width: 100%;
   max-width: 400px;
@@ -97,6 +98,8 @@
   top: calc(100% + 8px);
   left: 0;
   right: 0;
+  width: 100%;
+  max-width: 420px;
   background: var(--glass-bg);
   -webkit-backdrop-filter: blur(16px);
   backdrop-filter: blur(16px);
@@ -104,7 +107,8 @@
   box-shadow: var(--shadow-lg), var(--shadow-glow);
   z-index: 50;
   max-height: 360px;
-  overflow: auto;
+  overflow-y: auto;
+  overflow-x: hidden;
   padding: 6px;
   border: 1px solid var(--glass-border);
 }
@@ -135,8 +139,12 @@
 .SearchBar__suggestionImg {
   width: 48px;
   height: 48px;
+  min-width: 48px;
+  min-height: 48px;
   object-fit: cover;
   border-radius: 6px;
+  background: linear-gradient(135deg, var(--primary), var(--secondary));
+  flex-shrink: 0;
 }
 
 .SearchBar__suggestionInfo {
@@ -188,11 +196,29 @@
   padding: 10px 12px;
   border-radius: 10px;
   border: 1px solid var(--glass-border);
-  background: rgba(255, 255, 255, 0.05);
+  background: rgba(26, 60, 85, 0.95);
   -webkit-backdrop-filter: blur(8px);
   backdrop-filter: blur(8px);
   color: var(--text);
   font-size: 14px;
+  cursor: pointer;
+}
+
+.AdvancedSearch__select option {
+  background: rgba(15, 30, 40, 0.98);
+  color: var(--text);
+  padding: 8px;
+}
+
+.AdvancedSearch__select:hover {
+  border-color: var(--secondary);
+  background: rgba(26, 60, 85, 1);
+}
+
+.AdvancedSearch__select:focus {
+  outline: none;
+  border-color: var(--secondary);
+  box-shadow: 0 0 0 3px rgba(0, 200, 194, 0.1);
 }
 .AdvancedSearch__inputAdvanced {
   width: 120px;

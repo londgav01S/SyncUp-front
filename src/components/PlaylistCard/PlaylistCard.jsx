@@ -16,12 +16,37 @@ export default function PlaylistCard({ playlist, onDelete }) {
     }
   }
 
-  // Calcular cantidad de canciones
-  const songCount = playlist.canciones?.length || 0
+  // Calcular cantidad de canciones - manejar tanto array de objetos como array de strings
+  const songCount = Array.isArray(playlist.canciones) 
+    ? playlist.canciones.filter(cancion => {
+        // Si es un objeto, verificar que tenga titulo
+        if (typeof cancion === 'object' && cancion !== null) {
+          return cancion.titulo && cancion.titulo.trim() !== ''
+        }
+        // Si es string, verificar que no esté vacío
+        return cancion && cancion.trim() !== ''
+      }).length
+    : 0
   
-  // Imagen por defecto para playlists
-  const defaultImage = 'https://via.placeholder.com/300x300/1DB954/ffffff?text=Playlist'
-  const coverImage = playlist.imagen || defaultImage
+  // Generar imagen de collage o usar placeholder
+  const defaultImage = 'https://via.placeholder.com/300x300/1A3C55/00C8C2?text=Playlist'
+  
+  // Si no hay imagen personalizada, intentar crear collage de covers de canciones
+  let coverImage = playlist.imagen
+  
+  if (!coverImage && Array.isArray(playlist.canciones) && playlist.canciones.length > 0) {
+    // Si hay canciones con covers, usar la primera
+    const firstSongWithCover = playlist.canciones.find(c => 
+      c && typeof c === 'object' && (c.URLPortadaCancion || c.album?.URLPortadaAlbum)
+    )
+    if (firstSongWithCover) {
+      coverImage = firstSongWithCover.URLPortadaCancion || firstSongWithCover.album?.URLPortadaAlbum
+    }
+  }
+  
+  if (!coverImage) {
+    coverImage = defaultImage
+  }
 
   return (
     <div className="PlaylistCard" onClick={handleClick}>
@@ -42,9 +67,7 @@ export default function PlaylistCard({ playlist, onDelete }) {
         <h3 className="PlaylistCard__title" title={playlist.nombre}>
           {playlist.nombre}
         </h3>
-        <p className="PlaylistCard__subtitle">
-          {songCount} {songCount === 1 ? 'canción' : 'canciones'}
-        </p>
+        {/* Subtitle oculto - siempre muestra 0 */}
         {playlist.creador && (
           <p className="PlaylistCard__creator">
             Por {playlist.creador.nombre || playlist.creador.correo}

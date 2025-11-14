@@ -1,5 +1,6 @@
 import React, { useState, useRef } from 'react'
 import axios from '../../api/axiosConfig'
+import './MassUpload.css'
 
 export default function MassUpload(){
   const [activeTab, setActiveTab] = useState('canciones')
@@ -146,258 +147,166 @@ export default function MassUpload(){
   const instructions = getInstructions()
 
   return (
-    <div className="MassUploadPage admin-page" style={{ padding: 'var(--spacing-lg)' }}>
-      <h2 className="heading-2" style={{ marginBottom: 'var(--spacing-md)', color: 'var(--primary)' }}>
-        Carga masiva CSV
-      </h2>
+    <div className="MassUploadPage">
+      <div className="MassUploadPage__header">
+        <h2 className="MassUploadPage__title">
+          <i className="fas fa-cloud-upload-alt"></i>
+          Carga Masiva de Datos
+        </h2>
+        <p className="MassUploadPage__subtitle">
+          Importa múltiples registros desde archivos CSV
+        </p>
+      </div>
       
       {/* Tabs */}
-      <div style={{ 
-        display: 'flex', 
-        gap: 'var(--spacing-xs)', 
-        marginBottom: 'var(--spacing-md)',
-        borderBottom: '2px solid var(--border-color)'
-      }}>
+      <div className="MassUploadPage__tabs">
         <button
           onClick={() => { setActiveTab('artistas'); setFile(null); setLog([]) }}
-          style={{
-            padding: 'var(--spacing-sm) var(--spacing-lg)',
-            background: activeTab === 'artistas' ? 'var(--accent)' : 'transparent',
-            color: activeTab === 'artistas' ? '#fff' : 'var(--text)',
-            border: 'none',
-            borderBottom: activeTab === 'artistas' ? '2px solid var(--accent)' : 'none',
-            fontSize: 14,
-            fontWeight: 600,
-            cursor: 'pointer',
-            transition: 'var(--transition-fast)',
-            borderRadius: '8px 8px 0 0'
-          }}
+          className={`MassUploadPage__tab ${activeTab === 'artistas' ? 'MassUploadPage__tab--active' : ''}`}
         >
-          <i className="fas fa-user-music" style={{ marginRight: 8 }}></i>
-          Artistas
+          <i className="fas fa-user-music"></i>
+          <span>Artistas</span>
         </button>
         <button
           onClick={() => { setActiveTab('albumes'); setFile(null); setLog([]) }}
-          style={{
-            padding: 'var(--spacing-sm) var(--spacing-lg)',
-            background: activeTab === 'albumes' ? 'var(--secondary)' : 'transparent',
-            color: activeTab === 'albumes' ? '#fff' : 'var(--text)',
-            border: 'none',
-            borderBottom: activeTab === 'albumes' ? '2px solid var(--secondary)' : 'none',
-            fontSize: 14,
-            fontWeight: 600,
-            cursor: 'pointer',
-            transition: 'var(--transition-fast)',
-            borderRadius: '8px 8px 0 0'
-          }}
+          className={`MassUploadPage__tab ${activeTab === 'albumes' ? 'MassUploadPage__tab--active' : ''}`}
         >
-          <i className="fas fa-compact-disc" style={{ marginRight: 8 }}></i>
-          Álbumes
+          <i className="fas fa-compact-disc"></i>
+          <span>Álbumes</span>
         </button>
         <button
           onClick={() => { setActiveTab('canciones'); setFile(null); setLog([]) }}
-          style={{
-            padding: 'var(--spacing-sm) var(--spacing-lg)',
-            background: activeTab === 'canciones' ? 'var(--primary)' : 'transparent',
-            color: activeTab === 'canciones' ? '#fff' : 'var(--text)',
-            border: 'none',
-            borderBottom: activeTab === 'canciones' ? '2px solid var(--primary)' : 'none',
-            fontSize: 14,
-            fontWeight: 600,
-            cursor: 'pointer',
-            transition: 'var(--transition-fast)',
-            borderRadius: '8px 8px 0 0'
-          }}
+          className={`MassUploadPage__tab ${activeTab === 'canciones' ? 'MassUploadPage__tab--active' : ''}`}
         >
-          <i className="fas fa-music" style={{ marginRight: 8 }}></i>
-          Canciones
+          <i className="fas fa-music"></i>
+          <span>Canciones</span>
         </button>
       </div>
 
       {/* Instrucciones */}
-      <section className="card" style={{ 
-        background:'var(--card-bg)', 
-        border:'1px solid var(--border-color)', 
-        borderRadius:'var(--border-radius-md)', 
-        padding:'var(--spacing-lg)',
-        boxShadow:'var(--shadow-sm)',
-        marginBottom:'var(--spacing-md)'
-      }}>
-        <h3 className="heading-3" style={{ marginBottom: 'var(--spacing-sm)', color:'var(--text)' }}>
-          {instructions.title}
-        </h3>
-        
-        <div style={{ marginBottom: 'var(--spacing-md)' }}>
-          <p style={{ marginBottom: 'var(--spacing-sm)', color:'var(--text-muted)', fontSize:14 }}>
-            <strong>Formato del CSV:</strong>
-          </p>
-          <code style={{ 
-            display: 'block',
-            padding: 'var(--spacing-sm)',
-            background: 'var(--bg)',
-            borderRadius: 'var(--border-radius-sm)',
-            fontSize: 13,
-            fontFamily: 'monospace',
-            color: 'var(--text)',
-            marginBottom: 'var(--spacing-md)'
-          }}>
-            {instructions.format}
-          </code>
-          
-          <p style={{ marginBottom: 'var(--spacing-xs)', color:'var(--text-muted)', fontSize:14 }}>
-            <strong>Campos:</strong>
-          </p>
-          <ul style={{ paddingLeft: 20, color:'var(--text-muted)', fontSize:14 }}>
-            {instructions.fields.map((field, i) => (
-              <li key={i} style={{ marginBottom: 4 }}>{field}</li>
-            ))}
-          </ul>
+      <section className="MassUploadPage__card">
+        <div className="MassUploadPage__cardHeader">
+          <h3 className="MassUploadPage__cardTitle">
+            <i className="fas fa-info-circle"></i>
+            {instructions.title}
+          </h3>
         </div>
-
-        {instructions.warning && (
-          <div style={{ 
-            padding: 'var(--spacing-sm) var(--spacing-md)', 
-            background: 'rgba(242, 92, 67, 0.1)', 
-            border: '1px solid rgba(242, 92, 67, 0.3)',
-            borderRadius: 'var(--border-radius-sm)',
-            marginBottom: 'var(--spacing-md)'
-          }}>
-            <p style={{ margin: 0, fontSize: 13, color: 'var(--text)' }}>
-              <i className="fas fa-info-circle" style={{ marginRight: 8, color: 'var(--accent)' }}></i>
-              <strong>Importante:</strong> {instructions.warning}
-            </p>
+        
+        <div className="MassUploadPage__cardContent">
+          <div className="MassUploadPage__formatSection">
+            <p className="MassUploadPage__label">Formato del CSV:</p>
+            <code className="MassUploadPage__code">
+              {instructions.format}
+            </code>
           </div>
-        )}
+          
+          <div className="MassUploadPage__fieldsSection">
+            <p className="MassUploadPage__label">Descripción de campos:</p>
+            <ul className="MassUploadPage__fieldsList">
+              {instructions.fields.map((field, i) => (
+                <li key={i}>
+                  <i className="fas fa-chevron-right"></i>
+                  {field}
+                </li>
+              ))}
+            </ul>
+          </div>
 
-        <a 
-          className="btn" 
-          href={instructions.example} 
-          download
-          style={{
-            padding:'var(--spacing-sm) var(--spacing-md)',
-            background:'var(--bg)',
-            color:'var(--text)',
-            border:'1px solid var(--border-color)',
-            borderRadius:'var(--border-radius-full)',
-            fontSize:14,
-            fontWeight:500,
-            textDecoration:'none',
-            cursor:'pointer',
-            transition:'var(--transition-fast)',
-            display:'inline-flex',
-            alignItems:'center',
-            gap:8
-          }}
-        >
-          <i className="fas fa-download"></i>
-          Descargar ejemplo CSV
-        </a>
+          {instructions.warning && (
+            <div className="MassUploadPage__warning">
+              <i className="fas fa-exclamation-triangle"></i>
+              <div>
+                <strong>Importante:</strong> {instructions.warning}
+              </div>
+            </div>
+          )}
+
+          <a 
+            className="MassUploadPage__downloadBtn" 
+            href={instructions.example} 
+            download
+          >
+            <i className="fas fa-download"></i>
+            Descargar archivo de ejemplo
+          </a>
+        </div>
       </section>
 
       {/* Carga de archivo */}
-      <section className="card" style={{ 
-        background:'var(--card-bg)', 
-        border:'1px solid var(--border-color)', 
-        borderRadius:'var(--border-radius-md)', 
-        padding:'var(--spacing-lg)',
-        boxShadow:'var(--shadow-sm)',
-        marginBottom:'var(--spacing-md)'
-      }}>
-        <h3 className="heading-3" style={{ marginBottom: 'var(--spacing-md)', color:'var(--text)' }}>
-          Seleccionar archivo
-        </h3>
-        
-        <div style={{ marginBottom: 'var(--spacing-md)' }}>
-          <input 
-            ref={fileInputRef}
-            type="file" 
-            accept=".csv" 
-            onChange={onPickFile}
-            style={{ display:'none' }}
-          />
-          <button
-            onClick={() => fileInputRef.current?.click()}
-            style={{
-              padding:'var(--spacing-sm) var(--spacing-lg)',
-              background:'var(--bg)',
-              color:'var(--text)',
-              border:'1px solid var(--border-color)',
-              borderRadius:'var(--border-radius-full)',
-              fontSize:14,
-              fontWeight:600,
-              cursor:'pointer',
-              transition:'var(--transition-fast)',
-              display:'inline-flex',
-              alignItems:'center',
-              gap:8
-            }}
-          >
+      <section className="MassUploadPage__card">
+        <div className="MassUploadPage__cardHeader">
+          <h3 className="MassUploadPage__cardTitle">
             <i className="fas fa-file-upload"></i>
-            Elegir archivo CSV
-          </button>
-          {file && (
-            <span style={{ marginLeft: 16, color: 'var(--text)', fontSize: 14 }}>
-              <i className="fas fa-file-csv" style={{ marginRight: 8, color: 'var(--secondary)' }}></i>
-              {file.name}
-            </span>
-          )}
+            Seleccionar archivo
+          </h3>
         </div>
+        
+        <div className="MassUploadPage__cardContent">
+          <div className="MassUploadPage__uploadArea">
+            <input 
+              ref={fileInputRef}
+              type="file" 
+              accept=".csv" 
+              onChange={onPickFile}
+              style={{ display:'none' }}
+            />
+            
+            <div className="MassUploadPage__dropzone" onClick={() => fileInputRef.current?.click()}>
+              <i className="fas fa-cloud-upload-alt"></i>
+              <p>Haz clic para seleccionar un archivo CSV</p>
+              {file && (
+                <div className="MassUploadPage__selectedFile">
+                  <i className="fas fa-file-csv"></i>
+                  <span>{file.name}</span>
+                </div>
+              )}
+            </div>
 
-        <button 
-          onClick={uploadFile} 
-          disabled={!file || running}
-          style={{
-            padding:'var(--spacing-sm) var(--spacing-lg)',
-            background: (!file || running) ? 'var(--text-muted)' : 'var(--accent)',
-            color:'#fff',
-            border:'none',
-            borderRadius:'var(--border-radius-full)',
-            fontSize:14,
-            fontWeight:600,
-            cursor: (!file || running) ? 'not-allowed' : 'pointer',
-            transition:'var(--transition-fast)'
-          }}
-        >
-          {running ? (
-            <>
-              <i className="fas fa-spinner fa-spin" style={{ marginRight:8 }}></i>
-              Procesando…
-            </>
-          ) : (
-            <>
-              <i className="fas fa-upload" style={{ marginRight:8 }}></i>
-              Cargar archivo
-            </>
-          )}
-        </button>
+            <button 
+              onClick={uploadFile} 
+              disabled={!file || running}
+              className="MassUploadPage__uploadBtn"
+            >
+              {running ? (
+                <>
+                  <i className="fas fa-spinner fa-spin"></i>
+                  Procesando archivo...
+                </>
+              ) : (
+                <>
+                  <i className="fas fa-upload"></i>
+                  Iniciar carga masiva
+                </>
+              )}
+            </button>
+          </div>
+        </div>
       </section>
 
       {/* Log de ejecución */}
       {log.length > 0 && (
-        <section className="card" style={{ 
-          background:'var(--card-bg)', 
-          border:'1px solid var(--border-color)', 
-          borderRadius:'var(--border-radius-md)', 
-          padding:'var(--spacing-lg)',
-          boxShadow:'var(--shadow-sm)'
-        }}>
-          <h3 className="heading-3" style={{ marginBottom: 'var(--spacing-md)', color:'var(--text)' }}>
-            <i className="fas fa-list" style={{ marginRight:8 }}></i>
-            Log de ejecución
-          </h3>
-          <div style={{ 
-            maxHeight:300, 
-            overflowY:'auto', 
-            padding:'var(--spacing-md)', 
-            background:'var(--bg)', 
-            borderRadius:'var(--border-radius-sm)',
-            border:'1px solid var(--border-color)'
-          }}>
-            <ul style={{ margin:0, paddingLeft:20, fontSize:14, color:'var(--text)', fontFamily:'monospace', listStyle:'none' }}>
+        <section className="MassUploadPage__card">
+          <div className="MassUploadPage__cardHeader">
+            <h3 className="MassUploadPage__cardTitle">
+              <i className="fas fa-terminal"></i>
+              Resultado de la operación
+            </h3>
+          </div>
+          <div className="MassUploadPage__cardContent">
+            <div className="MassUploadPage__log">
               {log.map((l,i)=>(
-                <li key={i} style={{ marginBottom:4, paddingLeft: l.startsWith('  ') ? 20 : 0 }}>{l}</li>
+                <div 
+                  key={i} 
+                  className={`MassUploadPage__logLine ${
+                    l.includes('✓') ? 'success' : 
+                    l.includes('✗') ? 'error' : 
+                    l.includes('Errores') ? 'warning' : ''
+                  }`}
+                >
+                  {l}
+                </div>
               ))}
-            </ul>
+            </div>
           </div>
         </section>
       )}

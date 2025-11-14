@@ -38,13 +38,22 @@ export const getPlaylist = async (playlistId) => {
  */
 export const createPlaylist = async ({ nombre, correoCreador }) => {
   try {
+    // Debug: show outgoing request details
+    console.log('[playlistService] createPlaylist -> POST /playlists', { nombre, correoCreador })
     const response = await axios.post('/playlists', null, {
       params: { nombre, correoCreador }
     })
     console.log('✅ Playlist creada:', response.data)
     return response.data
   } catch (error) {
-    console.error('❌ Error creando playlist:', error)
+    // Better error logging to inspect server body and status
+    if (error?.response) {
+      console.error('[playlistService] Error creando playlist - response data:', error.response.data)
+      console.error('[playlistService] Error creating playlist - status:', error.response.status)
+      console.error('[playlistService] Error creating playlist - headers:', error.response.headers)
+    } else {
+      console.error('[playlistService] Error creando playlist (no response):', error)
+    }
     throw error
   }
 }
@@ -87,13 +96,22 @@ export const deletePlaylist = async (playlistId) => {
  */
 export const addSongToPlaylist = async (playlistId, tituloCancion) => {
   try {
+    console.log('📡 [playlistService] addSongToPlaylist llamado')
+    console.log('   - playlistId:', playlistId)
+    console.log('   - tituloCancion:', tituloCancion)
+    console.log('   - URL:', `/playlists/${playlistId}/canciones?tituloCancion=${tituloCancion}`)
+    
     const response = await axios.post(`/playlists/${playlistId}/canciones`, null, {
       params: { tituloCancion }
     })
-    console.log('✅ Canción agregada a playlist')
+    
+    console.log('✅ [playlistService] Respuesta del servidor:', response.data)
     return response.data
   } catch (error) {
-    console.error('❌ Error agregando canción:', error)
+    console.error('❌ [playlistService] Error agregando canción:', error)
+    console.error('   - Error response:', error.response)
+    console.error('   - Error status:', error.response?.status)
+    console.error('   - Error data:', error.response?.data)
     throw error
   }
 }

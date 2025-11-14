@@ -42,14 +42,19 @@ export default function AutocompleteSearch({ placeholder = 'Buscar canciones, ar
     axios.get('/canciones')
       .then(res=>{
         if(!mounted) return
+        console.log('🎵 Canciones del backend:', res.data)
         if(Array.isArray(res.data) && res.data.length > 0){
+          // Log primera canción para ver estructura
+          console.log('📊 Estructura de primera canción:', res.data[0])
           setSuggestions([])
           setApiSongs(res.data)
           setApiAvailable(true)
         } else {
+          console.log('⚠️ Backend no devolvió canciones, usando datos locales')
           setApiAvailable(false)
         }
-      }).catch(()=>{
+      }).catch((err)=>{
+        console.error('❌ Error al cargar canciones del backend:', err.message)
         if(mounted) setApiAvailable(false)
       })
     return ()=>{ mounted = false }
@@ -65,7 +70,14 @@ export default function AutocompleteSearch({ placeholder = 'Buscar canciones, ar
     debounceRef.current = setTimeout(()=>{
       const q = query.trim().toLowerCase()
       const source = apiAvailable && Array.isArray(apiSongs) && apiSongs.length ? apiSongs : songsData
-      const res = source.filter(s => (s.title || '').toLowerCase().includes(q) || (s.artist || '').toLowerCase().includes(q))
+      
+      // Adaptarse a campos del backend (titulo, artista.nombre) o locales (title, artist)
+      const res = source.filter(s => {
+        const title = s.titulo || s.title || ''
+        const artist = s.artista?.nombre || s.artist || ''
+        return title.toLowerCase().includes(q) || artist.toLowerCase().includes(q)
+      })
+      
       setSuggestions(res.slice(0, 8))
       setActiveIndex(-1)
       setOpen(true)
@@ -187,24 +199,45 @@ export default function AutocompleteSearch({ placeholder = 'Buscar canciones, ar
 
       {open && suggestions.length > 0 && (
         <div className="SearchBar__suggestions" role="listbox" aria-label="Sugerencias">
-          {suggestions.map((s, idx)=> (
-            <button
-              key={s.id}
-              ref={el => itemsRef.current[idx] = el}
-              role="option"
-              aria-selected={activeIndex === idx}
-              className={`SearchBar__suggestion ${activeIndex === idx ? 'SearchBar__suggestion--active' : ''}`}
-              onMouseEnter={() => setActiveIndex(idx)}
-              onMouseLeave={() => setActiveIndex(-1)}
-              onClick={() => onSelect(s)}
-            >
-              <img src={s.cover} alt={s.title} className="SearchBar__suggestionImg" />
-              <div className="SearchBar__suggestionInfo">
-                <div className="SearchBar__suggestionTitle">{highlight(s.title, query)}</div>
-                <div className="SearchBar__suggestionArtist">{highlight(s.artist, query)}</div>
-              </div>
-            </button>
-          ))}
+          {suggestions.map((s, idx)=> {
+            // Adaptarse a campos del backend o locales
+            const title = s.titulo || s.title || 'Sin título'
+            const artist = s.artista?.nombre || s.artist || 'Artista desconocido'
+            const cover = s.URLPortadaCancion || s.album?.URLPortadaAlbum || s.cover || 'https://via.placeholder.com/48x48/1A3C55/00C8C2?text=♪'
+            
+            // Debug: ver qué cover se está usando
+            if (idx === 0) {
+              console.log('🖼️ Cover seleccionado:', cover, 'de canción:', s)
+            }
+            
+            return (
+              <button
+                key={s.id}
+                ref={el => itemsRef.current[idx] = el}
+                role="option"
+                aria-selected={activeIndex === idx}
+                className={`SearchBar__suggestion ${activeIndex === idx ? 'SearchBar__suggestion--active' : ''}`}
+                onMouseEnter={() => setActiveIndex(idx)}
+                onMouseLeave={() => setActiveIndex(-1)}
+                onClick={() => onSelect(s)}
+              >
+                <img 
+                  src={cover} 
+                  alt={title} 
+                  className="SearchBar__suggestionImg"
+                  onError={(e) => {
+                    console.error('❌ Error cargando imagen:', cover)
+                    e.target.onerror = null
+                    e.target.src = 'https://via.placeholder.com/48x48/1A3C55/00C8C2?text=♪'
+                  }}
+                />
+                <div className="SearchBar__suggestionInfo">
+                  <div className="SearchBar__suggestionTitle">{highlight(title, query)}</div>
+                  <div className="SearchBar__suggestionArtist">{highlight(artist, query)}</div>
+                </div>
+              </button>
+            )
+          })}
         </div>
       )}
     </div>
