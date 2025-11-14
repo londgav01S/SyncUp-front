@@ -29,7 +29,7 @@ export default function PlaylistCard({ playlist, onDelete }) {
     : 0
   
   // Generar imagen de collage o usar placeholder
-  const defaultImage = 'https://via.placeholder.com/300x300/1A3C55/00C8C2?text=Playlist'
+  const defaultImage = 'https://placehold.co/300x300/1A3C55/00C8C2?text=Playlist'
   
   // Si no hay imagen personalizada, intentar crear collage de covers de canciones
   let coverImage = playlist.imagen

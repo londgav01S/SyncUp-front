@@ -6,12 +6,15 @@ import axios from './axiosConfig'
  */
 export const getUserPlaylists = async (userEmail) => {
   try {
+    console.log('🔍 [playlistService] getUserPlaylists llamado con email:', userEmail)
     const response = await axios.get('/playlists/usuario', {
       params: { correo: userEmail }
     })
+    console.log('📦 [playlistService] Respuesta del backend:', response.data)
+    console.log('📊 [playlistService] Total de playlists:', Array.isArray(response.data) ? response.data.length : 'No es array')
     return response.data || []
   } catch (error) {
-    console.error('Error obteniendo playlists del usuario:', error)
+    console.error('❌ Error obteniendo playlists del usuario:', error)
     throw error
   }
 }

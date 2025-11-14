@@ -19,15 +19,29 @@ export default function Playlists() {
     }
   }, [user])
 
+  // Escuchar eventos de actualización de playlists
+  useEffect(() => {
+    const handlePlaylistUpdate = () => {
+      console.log('🔄 Evento playlists-updated detectado, recargando...')
+      loadPlaylists()
+    }
+
+    window.addEventListener('playlists-updated', handlePlaylistUpdate)
+    return () => window.removeEventListener('playlists-updated', handlePlaylistUpdate)
+  }, [user])
+
   const loadPlaylists = async () => {
     try {
       setLoading(true)
       setError(null)
       const userEmail = user?.correo || localStorage.getItem('userEmail')
+      console.log('📡 [Playlists] Cargando playlists para:', userEmail)
       const data = await getUserPlaylists(userEmail)
+      console.log('✅ [Playlists] Playlists recibidas:', data)
+      console.log('📊 [Playlists] Cantidad:', data.length)
       setPlaylists(data)
     } catch (err) {
-      console.error('Error cargando playlists:', err)
+      console.error('❌ Error cargando playlists:', err)
       setError('No se pudieron cargar las playlists')
     } finally {
       setLoading(false)
